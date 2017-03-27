@@ -8,14 +8,16 @@
 
 <h1>Edit profile</h1>
 
-@b3.form(routes.HomeController.save()) {
+@b3.form(routes.ProfileController.save()) {
 
 <fieldset>
+    @*************************************
     @b3.select(profileForm("title.key"), '_label -> "Title", options = Seq("mr"->"Mr.","ms"->"Ms.","dr"->"Dr."), '_showConstraints -> false)
-
+    *************************************@
+    @b3.text(profileForm("title"), '_label -> "Title")
     @b3.text(profileForm("research"), '_label -> "Research areas", '_help -> "")
-    @b3.text(profileForm("firstName"), '_label -> "First Name", '_help -> "")
-    @b3.text(profileForm("lastName"), '_label -> "Last Name", '_help -> "")
+    @b3.text(profileForm("firstname"), '_label -> "First Name", '_help -> "")
+    @b3.text(profileForm("lastname"), '_label -> "Last Name", '_help -> "")
     @b3.text(profileForm("position"), '_label -> "Position", '_help -> "")
     @b3.text(profileForm("affiliation"), '_label -> "Affiliation", '_help -> "")
 
@@ -35,9 +37,7 @@
 
 <div class="actions">
     <input type="submit" value="Create this computer" class="btn primary"> or
-    @*************************************
     <a href="@routes.HomeController.list()" class="btn">Cancel</a>
-    *************************************@
 </div>
 
 }

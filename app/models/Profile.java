@@ -1,8 +1,19 @@
 package models;
 
+import java.util.*;
+import javax.persistence.*;
+
+import com.avaje.ebean.Model;
+import play.data.format.*;
+import play.data.validation.*;
+
+import com.avaje.ebean.*;
+
+
 /**
  * Created by sxh on 17/3/26.
  */
+@Entity
 public class Profile extends Model{
     private static final long serialVersionUID = 1L;
 
@@ -10,13 +21,13 @@ public class Profile extends Model{
     public Long id;
 
     @ManyToOne
-    public Title title;
+    public String title;
 
     public String research;
 
-    public String firstName;
+    public String firstname;
 
-    public String lastName;
+    public String lastname;
 
     public String position;
 

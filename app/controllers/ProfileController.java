@@ -104,9 +104,9 @@ public class ProfileController extends Controller{
      * Display the 'new computer form'.
      */
     public Result create() {
-        Form<Computer> computerForm = formFactory.form(Computer.class);
+        Form<Profile> profileForm = formFactory.form(Profile.class);
         return ok(
-                views.html.createForm.render(computerForm)
+                views.html.profile.render(profileForm)
         );
     }
 
@@ -114,12 +114,12 @@ public class ProfileController extends Controller{
      * Handle the 'new computer form' submission
      */
     public Result save() {
-        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest();
-        if(computerForm.hasErrors()) {
-            return badRequest(views.html.createForm.render(computerForm));
+        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+        if(profileForm.hasErrors()) {
+            return badRequest(views.html.profile.render(profileForm));
         }
-        computerForm.get().save();
-        flash("success", "Computer " + computerForm.get().name + " has been created");
+        profileForm.get().save();
+        flash("success", "Profile " + profileForm.get().title + profileForm.get().lastname + " has been created");
         return GO_HOME;
     }
 
