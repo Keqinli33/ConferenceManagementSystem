@@ -43,9 +43,10 @@ create table user (
   username                      varchar(255),
   password                      varchar(255),
   email                         varchar(255),
-  security_question_answer1     varchar(255),
-  security_question_answer2     varchar(255),
-  security_question_answer3     varchar(255),
+  security_question1            varchar(255),
+  security_answer1              varchar(255),
+  security_question2            varchar(255),
+  security_answer2              varchar(255),
   constraint pk_user primary key (id)
 );
 

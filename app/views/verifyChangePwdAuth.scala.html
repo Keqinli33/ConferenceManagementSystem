@@ -6,16 +6,11 @@
 
 @main {
 
-  <h1>User register</h1>
+  <h1>Validate Auth</h1>
 
-  @b3.form(routes.UserController.addUser()) {
+  @b3.form(routes.UserController.verifyQA()) {
 
     <fieldset>
-      @b3.text(userForm("username"), '_label -> "Username", 'required -> "true")
-      @b3.password(userForm("password"), '_label -> "Password", 'required -> "true")
-
-      @b3.email(userForm("email"), '_label -> "Email", 'placeholder -> "example@mail.com", 'required -> "true")
-
       @b3.select(
         userForm("security_question1"),
         options(User.questions),
@@ -35,8 +30,7 @@
     </fieldset>
 
     <div class="actions">
-      <input type="submit" value="Create Account" class="btn primary"> or
-      <a href="@routes.HomeController.list()" class="btn">Cancel</a>
+      <input type="submit" value="Verify" class="btn primary">
     </div>
 
   }

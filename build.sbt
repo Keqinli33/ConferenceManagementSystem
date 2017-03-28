@@ -11,4 +11,11 @@ libraryDependencies += "com.adrianhurt" %% "play-bootstrap" % "1.0-P25-B3"
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
 
+libraryDependencies += "com.sun.mail" % "javax.mail" % "1.5.6"
+
+libraryDependencies ++= Seq(
+  "com.sun.jersey" % "jersey-core" % "1.19.1",
+  "com.sun.jersey" % "jersey-client" % "1.19.1",
+  "com.sun.jersey.contribs" % "jersey-multipart" % "1.19.1")
+
 libraryDependencies += evolutions

@@ -11,19 +11,15 @@
   @b3.form(routes.UserController.verifyUser()) {
 
     <fieldset>
-      @*************************************
-      @b3.select(profileForm("title.key"), '_label -> "Title", options = Seq("mr"->"Mr.","ms"->"Ms.","dr"->"Dr."), '_showConstraints -> false)
-      *************************************@
       @b3.text(userForm("username"), '_label -> "Username", 'required -> "true")
-      @b3.text(userForm("password"), '_label -> "Password", 'required -> "true")
+      @b3.password(userForm("password"), '_label -> "Password", 'required -> "true")
 
     </fieldset>
 
     <div class="actions">
-      <input type="submit" value="Create this computer" class="btn primary"> or
+      <input type="submit" value="Login" class="btn primary"> or
       <a href="@routes.HomeController.list()" class="btn">Cancel</a>
     </div>
 
   }
-
 }
