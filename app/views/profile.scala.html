@@ -11,10 +11,12 @@
 @b3.form(routes.ProfileController.save()) {
 
 <fieldset>
-    @*************************************
-    @b3.select(profileForm("title.key"), '_label -> "Title", options = Seq("mr"->"Mr.","ms"->"Ms.","dr"->"Dr."), '_showConstraints -> false)
-    *************************************@
-    @b3.text(profileForm("title"), '_label -> "Title")
+    @b3.select(
+        profileForm("title"),
+        options(Profile.titles),
+        '_label -> "Title",
+        '_showConstraints -> false
+    )
     @b3.text(profileForm("research"), '_label -> "Research areas", '_help -> "")
     @b3.text(profileForm("firstname"), '_label -> "First Name", '_help -> "")
     @b3.text(profileForm("lastname"), '_label -> "Last Name", '_help -> "")
@@ -31,13 +33,14 @@
     @b3.text(profileForm("region"), '_label -> "Region", '_help -> "")
 
     @b3.number(profileForm("zipcode"), '_label -> "Zip Code", 'min -> 0, 'max -> 99999)
-    @b3.text(profileForm("comment"), '_label -> "Comments", '_help -> "")
+    @b3.textarea(profileForm("comment"), '_label -> "Comments", '_help -> "", 'rows -> 3)
 
 </fieldset>
 
 <div class="actions">
     <input type="submit" value="Create this computer" class="btn primary"> or
-    <a href="@routes.HomeController.list()" class="btn">Cancel</a>
+    <a href="@routes.HomeController.list()" class="btn">Cancel</a> or
+    <a href="@routes.HomeController.list()" class="btn">Reset to empty</a>
 </div>
 
 }
