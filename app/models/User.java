@@ -47,14 +47,17 @@ public class User extends Model {
 
     public static void AddTemporaryPwd(String username, String pwd){
         temporary_pwds.put(username, pwd);
+        System.out.println("User "+username+" tmp pwd "+pwd+" add");
     }
 
     public static boolean IfTemporaryPwdCorrect(String username, String pwd){
         if(temporary_pwds.containsKey(username)){
             if(temporary_pwds.get(username).equals(pwd)) {
+                System.out.println("User "+username+" tmp pwd "+pwd+" equals");
                 temporary_pwds.remove(username);
                 return true;
             }
+            System.out.println("User "+username+" tmp pwd "+pwd+" and "+temporary_pwds.get(username)+" not equal");
             temporary_pwds.remove(username);
         }
         return false;

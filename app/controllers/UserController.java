@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Profile;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -120,8 +121,8 @@ public class UserController extends Controller {
         String username = session.get("username");
         System.out.println("Send tmp pwd Username "+username);
 
-        //String email = new_user.GetEmailByUsername(username);
-        String email = "helen14.su@hotmail.com";
+        String email = new_user.GetEmailByUsername(username);
+        //String email = "helen14.su@hotmail.com";
         System.out.println("Send tmp pwd Email "+email);
         SendSimpleMessage(email, tmp_pwd);
         //SendEmail.SendEmail(email, tmp_pwd);
@@ -164,9 +165,12 @@ public class UserController extends Controller {
 
         if(new_user.IfQACorrect(username, question1, answer1)){
             if(new_user.IfQACorrect(username, question2, answer2)){
+                /*
                 return ok(
                         views.html.temporarypwd.render(userForm)
-                );
+                );*/
+                flash("success","Answer right!");
+                return redirect("/temporarypwd");
             }
         }
         //TODO notify frontend verification fail
@@ -261,8 +265,10 @@ public class UserController extends Controller {
         }
         System.out.println("User " + userForm.get().username + " has been created");
 
-        //TODO should jump to Profile page here
-        return GO_HOME;
+        Form<Profile> profileForm = formFactory.form(Profile.class);
+        return ok(
+                views.html.profile.render(profileForm)
+        );
     }
 
     /**
