@@ -27,3 +27,17 @@ GET     /profile/:id              controllers.ProfileController.edit(id:Long)
 GET    /profile/:id/change               controllers.ProfileController.update(id:Long)
 GET    /profiles/:id/delete        controllers.ProfileController.delete(id:Long)
 
+# Register a new user
+GET     /register                   controllers.UserController.register()
+POST    /register                   controllers.UserController.addUser()
+
+# Login
+GET     /login                      controllers.UserController.login()
+POST    /login                      controllers.UserController.verifyUser()
+
+# Set password
+GET     /verifyChangePwdAuth        controllers.UserController.verifyAuth()
+GET    /temporarypwd               controllers.UserController.sendTemporaryPwd()
+POST    /temporarypwd               controllers.UserController.verifyTmpPwd()
+POST    /verifyChangePwdAuth        controllers.UserController.verifyQA()
+POST     /changePwd                  controllers.UserController.changePwd()

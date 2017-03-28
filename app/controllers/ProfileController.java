@@ -88,7 +88,7 @@ public class ProfileController extends Controller{
                 savedProfile.zipcode = newProfileData.zipcode;
                 savedProfile.comment = newProfileData.comment;
 
-                savedProfile.id = userid;
+                savedProfile.userid = userid;
 
                 savedProfile.update();
                 flash("success", "Profile " + userid + " has been updated");
@@ -112,7 +112,7 @@ public class ProfileController extends Controller{
                 newProfile.zipcode = newProfileData.zipcode;
                 newProfile.comment = newProfileData.comment;
 
-                newProfile.id = userid;
+                newProfile.userid = userid;
 
                 newProfile.insert();
                 flash("success", "Profile " + userid + " has been inserted");

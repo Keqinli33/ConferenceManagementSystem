@@ -20,8 +20,6 @@ public class Profile extends Model{
     private static final long serialVersionUID = 1L;
 
     @Id
-    public Long id;
-
     public Long userid;
 
     @ManyToOne
