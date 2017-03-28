@@ -121,8 +121,8 @@ public class UserController extends Controller {
         String username = session.get("username");
         System.out.println("Send tmp pwd Username "+username);
 
-        String email = new_user.GetEmailByUsername(username);
-        //String email = "helen14.su@hotmail.com";
+        //String email = new_user.GetEmailByUsername(username);
+        String email = "linghl0915@163.com";
         System.out.println("Send tmp pwd Email "+email);
         SendSimpleMessage(email, tmp_pwd);
         //SendEmail.SendEmail(email, tmp_pwd);
