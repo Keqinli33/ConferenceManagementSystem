@@ -54,43 +54,68 @@ public class ProfileController extends Controller{
         );
     }
 
-    /**
-     * Display the 'edit form' of a existing Computer.
-     *
-     * @param id Id of the computer to edit
-     */
-    public Result edit(Long id) {
-        Form<Computer> computerForm = formFactory.form(Computer.class).fill(
-                Computer.find.byId(id)
-        );
-        return ok(
-                views.html.editForm.render(id, computerForm)
-        );
-    }
 
     /**
      * Handle the 'edit form' submission
      *
-     * @param id Id of the computer to edit
+     * @param userid Id of the user to edit
      */
-    public Result update(Long id) throws PersistenceException {
-        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest();
-        if(computerForm.hasErrors()) {
-            return badRequest(views.html.editForm.render(id, computerForm));
+    public Result edit(Long userid) throws PersistenceException {
+        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+        if(profileForm.hasErrors()) {
+            return badRequest(views.html.profile.render(userid, profileForm));
         }
 
         Transaction txn = Ebean.beginTransaction();
         try {
-            Computer savedComputer = Computer.find.byId(id);
-            if (savedComputer != null) {
-                Computer newComputerData = computerForm.get();
-                savedComputer.company = newComputerData.company;
-                savedComputer.discontinued = newComputerData.discontinued;
-                savedComputer.introduced = newComputerData.introduced;
-                savedComputer.name = newComputerData.name;
+            Profile savedProfile = Profile.find.byId(userid);
+            Profile newProfileData = profileForm.get();
 
-                savedComputer.update();
-                flash("success", "Computer " + computerForm.get().name + " has been updated");
+            if (savedProfile != null) {
+                savedProfile.title = newProfileData.title;
+                savedProfile.research = newProfileData.research;
+                savedProfile.firstname = newProfileData.firstname;
+                savedProfile.lastname = newProfileData.lastname;
+                savedProfile.position = newProfileData.position;
+                savedProfile.affiliation = newProfileData.affiliation;
+                savedProfile.email = newProfileData.email;
+                savedProfile.phone = newProfileData.phone;
+                savedProfile.fax = newProfileData.fax;
+                savedProfile.address = newProfileData.address;
+                savedProfile.city = newProfileData.city;
+                savedProfile.country = newProfileData.country;
+                savedProfile.region = newProfileData.region;
+                savedProfile.zipcode = newProfileData.zipcode;
+                savedProfile.comment = newProfileData.comment;
+
+                savedProfile.userid = userid;
+
+                savedProfile.update();
+                flash("success", "Profile " + userid + " has been updated");
+                txn.commit();
+            }
+            else{
+                Profile newProfile = new Profile();
+                newProfile.title = newProfileData.title;
+                newProfile.research = newProfileData.research;
+                newProfile.firstname = newProfileData.firstname;
+                newProfile.lastname = newProfileData.lastname;
+                newProfile.position = newProfileData.position;
+                newProfile.affiliation = newProfileData.affiliation;
+                newProfile.email = newProfileData.email;
+                newProfile.phone = newProfileData.phone;
+                newProfile.fax = newProfileData.fax;
+                newProfile.address = newProfileData.address;
+                newProfile.city = newProfileData.city;
+                newProfile.country = newProfileData.country;
+                newProfile.region = newProfileData.region;
+                newProfile.zipcode = newProfileData.zipcode;
+                newProfile.comment = newProfileData.comment;
+
+                newProfile.userid = userid;
+
+                newProfile.insert();
+                flash("success", "Profile " + userid + " has been inserted");
                 txn.commit();
             }
         } finally {
@@ -101,34 +126,37 @@ public class ProfileController extends Controller{
     }
 
     /**
-     * Display the 'new computer form'.
+     * Edit the 'profile form'.
      */
-    public Result create() {
-        Form<Computer> computerForm = formFactory.form(Computer.class);
+    public Result update(Long id) {
+        Form<Profile> profileForm = formFactory.form(Profile.class);
         return ok(
-                views.html.createForm.render(computerForm)
+                views.html.profile.render(id, profileForm)
         );
     }
 
     /**
-     * Handle the 'new computer form' submission
+     * Handle the 'new profile form' submission
      */
     public Result save() {
-        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest();
-        if(computerForm.hasErrors()) {
-            return badRequest(views.html.createForm.render(computerForm));
-        }
-        computerForm.get().save();
-        flash("success", "Computer " + computerForm.get().name + " has been created");
+        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+        profileForm.get().save();
+        flash("success", "Profile " + profileForm.get().title + profileForm.get().lastname + " has been created");
         return GO_HOME;
     }
 
     /**
-     * Handle computer deletion
+     * Handle profile deletion
      */
     public Result delete(Long id) {
-        Computer.find.ref(id).delete();
-        flash("success", "Computer has been deleted");
+        Profile deletedProfile = Profile.find.byId(id);
+        if(deletedProfile != null){
+            deletedProfile.delete();
+            flash("success", "Computer has been deleted");
+        }
+        else{
+            flash("success", "You haven't created your profile yet");
+        }
         return GO_HOME;
     }
 

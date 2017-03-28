@@ -1,4 +1,4 @@
-@(profileForm: Form[Profile])
+@(id: Long, profileForm: Form[Profile])
 
 @import helper._
 
@@ -6,38 +6,41 @@
 
 @main {
 
-<h1>Add a computer</h1>
+<h1>Edit profile</h1>
 
-@b3.form(routes.HomeController.save()) {
+@b3.form(routes.ProfileController.edit(id)) {
 
 <fieldset>
-    @b3.radio(computerForm("title"), '_label -> "Title", options = Seq("mr"->"Mr.","ms"->"Ms.","dr"->"Dr."))
+    @b3.select(
+        profileForm("title"),
+        options(Profile.titles),
+        '_label -> "Title",
+        '_showConstraints -> false
+    )
+    @b3.text(profileForm("research"), '_label -> "Research areas", '_help -> "")
+    @b3.text(profileForm("firstname"), '_label -> "First Name", '_help -> "")
+    @b3.text(profileForm("lastname"), '_label -> "Last Name", '_help -> "")
+    @b3.text(profileForm("position"), '_label -> "Position", '_help -> "")
+    @b3.text(profileForm("affiliation"), '_label -> "Affiliation", '_help -> "")
 
-    @b3.text(computerForm("research"), '_label -> "Research areas", '_help -> "")
-    @b3.text(computerForm("firstName"), '_label -> "First Name", '_help -> "")
-    @b3.text(computerForm("lastName"), '_label -> "Last Name", '_help -> "")
-    @b3.text(computerForm("position"), '_label -> "Position", '_help -> "")
-    @b3.text(computerForm("affiliation"), '_label -> "Affiliation", '_help -> "")
+    @b3.email(profileForm("email"), '_label -> "Email", 'placeholder -> "example@mail.com")
+    @b3.tel(profileForm("phone"), '_label -> "Phone", '_help -> "")
+    @b3.text(profileForm("fax"), '_label -> "Fax", '_help -> "")
 
-    @b3.email(computerForm("email"), '_label -> "Email", 'placeholder -> "example@mail.com")
-    @b3.tel(computerForm("phone"), '_label -> "Phone", '_help -> "")
-    @b3.text(computerForm("fax"), '_label -> "Fax", '_help -> "")
+    @b3.textarea(profileForm("address"), '_label -> "Address", 'rows -> 3)
+    @b3.text(profileForm("city"), '_label -> "City", '_help -> "")
+    @b3.text(profileForm("country"), '_label -> "Country", '_help -> "")
+    @b3.text(profileForm("region"), '_label -> "Region", '_help -> "")
 
-    @b3.textarea(computerForm("address"), '_label -> "Address", 'rows -> 3)
-    @b3.text(computerForm("city"), '_label -> "City", '_help -> "")
-    @b3.text(computerForm("country"), '_label -> "Country", '_help -> "")
-    @b3.text(computerForm("region"), '_label -> "Region", '_help -> "")
-
-    @b3.number(computerForm("zipcode"), '_label -> "Zip Code", 'min -> 0, 'max -> 99999)
-    @b3.text(computerForm("comment"), '_label -> "Comments", '_help -> "")
+    @b3.number(profileForm("zipcode"), '_label -> "Zip Code", 'min -> 0, 'max -> 99999)
+    @b3.textarea(profileForm("comment"), '_label -> "Comments", '_help -> "", 'rows -> 3)
 
 </fieldset>
 
 <div class="actions">
     <input type="submit" value="Create this computer" class="btn primary"> or
-    @*************************************
-    <a href="@routes.HomeController.list()" class="btn">Cancel</a>
-    *************************************@
+    <a href="@routes.HomeController.list()" class="btn">Cancel</a> or
+    <a href="@routes.ProfileController.delete(id)" class="btn">Reset to empty</a>
 </div>
 
 }
