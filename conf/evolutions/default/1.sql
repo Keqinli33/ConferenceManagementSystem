@@ -20,6 +20,7 @@ create table computer (
 
 create table profile (
   id                            bigint auto_increment not null,
+  userid                        bigint,
   title                         varchar(255),
   research                      varchar(255),
   firstname                     varchar(255),

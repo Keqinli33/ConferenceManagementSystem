@@ -58,26 +58,64 @@ public class ProfileController extends Controller{
     /**
      * Handle the 'edit form' submission
      *
-     * @param id Id of the computer to edit
+     * @param userid Id of the user to edit
      */
-    public Result update(Long id) throws PersistenceException {
-        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest();
-        if(computerForm.hasErrors()) {
-            return badRequest(views.html.editForm.render(id, computerForm));
+    public Result edit(Long userid) throws PersistenceException {
+        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+        if(profileForm.hasErrors()) {
+            return badRequest(views.html.profile.render(userid, profileForm));
         }
 
         Transaction txn = Ebean.beginTransaction();
         try {
-            Computer savedComputer = Computer.find.byId(id);
-            if (savedComputer != null) {
-                Computer newComputerData = computerForm.get();
-                savedComputer.company = newComputerData.company;
-                savedComputer.discontinued = newComputerData.discontinued;
-                savedComputer.introduced = newComputerData.introduced;
-                savedComputer.name = newComputerData.name;
+            Profile savedProfile = Profile.find.byId(userid);
+            Profile newProfileData = profileForm.get();
 
-                savedComputer.update();
-                flash("success", "Computer " + computerForm.get().name + " has been updated");
+            if (savedProfile != null) {
+                savedProfile.title = newProfileData.title;
+                savedProfile.research = newProfileData.research;
+                savedProfile.firstname = newProfileData.firstname;
+                savedProfile.lastname = newProfileData.lastname;
+                savedProfile.position = newProfileData.position;
+                savedProfile.affiliation = newProfileData.affiliation;
+                savedProfile.email = newProfileData.email;
+                savedProfile.phone = newProfileData.phone;
+                savedProfile.fax = newProfileData.fax;
+                savedProfile.address = newProfileData.address;
+                savedProfile.city = newProfileData.city;
+                savedProfile.country = newProfileData.country;
+                savedProfile.region = newProfileData.region;
+                savedProfile.zipcode = newProfileData.zipcode;
+                savedProfile.comment = newProfileData.comment;
+
+                savedProfile.id = userid;
+
+                savedProfile.update();
+                flash("success", "Profile " + userid + " has been updated");
+                txn.commit();
+            }
+            else{
+                Profile newProfile = new Profile();
+                newProfile.title = newProfileData.title;
+                newProfile.research = newProfileData.research;
+                newProfile.firstname = newProfileData.firstname;
+                newProfile.lastname = newProfileData.lastname;
+                newProfile.position = newProfileData.position;
+                newProfile.affiliation = newProfileData.affiliation;
+                newProfile.email = newProfileData.email;
+                newProfile.phone = newProfileData.phone;
+                newProfile.fax = newProfileData.fax;
+                newProfile.address = newProfileData.address;
+                newProfile.city = newProfileData.city;
+                newProfile.country = newProfileData.country;
+                newProfile.region = newProfileData.region;
+                newProfile.zipcode = newProfileData.zipcode;
+                newProfile.comment = newProfileData.comment;
+
+                newProfile.id = userid;
+
+                newProfile.insert();
+                flash("success", "Profile " + userid + " has been inserted");
                 txn.commit();
             }
         } finally {
@@ -90,7 +128,7 @@ public class ProfileController extends Controller{
     /**
      * Edit the 'profile form'.
      */
-    public Result edit(Long id) {
+    public Result update(Long id) {
         Form<Profile> profileForm = formFactory.form(Profile.class);
         return ok(
                 views.html.profile.render(id, profileForm)
@@ -111,8 +149,14 @@ public class ProfileController extends Controller{
      * Handle profile deletion
      */
     public Result delete(Long id) {
-        Profile.find.ref(id).delete();
-        flash("success", "Computer has been deleted");
+        Profile deletedProfile = Profile.find.byId(id);
+        if(deletedProfile != null){
+            deletedProfile.delete();
+            flash("success", "Computer has been deleted");
+        }
+        else{
+            flash("success", "You haven't created your profile yet");
+        }
         return GO_HOME;
     }
 

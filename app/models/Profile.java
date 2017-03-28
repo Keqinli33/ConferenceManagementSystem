@@ -22,6 +22,8 @@ public class Profile extends Model{
     @Id
     public Long id;
 
+    public Long userid;
+
     @ManyToOne
     public String title;
 
