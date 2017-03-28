@@ -12,7 +12,7 @@
 
 <fieldset>
     @*************************************
-    @b3.select(profileForm("title.key"), '_label -> "Title", options = Seq("mr"->"Mr.","ms"->"Ms.","dr"->"Dr."), '_showConstraints -> false)
+    @b3.select(profileForm("title"), '_label -> "Title", options = Seq("mr"->"Mr.","ms"->"Ms.","dr"->"Dr."), '_showConstraints -> false)
     *************************************@
     @b3.text(profileForm("title"), '_label -> "Title")
     @b3.text(profileForm("research"), '_label -> "Research areas", '_help -> "")

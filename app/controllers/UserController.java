@@ -57,6 +57,15 @@ public class UserController extends Controller {
             return badRequest(views.html.register.render(userForm));
         }
 
+            User new_user = userForm.get();
+            String username = new_user.username;
+            String password = new_user.password;
+            if(new_user.VerifyUser(username, password)){
+                System.out.println("User " + username + " login successfully!");
+                return GO_HOME;
+            }
+        return GO_HOME;
+
     }
 
     public Result addUser() {

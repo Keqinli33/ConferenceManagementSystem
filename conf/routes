@@ -27,7 +27,11 @@ GET     /profile/new              controllers.ProfileController.create()
 POST    /profiles                  controllers.ProfileController.save()
 
 # Register a new user
-GET     /register              controllers.UserController.create()
-POST    /register                 controllers.UserController.save()
+GET     /register                   controllers.UserController.register()
+POST    /register                   controllers.UserController.addUser()
+
+# Login
+GET     /login                      controllers.UserController.login()
+POST    /login                      controllers.UserController.verifyUser()
 
 # Set password
