@@ -54,19 +54,6 @@ public class ProfileController extends Controller{
         );
     }
 
-    /**
-     * Display the 'edit form' of a existing Computer.
-     *
-     * @param id Id of the computer to edit
-     */
-    public Result edit(Long id) {
-        Form<Computer> computerForm = formFactory.form(Computer.class).fill(
-                Computer.find.byId(id)
-        );
-        return ok(
-                views.html.editForm.render(id, computerForm)
-        );
-    }
 
     /**
      * Handle the 'edit form' submission
@@ -101,33 +88,30 @@ public class ProfileController extends Controller{
     }
 
     /**
-     * Display the 'new computer form'.
+     * Edit the 'profile form'.
      */
-    public Result create() {
+    public Result edit(Long id) {
         Form<Profile> profileForm = formFactory.form(Profile.class);
         return ok(
-                views.html.profile.render(profileForm)
+                views.html.profile.render(id, profileForm)
         );
     }
 
     /**
-     * Handle the 'new computer form' submission
+     * Handle the 'new profile form' submission
      */
     public Result save() {
         Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
-        if(profileForm.hasErrors()) {
-            return badRequest(views.html.profile.render(profileForm));
-        }
         profileForm.get().save();
         flash("success", "Profile " + profileForm.get().title + profileForm.get().lastname + " has been created");
         return GO_HOME;
     }
 
     /**
-     * Handle computer deletion
+     * Handle profile deletion
      */
     public Result delete(Long id) {
-        Computer.find.ref(id).delete();
+        Profile.find.ref(id).delete();
         flash("success", "Computer has been deleted");
         return GO_HOME;
     }

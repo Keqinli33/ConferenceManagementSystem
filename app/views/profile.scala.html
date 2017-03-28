@@ -1,4 +1,4 @@
-@(profileForm: Form[Profile])
+@(id: Long, profileForm: Form[Profile])
 
 @import helper._
 
@@ -40,7 +40,7 @@
 <div class="actions">
     <input type="submit" value="Create this computer" class="btn primary"> or
     <a href="@routes.HomeController.list()" class="btn">Cancel</a> or
-    <a href="@routes.HomeController.list()" class="btn">Reset to empty</a>
+    <a href="@routes.ProfileController.delete(id)" class="btn">Reset to empty</a>
 </div>
 
 }

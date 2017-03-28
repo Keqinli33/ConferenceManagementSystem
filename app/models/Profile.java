@@ -53,4 +53,9 @@ public class Profile extends Model{
 
     public String comment;
 
+    /**
+     * Generic query helper for entity Profile with id Long
+     */
+    public static Find<Long,Profile> find = new Find<Long,Profile>(){};
+
 }

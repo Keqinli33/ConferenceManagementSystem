@@ -22,7 +22,8 @@ POST    /computers/:id/delete       controllers.HomeController.delete(id:Long)
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
-# Add profile
-GET     /profile/new              controllers.ProfileController.create()
-POST    /profiles                  controllers.ProfileController.save()
+# Edit profile
+GET     /profile/:id              controllers.ProfileController.edit(id:Long)
+POST    /profiles/                  controllers.ProfileController.save()
+GET    /profiles/:id/delete        controllers.ProfileController.delete(id:Long)
 
