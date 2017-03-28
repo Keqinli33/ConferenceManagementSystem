@@ -26,3 +26,8 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /profile/new              controllers.ProfileController.create()
 POST    /profiles                  controllers.ProfileController.save()
 
+# Register a new user
+GET     /register              controllers.UserController.create()
+POST    /register                 controllers.UserController.save()
+
+# Set password
