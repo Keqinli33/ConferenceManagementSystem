@@ -31,6 +31,9 @@ import java.math.BigInteger;
 
 import java.util.Random;
 
+//import play.libs.Mail;
+import org.apache.commons.mail.*;
+
 
 /**
  * Created by Ling on 2017/3/27.
@@ -47,6 +50,10 @@ public class UserController extends Controller {
             routes.HomeController.list(0, "name", "asc", "")
     );
 
+    public Result GO_LOGIN = Results.redirect(
+            routes.UserController.login()
+    );
+
     public Result register() {
         Form<User> userForm = formFactory.form(User.class);
         return ok(
@@ -61,7 +68,7 @@ public class UserController extends Controller {
     public Result login() {
         Form<User> userForm = formFactory.form(User.class);
         return ok(
-                views.html.login.render(userForm)
+                views.html.login.render(userForm, 0)
         );
     }
 
@@ -121,11 +128,12 @@ public class UserController extends Controller {
         String username = session.get("username");
         System.out.println("Send tmp pwd Username "+username);
 
-        //String email = new_user.GetEmailByUsername(username);
-        String email = "linghl0915@163.com";
+        String email = new_user.GetEmailByUsername(username);
+        //String email = "linghl0915@163.com";
         System.out.println("Send tmp pwd Email "+email);
-        SendSimpleMessage(email, tmp_pwd);
+        //SendSimpleMessage(email, tmp_pwd);
         //SendEmail.SendEmail(email, tmp_pwd);
+        SendEmail(email,tmp_pwd);
         System.out.println("Email sent");
         //TODO notify tmp pwd sent to register email
 
@@ -195,7 +203,7 @@ public class UserController extends Controller {
                 }
             }
             System.out.println("Please correct the following errors: " + errorMsg);
-            return badRequest(views.html.login.render(userForm));
+            return badRequest(views.html.login.render(userForm, 1));
         }
 
             User new_user = userForm.get();
@@ -208,12 +216,16 @@ public class UserController extends Controller {
                 Long id = new_user.GetUserID(username);
                 session.put("username",username);
                 session.put("userid",id.toString());
+                System.out.println("Login successfully");
+                flash("success", "Login success");
                 return GO_HOME;
             }
 
             //TODO notify frontend error message
-
-            return badRequest(views.html.login.render(userForm));
+            System.out.println("Login unsuccessfully");
+            //flash("error", "Login error");
+            //return GO_LOGIN;
+            return ok(views.html.login.render(userForm, 1));
     }
     /**
      * Register a user
@@ -303,6 +315,23 @@ public class UserController extends Controller {
         formData.add("text", "Dear Sir/Madam, your temporary password is "+tmp_pwd);
         return webResource.type(MediaType.APPLICATION_FORM_URLENCODED).
                 post(ClientResponse.class, formData);
+    }
+
+    private static void SendEmail(String emailto, String pwd){
+        try {
+            Email email = new SimpleEmail();
+            email.setHostName("smtp.googlemail.com");
+            email.setSmtpPort(465);
+            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+            email.setSSLOnConnect(true);
+            email.setFrom("socandrew2017@gmail.com");
+            email.setSubject("Temporary password");
+            email.setMsg("Dear Sir/Madam, your temporary password is "+pwd);
+            email.addTo(emailto);
+            email.send();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }
