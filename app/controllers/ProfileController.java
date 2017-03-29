@@ -11,6 +11,8 @@ import models.*;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 
+import play.mvc.Http.Session;
+
 /**
  * Created by sxh on 17/3/26.
  */
@@ -51,6 +53,15 @@ public class ProfileController extends Controller{
                         Computer.page(page, 10, sortBy, order, filter),
                         sortBy, order, filter
                 )
+        );
+    }
+
+    public Result enterProfile(){
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
+        Form<Profile> profileForm = formFactory.form(Profile.class);
+        return ok(
+                views.html.profile.render(userid, profileForm)
         );
     }
 
