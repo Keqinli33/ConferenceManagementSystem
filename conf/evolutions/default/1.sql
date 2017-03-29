@@ -37,7 +37,25 @@ create table profile (
   comment                       varchar(255),
   constraint pk_profile primary key (userid)
 );
-
+create table paper (
+  id                            bigint auto_increment not null,
+  title                         varchar(255),
+  contactemail                  varchar(255),
+  authorsinfo                   varchar(2000),
+  otherauthor                   varchar(255),
+  candidate                     varchar(255),
+  volunteer                     varchar(255),
+  paperabstract                 varchar(5000),
+  ifsubmit                      varchar(255),
+  fileformat                    varchar(255),
+  filesize                      varchar(255),
+  filedirectory                 varchar(255),
+  conference                    varchar(255),
+  topic                         varchar(255),
+  status                        varchar(255),
+  date                          datetime(6),
+  constraint pk_paper primary key (id)
+);
 create table user (
   id                            bigint auto_increment not null,
   username                      varchar(255),
@@ -64,6 +82,8 @@ drop table if exists company;
 drop table if exists computer;
 
 drop table if exists profile;
+
+drop table if exists paper;
 
 drop table if exists user;
 
