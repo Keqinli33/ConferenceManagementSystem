@@ -44,4 +44,12 @@ POST     /changePwd                  controllers.UserController.changePwd()
 
 # Submit paper
 
-POST  /paper                        controllers.PaperController
+GET  /papers/new                        controllers.PaperController.create()
+POST  /papers                           controllers.PaperController.save()
+
+#Edit paper
+GET     /papers/:id                     controllers.PaperController.edit(id:Long)
+POST    /papers/:id                     controllers.PaperController.update(id:Long)
+
+#Upload paper
+POST    /papers/:id/upload              controllers.PaperController.upload(id:Long)
