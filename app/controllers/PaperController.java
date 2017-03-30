@@ -121,27 +121,59 @@ public class PaperController extends Controller {
 
         Paper newPaper = paperForm.get();
         Http.Session session = Http.Context.current().session();
-        String username = session.get("username");
-        newPaper.username= username;
+//        String username = session.get("username");
+        newPaper.username= session.get("username");
         newPaper.ifsubmit = "N";
+        newPaper.date = new Date();
         paperForm.get().save();
-        flash("success", "Paper " + paperForm.get().title + " has been created");
+        flash("success", "Thank you. Your paper abstract has been submitted successfully. " + paperForm.get().title + " has been created" +" Please keep your paper id:" + paperForm.get().id);
         return GO_HOME;
     }
-
-    public Result uploadFile() {
-        Http.MultipartFormData<File> body = request().body().asMultipartFormData();
-        Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
-        if (picture != null) {
-            String fileName = picture.getFilename();
-            String contentType = picture.getContentType();
-            File file = picture.getFile();
-            return ok("File uploaded");
-        } else {
-            flash("error", "Missing file");
-            return badRequest();
+    public Result uploadFile(Long id) {
+        Form<Paper> paperForm = formFactory.form(Paper.class);
+        return ok(
+                views.html.uploadFile.render(id, paperForm)
+        );
+    }
+    public Result selectFile(Long id) {
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        if(paperForm.hasErrors()) {
+            return badRequest(views.html.editPaper.render(id, paperForm));
         }
-//        return GO_HOME;
+        Paper savedPaper = Paper.find.byId(id);
+        if (savedPaper != null) {
+            Http.MultipartFormData<File> body = request().body().asMultipartFormData();
+            Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
+            if (picture != null) {
+                String fileName = picture.getFilename();
+                String contentType = picture.getContentType();
+                File file = picture.getFile();
+                savedPaper.ifsubmit = "Y";
+                savedPaper.format = contentType;
+                savedPaper.papersize = String.valueOf(file.length());
+                savedPaper.update();
+            } else {
+                flash("error", "Missing file");
+                return badRequest();
+            }
+        }
+        try {
+            Email email = new SimpleEmail();
+            email.setHostName("smtp.googlemail.com");
+            email.setSmtpPort(465);
+            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+            email.setSSLOnConnect(true);
+            email.setFrom("socandrew2017@gmail.com");
+            email.setSubject("Paper submitted");
+            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
+            Http.Session session = Http.Context.current().session();
+            String emailto = session.get("email");
+            email.addTo(emailto);
+            email.send();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return GO_HOME;
     }
 
 }
