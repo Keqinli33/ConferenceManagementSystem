@@ -54,4 +54,19 @@ public class ShowPaperController extends Controller{
 
     }
 
+    /**
+     * Handle profile deletion
+     */
+    public Result showMyPaper(Long id) {
+        Profile deletedProfile = Paper.find.byId(id);
+        if(deletedProfile != null){
+            deletedProfile.delete();
+            flash("success", "Computer has been deleted");
+        }
+        else{
+            flash("success", "You haven't created your profile yet");
+        }
+        return GO_HOME;
+    }
+
 }

@@ -45,4 +45,4 @@ POST     /changePwd                  controllers.UserController.changePwd()
 
 # Submit paper
 
-POST  /paper                        controllers.PaperController
+#POST  /paper                        controllers.PaperController.

@@ -62,4 +62,18 @@ public class Paper extends Model {
 
     @Formats.DateTime(pattern="yyyy-MM-dd")
     public Date date;
+
+    /**
+     * Generic query helper for entity Profile with id Long
+     */
+    public static Find<Long,Paper> find = new Find<Long,Paper>(){};
+
+    public static String GetMyPaper(String firstname, String lastname){
+        List<Paper> results =
+                find.where()
+                        .or(Expr.eq("firstname1", ))
+                        .eq("username", username)
+                        .findList();
+        return results.get(0).email;
+    }
 }

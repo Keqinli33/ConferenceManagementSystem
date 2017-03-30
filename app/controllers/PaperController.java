@@ -32,5 +32,6 @@ public class PaperController extends Controller {
         return GO_HOME;
     }
 
-    public Result
+    //public Result
+
 }
