@@ -38,7 +38,7 @@ public class ProfileController extends Controller{
         Form<Profile> profileForm = formFactory.form(Profile.class);
         Profile profile = Profile.find.byId(userid);
         return ok(
-                views.html.profile.render(userid, profileForm, profile)
+                views.html.profile.render(profileForm, profile)
         );
     }
 
@@ -46,13 +46,15 @@ public class ProfileController extends Controller{
     /**
      * Handle the 'edit form' submission
      *
-     * @param userid Id of the user to edit
      */
-    public Result edit(Long userid) throws PersistenceException {
+    public Result edit() throws PersistenceException {
         Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
         if(profileForm.hasErrors()) {
-            return badRequest(views.html.profile.render(userid, profileForm, null));
+            return badRequest(views.html.profile.render(profileForm, null));
         }
+
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
 
         Transaction txn = Ebean.beginTransaction();
         try {
@@ -126,8 +128,10 @@ public class ProfileController extends Controller{
     /**
      * Handle profile deletion
      */
-    public Result delete(Long id) {
-        Profile deletedProfile = Profile.find.byId(id);
+    public Result delete() {
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
+        Profile deletedProfile = Profile.find.byId(userid);
         if(deletedProfile != null){
             deletedProfile.delete();
             flash("success", "Computer has been deleted");

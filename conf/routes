@@ -24,8 +24,8 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Edit profile
 GET     /profile                   controllers.ProfileController.enterProfile()
-GET     /profile/:id              controllers.ProfileController.edit(id:Long)
-GET    /profiles/:id/delete        controllers.ProfileController.delete(id:Long)
+GET     /profile/edit              controllers.ProfileController.edit()
+GET    /profile/delete        controllers.ProfileController.delete()
 
 # Register a new user
 GET     /register                   controllers.UserController.register()

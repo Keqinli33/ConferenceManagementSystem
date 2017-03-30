@@ -1,4 +1,4 @@
-@(id: Long, profileForm: Form[Profile], profileObject: Profile)
+@(profileForm: Form[Profile], profileObject: Profile)
 
 @import helper._
 
@@ -8,7 +8,7 @@
 
 <h1>Edit profile</h1>
 
-@b3.form(routes.ProfileController.edit(id)) {
+@b3.form(routes.ProfileController.edit()) {
 
 <fieldset>
         @b3.select(
@@ -91,9 +91,9 @@
 </fieldset>
 
 <div class="actions">
-    <input type="submit" value="Edit profile" class="btn primary"> or
-    <a href="@routes.HomeController.list()" class="btn">Cancel</a> or
-    <a href="@routes.ProfileController.delete(id)" class="btn">Reset to empty</a>
+    <input type="submit" value="Edit profile" class="btn primary">
+    <a href="@routes.HomeController.list()" class="btn">Cancel</a>
+    <a href="@routes.ProfileController.delete()" class="btn">Reset to empty</a>
 </div>
 
 }

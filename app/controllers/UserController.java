@@ -277,7 +277,7 @@ public class UserController extends Controller {
                 Form<Profile> profileForm = formFactory.form(Profile.class);
                 Profile profile = Profile.find.byId(id);
                 return ok(
-                        views.html.profile.render(id, profileForm, profile)
+                        views.html.profile.render(profileForm, profile)
                 );
             }
         } catch (Exception e){
