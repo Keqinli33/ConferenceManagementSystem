@@ -275,8 +275,9 @@ public class UserController extends Controller {
                 System.out.println("User " + userForm.get().username + " has been created");
 
                 Form<Profile> profileForm = formFactory.form(Profile.class);
+                Profile profile = Profile.find.byId(id);
                 return ok(
-                        views.html.profile.render(id, profileForm)
+                        views.html.profile.render(id, profileForm, profile)
                 );
             }
         } catch (Exception e){

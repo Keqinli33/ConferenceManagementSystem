@@ -15,7 +15,7 @@ import com.avaje.ebean.*;
  */
 @Entity
 public class Profile extends Model{
-    public static List<String> titles = Arrays.asList("Mr.", "Ms.", "Dr.");
+    public static List<String> titles = Arrays.asList(" ", "Mr.", "Ms.", "Dr.");
 
     private static final long serialVersionUID = 1L;
 
