@@ -8,83 +8,75 @@
     
     <h1>Edit a paper</h1>
     
-    @b3.form(routes.PaperController.update()) {
+    @b3.form(routes.PaperController.update(id)) {
 
             @b3.text(paperForm("title"), '_label -> "Title", '_help -> "")
             @b3.email(paperForm("contactemail"), '_label -> "Email of Contact Author", 'placeholder -> "example@mail.com")
             @b3.email(paperForm("confirmemail"), '_label -> "Confirm Email", '_help -> "")
     }
 
-    @b3.inline.form(routes.PaperController.update()) {
-        <fieldset>
+    @b3.inline.form(routes.PaperController.update(id)) {implicit ifc =>
+
             @b3.text(paperForm("firstname1"), '_label -> "First Name", '_help -> "")
             @b3.text(paperForm("lastname1"), '_label -> "Last Name", '_help -> "")
             @b3.text(paperForm("affiliation1"), '_label -> "Affiliation", '_help -> "")
             @b3.email(paperForm("email1"), '_label -> "Email", '_help -> "")
-        </fieldset>
+
     }
-    @b3.inline.form(routes.PaperController.update()) {
-        <fieldset>
+    @b3.inline.form(routes.PaperController.update(id)) {implicit ifc =>
             @b3.text(paperForm("firstname2"), '_label -> "First Name", '_help -> "")
             @b3.text(paperForm("lastname2"), '_label -> "Last Name", '_help -> "")
             @b3.text(paperForm("affiliation2"), '_label -> "Affiliation", '_help -> "")
             @b3.email(paperForm("email2"), '_label -> "Email", '_help -> "")
-        </fieldset>
+
     }
-    @b3.inline.form(routes.PaperController.update()) {
-        <fieldset>
+    @b3.inline.form(routes.PaperController.update(id)) {implicit ifc =>
+
             @b3.text(paperForm("firstname3"), '_label -> "First Name", '_help -> "")
             @b3.text(paperForm("lastname3"), '_label -> "Last Name", '_help -> "")
             @b3.text(paperForm("affiliation3"), '_label -> "Affiliation", '_help -> "")
             @b3.email(paperForm("email3"), '_label -> "Email", '_help -> "")
-        </fieldset>
+
     }
-    @b3.inline.form(routes.PaperController.update()) {
-        <fieldset>
+    @b3.inline.form(routes.PaperController.update(id)) {implicit ifc =>
+
             @b3.text(paperForm("firstname4"), '_label -> "First Name", '_help -> "")
             @b3.text(paperForm("lastname4"), '_label -> "Last Name", '_help -> "")
             @b3.text(paperForm("affiliation4"), '_label -> "Affiliation", '_help -> "")
             @b3.email(paperForm("email4"), '_label -> "Email", '_help -> "")
-        </fieldset>
+
     }
-    @b3.inline.form(routes.PaperController.update()) {
-        <fieldset>
+    @b3.inline.form(routes.PaperController.update(id)) {implicit ifc =>
+
             @b3.text(paperForm("firstname5"), '_label -> "First Name", '_help -> "")
             @b3.text(paperForm("lastname5"), '_label -> "Last Name", '_help -> "")
             @b3.text(paperForm("affiliation5"), '_label -> "Affiliation", '_help -> "")
             @b3.email(paperForm("email5"), '_label -> "Email", '_help -> "")
-        </fieldset>
+
     }
-    @b3.inline.form(routes.PaperController.update()) {
-        <fieldset>
+    @b3.inline.form(routes.PaperController.update(id)) {implicit ifc =>
+
             @b3.text(paperForm("firstname6"), '_label -> "First Name", '_help -> "")
             @b3.text(paperForm("lastname6"), '_label -> "Last Name", '_help -> "")
             @b3.text(paperForm("affiliation6"), '_label -> "Affiliation", '_help -> "")
             @b3.email(paperForm("email6"), '_label -> "Email", '_help -> "")
-        </fieldset>
+
     }
-    @b3.inline.form(routes.PaperController.update()) {
-        <fieldset>
+    @b3.inline.form(routes.PaperController.update(id)) {implicit ifc =>
+
             @b3.text(paperForm("firstname7"), '_label -> "First Name", '_help -> "")
             @b3.text(paperForm("lastname7"), '_label -> "Last Name", '_help -> "")
             @b3.text(paperForm("affiliation7"), '_label -> "Affiliation", '_help -> "")
             @b3.email(paperForm("email7"), '_label -> "Email", '_help -> "")
-        </fieldset>
+
     }
-    @b3.inline.form(routes.PaperController.update()) {
-        <fieldset>
-            @b3.text(paperForm("firstname7"), '_label -> "First Name", '_help -> "")
-            @b3.text(paperForm("lastname7"), '_label -> "Last Name", '_help -> "")
-            @b3.text(paperForm("affiliation7"), '_label -> "Affiliation", '_help -> "")
-            @b3.email(paperForm("email7"), '_label -> "Email", '_help -> "")
-        </fieldset>
-    }
-    @b3.form(routes.PaperController.update()) {
+
+    @b3.form(routes.PaperController.update(id)) {
             @b3.text(paperForm("otherauthor"), '_label -> "Other authors", '_help -> "")
-            @opts1 = @{ Seq("Y"->"Yes","N"->"No") }
-            @b3.radio( paperForm("candidate"), options = opts1, '_label -> "Best student paper award candidate", 'value -> "Y",'_inline -> true )
-            @opts2 = @{ Seq("Y"->"Yes","N"->"No", "T"->"To be decided") }
-            @b3.radio( paperForm("volunteer"), options = opts2, '_label -> "Student Volunteer?",'value -> "Y",'_inline -> true )
+
+            @b3.radio( paperForm("candidate"), options = Seq("Y"->"Yes","N"->"No"), '_label -> "Best student paper award candidate", 'value -> "Y",'_inline -> true )
+
+            @b3.radio( paperForm("volunteer"), options = Seq("Y"->"Yes","N"->"No", "T"->"To be decided"), '_label -> "Student Volunteer?",'value -> "Y",'_inline -> true )
             @b3.textarea(paperForm("paperabstract"), '_label -> "Abstract", 'rows -> 3)
 
 

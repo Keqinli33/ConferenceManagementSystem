@@ -13,7 +13,7 @@ import models.*;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.util.Date;
-
+import java.io.File;
 /**
  * Created by shuang on 3/29/17.
  */
@@ -116,17 +116,32 @@ public class PaperController extends Controller {
     public Result save() {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
         if(paperForm.hasErrors()) {
-            return badRequest(views.html.createForm.render(paperForm));
+            return badRequest(views.html.createPaper.render(paperForm));
         }
 
         Paper newPaper = paperForm.get();
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
         newPaper.username= username;
-
+        newPaper.ifsubmit = "N";
         paperForm.get().save();
         flash("success", "Paper " + paperForm.get().title + " has been created");
         return GO_HOME;
+    }
+
+    public Result uploadFile() {
+        Http.MultipartFormData<File> body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
+        if (picture != null) {
+            String fileName = picture.getFilename();
+            String contentType = picture.getContentType();
+            File file = picture.getFile();
+            return ok("File uploaded");
+        } else {
+            flash("error", "Missing file");
+            return badRequest();
+        }
+//        return GO_HOME;
     }
 
 }
