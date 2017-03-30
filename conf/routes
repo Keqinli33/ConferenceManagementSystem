@@ -3,7 +3,7 @@
 # ~~~~
 
 # Default path will just redirect to the computer list
-GET     /                           controllers.HomeController.index()
+GET     /                           controllers.UserController.login()
 
 # Computers list (look at the default values for pagination parameters)
 GET     /computers                  controllers.HomeController.list(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
@@ -23,9 +23,9 @@ POST    /computers/:id/delete       controllers.HomeController.delete(id:Long)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Edit profile
-GET     /profile/:id              controllers.ProfileController.edit(id:Long)
-GET    /profile/:id/change               controllers.ProfileController.update(id:Long)
-GET    /profiles/:id/delete        controllers.ProfileController.delete(id:Long)
+GET     /profile                   controllers.ProfileController.enterProfile()
+GET     /profile/edit              controllers.ProfileController.edit()
+GET    /profile/delete        controllers.ProfileController.delete()
 
 # Register a new user
 GET     /register                   controllers.UserController.register()

@@ -1,4 +1,4 @@
-@(userForm: Form[User])
+@(userForm: Form[User])(err:Integer)
 
 @import helper._
 
@@ -35,4 +35,11 @@
     </div>
 
   }
+
+  @if(err==1){
+    <div>Password Error!</div>
+  }
+
+  <a class="btn success" id="register" href="@routes.UserController.register()">register</a>
+
 }
