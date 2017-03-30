@@ -14,16 +14,24 @@ import com.avaje.ebean.Model;
 /**
  * Created by shuang on 3/28/17.
  */
+
+@Entity
 public class Paper extends Model {
     private static final long serialVersionUID = 1L;
     @Id
     public long id;
-
+    public String username;
+    @Constraints.Required
     public String title;
+    @Constraints.Required
     public String contactemail;
+    @Constraints.Required
     public String firstname1;
+    @Constraints.Required
     public String lastname1;
+    @Constraints.Required
     public String email1;
+    @Constraints.Required
     public String affilation1;
     public String firstname2;
     public String lastname2;
@@ -52,6 +60,7 @@ public class Paper extends Model {
     public String otherauthor;
     public String candidate;
     public String volunteer;
+    @Constraints.Required
     public String paperabstract;
     public String ifsubmit;
     public String format;
@@ -63,17 +72,5 @@ public class Paper extends Model {
     @Formats.DateTime(pattern="yyyy-MM-dd")
     public Date date;
 
-    /**
-     * Generic query helper for entity Profile with id Long
-     */
     public static Find<Long,Paper> find = new Find<Long,Paper>(){};
-
-    public static String GetMyPaper(String firstname, String lastname){
-        List<Paper> results =
-                find.where()
-                        .or(Expr.eq("firstname1", ))
-                        .eq("username", username)
-                        .findList();
-        return results.get(0).email;
-    }
 }
