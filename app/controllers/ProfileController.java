@@ -11,6 +11,8 @@ import models.*;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 
+import play.mvc.Http.Session;
+
 /**
  * Created by sxh on 17/3/26.
  */
@@ -54,6 +56,16 @@ public class ProfileController extends Controller{
         );
     }
 
+    public Result enterProfile(){
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
+        Form<Profile> profileForm = formFactory.form(Profile.class);
+        Profile profile = Profile.find.byId(userid);
+        return ok(
+                views.html.profile.render(userid, profileForm, profile)
+        );
+    }
+
 
     /**
      * Handle the 'edit form' submission
@@ -63,7 +75,7 @@ public class ProfileController extends Controller{
     public Result edit(Long userid) throws PersistenceException {
         Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
         if(profileForm.hasErrors()) {
-            return badRequest(views.html.profile.render(userid, profileForm));
+            return badRequest(views.html.profile.render(userid, profileForm, null));
         }
 
         Transaction txn = Ebean.beginTransaction();
@@ -128,12 +140,12 @@ public class ProfileController extends Controller{
     /**
      * Edit the 'profile form'.
      */
-    public Result update(Long id) {
-        Form<Profile> profileForm = formFactory.form(Profile.class);
-        return ok(
-                views.html.profile.render(id, profileForm)
-        );
-    }
+//    public Result update(Long id) {
+//        Form<Profile> profileForm = formFactory.form(Profile.class);
+//        return ok(
+//                views.html.profile.render(id, profileForm)
+//        );
+//    }
 
     /**
      * Handle the 'new profile form' submission
