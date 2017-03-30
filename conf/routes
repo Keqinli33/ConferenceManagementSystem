@@ -41,3 +41,7 @@ GET    /temporarypwd               controllers.UserController.sendTemporaryPwd()
 POST    /temporarypwd               controllers.UserController.verifyTmpPwd()
 POST    /verifyChangePwdAuth        controllers.UserController.verifyQA()
 POST     /changePwd                  controllers.UserController.changePwd()
+
+# Submit paper
+
+POST  /paper                        controllers.PaperController
