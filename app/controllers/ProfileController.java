@@ -32,30 +32,6 @@ public class ProfileController extends Controller{
             routes.HomeController.list(0, "name", "asc", "")
     );
 
-    /**
-     * Handle default path requests, redirect to computers list
-     */
-    public Result index() {
-        return GO_HOME;
-    }
-
-    /**
-     * Display the paginated list of computers.
-     *
-     * @param page Current page number (starts from 0)
-     * @param sortBy Column to be sorted
-     * @param order Sort order (either asc or desc)
-     * @param filter Filter applied on computer names
-     */
-    public Result list(int page, String sortBy, String order, String filter) {
-        return ok(
-                views.html.list.render(
-                        Computer.page(page, 10, sortBy, order, filter),
-                        sortBy, order, filter
-                )
-        );
-    }
-
     public Result enterProfile(){
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
@@ -136,16 +112,6 @@ public class ProfileController extends Controller{
 
         return GO_HOME;
     }
-
-    /**
-     * Edit the 'profile form'.
-     */
-//    public Result update(Long id) {
-//        Form<Profile> profileForm = formFactory.form(Profile.class);
-//        return ok(
-//                views.html.profile.render(id, profileForm)
-//        );
-//    }
 
     /**
      * Handle the 'new profile form' submission
