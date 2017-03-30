@@ -7,6 +7,8 @@ import com.avaje.ebean.Transaction;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
+import play.mvc.Result;
+import play.mvc.Http;
 
 import models.*;
 
@@ -15,6 +17,7 @@ import javax.persistence.PersistenceException;
 import java.util.Date;
 import java.io.File;
 import org.apache.commons.mail.*;
+import org.apache.commons.io.FileUtils;
 /**
  * Created by shuang on 3/29/17.
  */
@@ -26,8 +29,11 @@ public class PaperController extends Controller {
         this.formFactory = formFactory;
     }
 
-    public Result GO_HOME = Results.redirect(
+    /*public Result GO_HOME = Results.redirect(
             routes.HomeController.list(0, "name", "asc", "")
+    );*/
+    public Result GO_HOME = Results.redirect(
+            routes.ShowPaperController.showMyPaper()
     );
     /**
      * Handle default path requests, redirect to computers list

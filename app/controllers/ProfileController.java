@@ -28,13 +28,17 @@ public class ProfileController extends Controller{
     /**
      * This result directly redirect to application home.
      */
-    public Result GO_HOME = Results.redirect(
+    /*public Result GO_HOME = Results.redirect(
             routes.HomeController.list(0, "name", "asc", "")
+    );*/
+    public Result GO_HOME = Results.redirect(
+            routes.ShowPaperController.showMyPaper()
     );
 
     public Result enterProfile(){
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
+        System.out.println("Enter profile page user id is "+userid.toString());
         Form<Profile> profileForm = formFactory.form(Profile.class);
         Profile profile = Profile.find.byId(userid);
         return ok(
