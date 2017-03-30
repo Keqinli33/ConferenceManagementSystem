@@ -7,9 +7,13 @@ import play.data.*;
 import static play.data.Form.*;
 
 import models.*;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by keqinli on 3/29/17.
  */
@@ -46,27 +50,53 @@ public class ShowPaperController extends Controller{
     }
 
     /**
-     * Show the papera of user
-     */
-    public Result showMyPaper(String username){
-        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        Paper my_paper = paperForm.get();
-
-    }
-
-    /**
      * Handle profile deletion
      */
-    public Result showMyPaper(Long id) {
-        Profile deletedProfile = Paper.find.byId(id);
-        if(deletedProfile != null){
-            deletedProfile.delete();
-            flash("success", "Computer has been deleted");
-        }
-        else{
-            flash("success", "You haven't created your profile yet");
-        }
-        return GO_HOME;
+    public Result showMyPaper() {
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        Paper paperInfo = paperForm.get();
+        Http.Session session = Http.Context.current().session();
+        String username = session.get("username");
+
+        List<Paper> res = new ArrayList<Paper>();
+        res = paperInfo.GetMyPaper(username);
+
+//        Long id = res.get(0).id;
+//        String title = res.get(0).title;
+//        String conference = res.get(0).conference;
+//
+//        String authors = "";
+//        authors = authors + res.get(0).firstname1 + " ";
+//        authors = authors + res.get(0).lastname1 + ", ";
+//        authors = authors + res.get(0).firstname2 + " ";
+//        authors = authors + res.get(0).lastname2 + ", ";
+//        authors = authors + res.get(0).firstname3 + " ";
+//        authors = authors + res.get(0).lastname3 + ", ";
+//        authors = authors + res.get(0).firstname4 + " ";
+//        authors = authors + res.get(0).lastname4 + ", ";
+//        authors = authors + res.get(0).firstname5 + " ";
+//        authors = authors + res.get(0).lastname5 + ", ";
+//        authors = authors + res.get(0).firstname6 + " ";
+//        authors = authors + res.get(0).lastname6 + ", ";
+//        authors = authors + res.get(0).firstname7 + " ";
+//        authors = authors + res.get(0).lastname7;
+//
+        String email = User.GetEmailByUsername(username);
+//
+//        String topic = res.get(0).topic;
+//        String status = res.get(0).status;
+//        String format = res.get(0).format;
+//        String filesize = res.get(0).papersize;
+//        Date date = res.get(0).date;
+//        String action = "Modify";
+
+
+
+        return ok(
+                views.html.showmypaper.render(paperForm,res, email)
+        );
+
+        //return GO_HOME;
     }
 
 }

@@ -73,4 +73,12 @@ public class Paper extends Model {
     public Date date;
 
     public static Find<Long,Paper> find = new Find<Long,Paper>(){};
+
+    public static List<Paper> GetMyPaper(String username){
+        List<Paper> results =
+                find.where()
+                        .eq("username",username)
+                        .findList();
+        return results;
+    }
 }

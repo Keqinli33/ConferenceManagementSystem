@@ -14,6 +14,8 @@ import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.util.Date;
 
+
+
 /**
  * Created by shuang on 3/29/17.
  */
@@ -95,7 +97,11 @@ public class PaperController extends Controller {
 //                savedPaper.topic = newPaperData.topic;
 //                savedPaper.status = newPaperData.status;
                 savedPaper.date = newPaperData.date;
-                
+
+                //savedPaper.id = id;
+                Http.Session session = Http.Context.current().session();
+                String username = session.get("username");
+                savedPaper.username= username;
 
                 savedPaper.update();
                 flash("success", "Paper " + paperForm.get().title + " has been updated");
