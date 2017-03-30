@@ -8,7 +8,7 @@
 
     <h1>Upload Paper</h1>
 
-    @b3.form(routes.PaperController.uploadFile(id)) {
+    @b3.form(routes.PaperController.selectFile(id)) {
 
         <fieldset>
             @b3.file(paperForm("file"), 'enctype -> "multipart/form-data", '_label -> "File", 'class -> "form-control" )

@@ -7,7 +7,8 @@ import com.avaje.ebean.Transaction;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
-
+import play.mvc.Result;
+import play.mvc.Http;
 import models.*;
 
 import javax.inject.Inject;
@@ -55,6 +56,9 @@ public class PaperController extends Controller {
             Paper savedPaper = Paper.find.byId(id);
             if (savedPaper != null) {
                 Paper newPaperData = paperForm.get();
+//                if(newPaperData.contactemail != newPaperData.confirmemail){
+//                    return badRequest(views.html.editPaper.render(id, paperForm));
+//                }
                 savedPaper.title = newPaperData.title;
                 savedPaper.contactemail = newPaperData.contactemail;
                 savedPaper.firstname1 = newPaperData.firstname1;
@@ -121,6 +125,9 @@ public class PaperController extends Controller {
         }
 
         Paper newPaper = paperForm.get();
+//        if(newPaper.contactemail != newPaper.confirmemail){
+//            return badRequest(views.html.createPaper.render(paperForm));
+//        }
         Http.Session session = Http.Context.current().session();
 //        String username = session.get("username");
         newPaper.username= session.get("username");
@@ -138,25 +145,38 @@ public class PaperController extends Controller {
     }
     public Result selectFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        if(paperForm.hasErrors()) {
-            return badRequest(views.html.editPaper.render(id, paperForm));
-        }
+//        if(paperForm.hasErrors()) {
+//            return badRequest(views.html.editPaper.render(id, paperForm));
+//        }
         Paper savedPaper = Paper.find.byId(id);
+        System.out.println("begin upload file");
         if (savedPaper != null) {
-            Http.MultipartFormData<File> body = request().body().asMultipartFormData();
-            Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
-            if (picture != null) {
-                String fileName = picture.getFilename();
-                String contentType = picture.getContentType();
-                File file = picture.getFile();
+            System.out.println("upload file");
+            Http.MultipartFormData body = request().body().asMultipartFormData();
+            if(body == null)
+            {
+                return badRequest("Invalid request, required is POST with enctype=multipart/form-data.");
+            }
+
+            Http.MultipartFormData.FilePart<File> filePart = body.getFile("file");
+            if(filePart == null)
+            {
+                return badRequest("Invalid request, no file has been sent.");
+            }
+
+            // getContentType can return null, so we check the other way around to prevent null exception
+//            if(!"application/pdf".equalsIgnoreCase(filePart.getContentType()))
+//            {
+//                return badRequest("Invalid request, only PDFs are allowed.");
+//            }
+
+                File file= filePart.getFile();
                 savedPaper.ifsubmit = "Y";
-                savedPaper.format = contentType;
+                savedPaper.format = filePart.getContentType();
                 savedPaper.papersize = String.valueOf(file.length());
                 savedPaper.update();
-            } else {
-                flash("error", "Missing file");
-                return badRequest();
-            }
+
+
         }
         try {
             Email email = new SimpleEmail();

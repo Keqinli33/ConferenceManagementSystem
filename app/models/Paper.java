@@ -21,17 +21,19 @@ public class Paper extends Model {
     @Id
     public long id;
     public String username;
-    @Constraints.Required
+//    @Constraints.Required
     public String title;
-    @Constraints.Required
+//    @Constraints.Required
     public String contactemail;
-    @Constraints.Required
+//    @Constraints.Required
+    public String confirmemail;
+//    @Constraints.Required
     public String firstname1;
-    @Constraints.Required
+//    @Constraints.Required
     public String lastname1;
-    @Constraints.Required
+//    @Constraints.Required
     public String email1;
-    @Constraints.Required
+//    @Constraints.Required
     public String affilation1;
     public String firstname2;
     public String lastname2;
@@ -60,11 +62,12 @@ public class Paper extends Model {
     public String otherauthor;
     public String candidate;
     public String volunteer;
-    @Constraints.Required
+//    @Constraints.Required
     public String paperabstract;
     public String ifsubmit;
     public String format;
     public String papersize;
+    public String file;
     public String conference;
     public String topic;
     public String status;
