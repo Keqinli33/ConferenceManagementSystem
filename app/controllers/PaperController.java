@@ -16,6 +16,7 @@ import javax.persistence.PersistenceException;
 import java.util.Date;
 import java.io.File;
 import org.apache.commons.mail.*;
+import org.apache.commons.io.FileUtils;
 /**
  * Created by shuang on 3/29/17.
  */
@@ -140,7 +141,7 @@ public class PaperController extends Controller {
     public Result uploadFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class);
         return ok(
-                views.html.uploadFile.render(id, paperForm)
+                views.html.selectFile.render(id, paperForm)
         );
     }
     public Result selectFile(Long id) {
@@ -150,7 +151,7 @@ public class PaperController extends Controller {
 //        }
         Paper savedPaper = Paper.find.byId(id);
         System.out.println("begin upload file");
-        if (savedPaper != null) {
+//        if (savedPaper != null) {
             System.out.println("upload file");
             Http.MultipartFormData body = request().body().asMultipartFormData();
             if(body == null)
@@ -170,30 +171,33 @@ public class PaperController extends Controller {
 //                return badRequest("Invalid request, only PDFs are allowed.");
 //            }
 
-                File file= filePart.getFile();
-                savedPaper.ifsubmit = "Y";
-                savedPaper.format = filePart.getContentType();
-                savedPaper.papersize = String.valueOf(file.length());
-                savedPaper.update();
+            File file= filePart.getFile();
+            File destination = new File("/home/app/uploads/", file.getName());
+            FileUtils.moveFile(file, destination);
+//                savedPaper.ifsubmit = "Y";
+//                savedPaper.format = filePart.getContentType();
+//                savedPaper.papersize = String.valueOf(file.length());
+//                savedPaper.update();
 
 
-        }
-        try {
-            Email email = new SimpleEmail();
-            email.setHostName("smtp.googlemail.com");
-            email.setSmtpPort(465);
-            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
-            email.setSSLOnConnect(true);
-            email.setFrom("socandrew2017@gmail.com");
-            email.setSubject("Paper submitted");
-            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
-            Http.Session session = Http.Context.current().session();
-            String emailto = session.get("email");
-            email.addTo(emailto);
-            email.send();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+//        }
+//        try {
+//            Email email = new SimpleEmail();
+//            email.setHostName("smtp.googlemail.com");
+//            email.setSmtpPort(465);
+//            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+//            email.setSSLOnConnect(true);
+//            email.setFrom("socandrew2017@gmail.com");
+//            email.setSubject("Paper submitted");
+//            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
+//            Http.Session session = Http.Context.current().session();
+//            String emailto = session.get("email");
+//            email.addTo(emailto);
+//            email.send();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+        flash("success", "Paper File has been submitted");
         return GO_HOME;
     }
 
