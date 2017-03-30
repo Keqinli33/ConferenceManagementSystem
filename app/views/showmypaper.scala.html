@@ -38,8 +38,8 @@
                         <td>@paper.status</td>
                         <td>@paper.format  @paper.papersize</td>
                         <td>@paper.date</td>
-                        @*should be <a href></a>*@
-                        <td><a href="@routes.PaperController.update(@paper.id)" class="btn">Modify</a></td>
+                        <td><a href="@routes.PaperController.edit(paper.id)">Modify</a></td>
+                        @*<td>Modify</td>*@
                     </tr>
                 }
 
