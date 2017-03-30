@@ -53,4 +53,5 @@ POST    /papers/:id                     controllers.PaperController.update(id:Lo
 
 GET   /papers                      controllers.ShowPaperController.showMyPaper()
 #Upload paper
-#POST    /papers/:id/upload              controllers.PaperController.upload(id:Long)
+GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
+POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
