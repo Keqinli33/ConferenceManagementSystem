@@ -1,0 +1,57 @@
+@(paperForm: Form[Paper], paperInfo: List[Paper], myemail: String)
+
+@import helper._
+
+@import b3.vertical.fieldConstructor
+
+@main {
+
+    <h1>Show My Paper</h1>
+
+    @b3.form(routes.ShowPaperController.showMyPaper()) {
+
+        <fieldset>
+            @myconference = @{ Seq("C" ->paperInfo.get(0).conference) }
+            @b3.select( paperForm("conference"), options = myconference, '_label -> "Select" )
+
+            <table class="mypaper zebra-striped">
+                <thead>
+                    <tr>
+                        <th>Paper Id / Title </th>
+                        <th>Conference / Submission Deadline</th>
+                        <th>Authors / Contact email</th>
+                        <th>Topic</th>
+                        <th>Status</th>
+                        <th>Format / File Size</th>
+                        <th>Submission Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                @for(paper <- paperInfo) {
+                    <tr>
+                        <td>@paper.id    @paper.title</td>
+                        <td>@paper.conference </td>
+                        <td>@paper.firstname1 @paper.lastname1, @paper.firstname2 @paper.lastname2, @paper.firstname3 @paper.lastname3, @paper.firstname4 @paper.lastname4, @paper.firstname5 @paper.lastname5, @paper.firstname6 @paper.lastname6, @paper.firstname7 @paper.lastname7 myemail</td>
+                        <td>@paper.topic</td>
+                        <td>@paper.status</td>
+                        <td>@paper.format  @paper.papersize</td>
+                        <td>@paper.date</td>
+                        @*should be <a href></a>*@
+                        <td><a href="@routes.PaperController.update(@paper.id)" class="btn">Modify</a></td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+
+        </fieldset>
+
+        <div class="actions">
+            <input type="submit" value="Show My Papers" class="btn primary"> or
+            <a href="@routes.HomeController.list()" class="btn">Cancel</a>
+        </div>
+
+    }
+}
