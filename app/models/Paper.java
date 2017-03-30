@@ -16,7 +16,9 @@ import com.avaje.ebean.Model;
  */
 public class Paper extends Model {
     private static final long serialVersionUID = 1L;
+    @Id
     public long id;
+
     public String title;
     public String contactemail;
     public String authorsinfo;

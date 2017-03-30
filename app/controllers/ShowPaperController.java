@@ -45,4 +45,13 @@ public class ShowPaperController extends Controller{
         );
     }
 
+    /**
+     * Show the papera of user
+     */
+    public Result showMyPaper(String username){
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        Paper my_paper = paperForm.get();
+
+    }
+
 }
