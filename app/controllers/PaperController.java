@@ -94,7 +94,7 @@ public class PaperController extends Controller {
 //                savedPaper.conference = newPaperData.conference;
 //                savedPaper.topic = newPaperData.topic;
 //                savedPaper.status = newPaperData.status;
-                savedPaper.date = newPaperData.date;
+//                savedPaper.date = newPaperData.date;
                 
 
                 savedPaper.update();
@@ -118,8 +118,15 @@ public class PaperController extends Controller {
         if(paperForm.hasErrors()) {
             return badRequest(views.html.createForm.render(paperForm));
         }
+
+        Paper newPaper = paperForm.get();
+        Http.Session session = Http.Context.current().session();
+        String username = session.get("username");
+        newPaper.username= username;
+
         paperForm.get().save();
         flash("success", "Paper " + paperForm.get().title + " has been created");
         return GO_HOME;
     }
+
 }
