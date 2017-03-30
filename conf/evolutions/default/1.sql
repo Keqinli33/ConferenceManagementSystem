@@ -18,6 +18,53 @@ create table computer (
   constraint pk_computer primary key (id)
 );
 
+create table paper (
+  id                            bigint auto_increment not null,
+  username                      varchar(255),
+  title                         varchar(255),
+  contactemail                  varchar(255),
+  firstname1                    varchar(255),
+  lastname1                     varchar(255),
+  email1                        varchar(255),
+  affilation1                   varchar(255),
+  firstname2                    varchar(255),
+  lastname2                     varchar(255),
+  email2                        varchar(255),
+  affilation2                   varchar(255),
+  firstname3                    varchar(255),
+  lastname3                     varchar(255),
+  email3                        varchar(255),
+  affilation3                   varchar(255),
+  firstname4                    varchar(255),
+  lastname4                     varchar(255),
+  email4                        varchar(255),
+  affilation4                   varchar(255),
+  firstname5                    varchar(255),
+  lastname5                     varchar(255),
+  email5                        varchar(255),
+  affilation5                   varchar(255),
+  firstname6                    varchar(255),
+  lastname6                     varchar(255),
+  email6                        varchar(255),
+  affilation6                   varchar(255),
+  firstname7                    varchar(255),
+  lastname7                     varchar(255),
+  email7                        varchar(255),
+  affilation7                   varchar(255),
+  otherauthor                   varchar(255),
+  candidate                     varchar(255),
+  volunteer                     varchar(255),
+  paperabstract                 varchar(255),
+  ifsubmit                      varchar(255),
+  format                        varchar(255),
+  papersize                     varchar(255),
+  conference                    varchar(255),
+  topic                         varchar(255),
+  status                        varchar(255),
+  date                          datetime(6),
+  constraint pk_paper primary key (id)
+);
+
 create table profile (
   userid                        bigint auto_increment not null,
   title                         varchar(255),
@@ -62,6 +109,8 @@ drop index ix_computer_company_id on computer;
 drop table if exists company;
 
 drop table if exists computer;
+
+drop table if exists paper;
 
 drop table if exists profile;
 

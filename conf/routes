@@ -42,3 +42,16 @@ GET    /temporarypwd               controllers.UserController.sendTemporaryPwd()
 POST    /temporarypwd               controllers.UserController.verifyTmpPwd()
 POST    /verifyChangePwdAuth        controllers.UserController.verifyQA()
 POST     /changePwd                  controllers.UserController.changepwd()
+
+# Submit paper
+
+GET  /papers/new                        controllers.PaperController.create()
+POST  /papers                           controllers.PaperController.save()
+
+#Edit paper
+GET     /papers/:id                     controllers.PaperController.edit(id:Long)
+POST    /papers/:id                     controllers.PaperController.update(id:Long)
+
+#Upload paper
+GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
+POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)

@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Profile;
+//import org.hibernate.validator.constraints.Email;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -33,7 +34,6 @@ import java.util.Random;
 
 //import play.libs.Mail;
 import org.apache.commons.mail.*;
-
 
 /**
  * Created by Ling on 2017/3/27.
