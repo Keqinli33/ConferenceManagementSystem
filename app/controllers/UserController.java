@@ -72,7 +72,7 @@ public class UserController extends Controller {
         );
     }
 
-    public Result changePwd(){
+    public Result changepwd(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         User new_user = userForm.get();
         String password = new_user.username;
