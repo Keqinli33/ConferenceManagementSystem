@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.util.Date;
 import java.io.File;
+import org.apache.commons.mail.*;
 /**
  * Created by shuang on 3/29/17.
  */
