@@ -11,8 +11,8 @@
     @b3.form(routes.ShowPaperController.showMyPaper()) {
 
         <fieldset>
-            @myconference = @{ Seq("C" ->paperInfo.get(0).conference) }
-            @b3.select( paperForm("conference"), options = myconference, '_label -> "Select" )
+
+            @b3.select( paperForm("conference"), options({"C" -> "myConference"}), '_label -> "Select" )
 
             <table class="mypaper zebra-striped">
                 <thead>
