@@ -88,12 +88,12 @@ public class PaperController extends Controller {
                 savedPaper.candidate = newPaperData.candidate;
                 savedPaper.volunteer = newPaperData.volunteer;
                 savedPaper.paperabstract = newPaperData.paperabstract;
-                savedPaper.ifsubmit = newPaperData.ifsubmit;
-                savedPaper.format = newPaperData.format;
-                savedPaper.papersize = newPaperData.papersize;
-                savedPaper.conference = newPaperData.conference;
-                savedPaper.topic = newPaperData.topic;
-                savedPaper.status = newPaperData.status;
+//                savedPaper.ifsubmit = newPaperData.ifsubmit;
+//                savedPaper.format = newPaperData.format;
+//                savedPaper.papersize = newPaperData.papersize;
+//                savedPaper.conference = newPaperData.conference;
+//                savedPaper.topic = newPaperData.topic;
+//                savedPaper.status = newPaperData.status;
                 savedPaper.date = newPaperData.date;
                 
 

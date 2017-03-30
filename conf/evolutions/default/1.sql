@@ -39,6 +39,7 @@ create table profile (
 );
 create table paper (
   id                            bigint auto_increment not null,
+  username                      varchar(255),
   title                         varchar(255),
   contactemail                  varchar(255),
   firstname1                     varchar(255),
