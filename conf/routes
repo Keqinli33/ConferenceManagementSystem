@@ -34,10 +34,10 @@ POST    /register                   controllers.UserController.addUser()
 # Login
 GET     /login                      controllers.UserController.login()
 POST    /login                      controllers.UserController.verifyUser()
+GET     /logout                     controllers.UserController.logout()
 
 # Set password
 GET     /verifyChangePwdAuth        controllers.UserController.verifyAuth()
 GET    /temporarypwd               controllers.UserController.sendTemporaryPwd()
 POST    /temporarypwd               controllers.UserController.verifyTmpPwd()
 POST    /verifyChangePwdAuth        controllers.UserController.verifyQA()
-POST     /changePwd                  controllers.UserController.changePwd()

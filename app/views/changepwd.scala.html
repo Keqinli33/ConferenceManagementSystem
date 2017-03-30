@@ -8,17 +8,5 @@
 
     <h1>Change Password</h1>
 
-    @b3.form(routes.UserController.changePwd()) {
 
-        <fieldset>
-            @b3.password(userForm("username"), '_label -> "Password", 'required -> "true")
-            @b3.password(userForm("password"), '_label -> "Enter again", 'required -> "true")
-        </fieldset>
-
-        <div class="actions">
-            <input type="submit" value="Change Password" class="btn primary"> or
-            <a href="@routes.HomeController.list()" class="btn">Cancel</a>
-        </div>
-
-    }
 }

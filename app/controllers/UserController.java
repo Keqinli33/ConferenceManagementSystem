@@ -47,6 +47,7 @@ public class UserController extends Controller {
             routes.HomeController.list(0, "name", "asc", "")
     );
 
+
     public Result register() {
         Form<User> userForm = formFactory.form(User.class);
         return ok(
@@ -65,7 +66,7 @@ public class UserController extends Controller {
         );
     }
 
-    public Result changePwd(){
+    /*public Result changepwd(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         User new_user = userForm.get();
         String password = new_user.username;
@@ -92,7 +93,7 @@ public class UserController extends Controller {
             e.printStackTrace();
         }
         return GO_HOME;
-    }
+    }*/
 
     /**
      * Get request for verify auth for changing password
@@ -271,6 +272,14 @@ public class UserController extends Controller {
             e.printStackTrace();
         }
         return ok();
+    }
+
+    public Result logout(){
+        Session session = Http.Context.current().session();
+        session.clear();
+        return redirect(
+                routes.UserController.login()
+        );
     }
 
     /**
