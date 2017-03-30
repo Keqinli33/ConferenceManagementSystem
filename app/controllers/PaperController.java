@@ -61,6 +61,9 @@ public class PaperController extends Controller {
             Paper savedPaper = Paper.find.byId(id);
             if (savedPaper != null) {
                 Paper newPaperData = paperForm.get();
+//                if(newPaperData.contactemail != newPaperData.confirmemail){
+//                    return badRequest(views.html.editPaper.render(id, paperForm));
+//                }
                 savedPaper.title = newPaperData.title;
                 savedPaper.contactemail = newPaperData.contactemail;
                 savedPaper.firstname1 = newPaperData.firstname1;
@@ -127,6 +130,9 @@ public class PaperController extends Controller {
         }
 
         Paper newPaper = paperForm.get();
+//        if(newPaper.contactemail != newPaper.confirmemail){
+//            return badRequest(views.html.createPaper.render(paperForm));
+//        }
         Http.Session session = Http.Context.current().session();
 //        String username = session.get("username");
         newPaper.username= session.get("username");
@@ -139,47 +145,63 @@ public class PaperController extends Controller {
     public Result uploadFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class);
         return ok(
-                views.html.uploadFile.render(id, paperForm)
+                views.html.selectFile.render(id, paperForm)
         );
     }
     public Result selectFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        if(paperForm.hasErrors()) {
-            return badRequest(views.html.editPaper.render(id, paperForm));
-        }
+//        if(paperForm.hasErrors()) {
+//            return badRequest(views.html.editPaper.render(id, paperForm));
+//        }
         Paper savedPaper = Paper.find.byId(id);
-        if (savedPaper != null) {
-            Http.MultipartFormData<File> body = request().body().asMultipartFormData();
-            Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
-            if (picture != null) {
-                String fileName = picture.getFilename();
-                String contentType = picture.getContentType();
-                File file = picture.getFile();
-                savedPaper.ifsubmit = "Y";
-                savedPaper.format = contentType;
-                savedPaper.papersize = String.valueOf(file.length());
-                savedPaper.update();
-            } else {
-                flash("error", "Missing file");
-                return badRequest();
+        System.out.println("begin upload file");
+//        if (savedPaper != null) {
+            System.out.println("upload file");
+            Http.MultipartFormData body = request().body().asMultipartFormData();
+            if(body == null)
+            {
+                return badRequest("Invalid request, required is POST with enctype=multipart/form-data.");
             }
-        }
-        try {
-            Email email = new SimpleEmail();
-            email.setHostName("smtp.googlemail.com");
-            email.setSmtpPort(465);
-            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
-            email.setSSLOnConnect(true);
-            email.setFrom("socandrew2017@gmail.com");
-            email.setSubject("Paper submitted");
-            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
-            Http.Session session = Http.Context.current().session();
-            String emailto = session.get("email");
-            email.addTo(emailto);
-            email.send();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
+            Http.MultipartFormData.FilePart<File> filePart = body.getFile("file");
+            if(filePart == null)
+            {
+                return badRequest("Invalid request, no file has been sent.");
+            }
+
+            // getContentType can return null, so we check the other way around to prevent null exception
+//            if(!"application/pdf".equalsIgnoreCase(filePart.getContentType()))
+//            {
+//                return badRequest("Invalid request, only PDFs are allowed.");
+//            }
+
+            File file= filePart.getFile();
+            File destination = new File("/home/app/uploads/", file.getName());
+            FileUtils.moveFile(file, destination);
+//                savedPaper.ifsubmit = "Y";
+//                savedPaper.format = filePart.getContentType();
+//                savedPaper.papersize = String.valueOf(file.length());
+//                savedPaper.update();
+
+
+//        }
+//        try {
+//            Email email = new SimpleEmail();
+//            email.setHostName("smtp.googlemail.com");
+//            email.setSmtpPort(465);
+//            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+//            email.setSSLOnConnect(true);
+//            email.setFrom("socandrew2017@gmail.com");
+//            email.setSubject("Paper submitted");
+//            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
+//            Http.Session session = Http.Context.current().session();
+//            String emailto = session.get("email");
+//            email.addTo(emailto);
+//            email.send();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+        flash("success", "Paper File has been submitted");
         return GO_HOME;
     }
 
