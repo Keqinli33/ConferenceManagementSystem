@@ -102,7 +102,7 @@ public class PaperController extends Controller {
 //                savedPaper.format = newPaperData.format;
 //                savedPaper.papersize = newPaperData.papersize;
 //                savedPaper.conference = newPaperData.conference;
-//                savedPaper.topic = newPaperData.topic;
+                savedPaper.topic = newPaperData.topic;
 //                savedPaper.status = newPaperData.status;
 //                savedPaper.date = newPaperData.date;
                 

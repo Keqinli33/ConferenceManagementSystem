@@ -12,10 +12,13 @@
     @b3.form(routes.PaperController.save()) {
 
             @b3.text(paperForm("title"), '_label -> "Title", '_help -> "")
+            @b3.text(paperForm("topic"), '_label -> "Topic", '_help -> "")
             @b3.email(paperForm("contactemail"), '_label -> "Email of Contact Author", 'placeholder -> "example@mail.com")
        <br><br><br><br> @b3.email(paperForm("confirmemail"), '_label -> "Confirm Email", '_help -> "")
 
+@if(paperForm("contactemail") == paperForm("confirmemail")){
 
+}
 
             @b3.text(paperForm("firstname1"), '_label -> "First Name", '_help -> "")
             @b3.text(paperForm("lastname1"), '_label -> "Last Name", '_help -> "")
