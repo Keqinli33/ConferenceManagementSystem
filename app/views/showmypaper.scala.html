@@ -12,7 +12,8 @@
 
         <fieldset>
 
-            @b3.select( paperForm("conference"), options({"C" -> "myConference"}), '_label -> "Select" )
+@*//            @b3.select( paperForm("conference"), options = Seq{"C" -> paperInfo.get(0).conference}, '_label -> "Select" )*@
+            @b3.select( paperForm("conference"), options("C" -> "myConference"), '_label -> "Select" )
 
             <table class="mypaper zebra-striped">
                 <thead>
