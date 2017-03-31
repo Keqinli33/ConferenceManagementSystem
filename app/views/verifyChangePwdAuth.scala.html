@@ -1,4 +1,4 @@
-@(userForm: Form[User])
+@(userForm: Form[User])(err: Integer)
 
 @import helper._
 
@@ -46,5 +46,7 @@
     </div>
 
   }
-
+  @if(err == 1){
+    <div style="color: red;">Answer Wrong!</div>
+  }
 }

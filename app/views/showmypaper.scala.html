@@ -49,11 +49,15 @@
                         <td>@paper.firstname1 @paper.lastname1, @paper.firstname2 @paper.lastname2, @paper.firstname3 @paper.lastname3, @paper.firstname4 @paper.lastname4, @paper.firstname5 @paper.lastname5, @paper.firstname6 @paper.lastname6, @paper.firstname7 @paper.lastname7 myemail</td>
                         <td>@paper.topic</td>
                         <td>@paper.status</td>
-                        <td>@paper.format  @paper.papersize</td>
+
+                            @if(paper.ifsubmit == "Y") {
+                                <td>@paper.format @paper.papersize</td>
+                            } else {
+                                <td><a class="btn success" id="upload" href="@routes.PaperController.uploadFile(paper.id)">Upload a new paper</a></td>
+                            }
+
                         <td>@paper.date</td>
                         <td><a href="@routes.PaperController.edit(paper.id)">Modify</a></td>
-                        <td><a class="btn success" id="upload" href="@routes.PaperController.uploadFile(paper.id)">Upload a new paper</a>
-                        </td>
                         @*<td>Modify</td>*@
                     </tr>
                 }

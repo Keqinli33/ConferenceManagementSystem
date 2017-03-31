@@ -57,7 +57,7 @@ public class UserController extends Controller {
     public Result register() {
         Form<User> userForm = formFactory.form(User.class);
         return ok(
-                views.html.register.render(userForm)
+                views.html.register.render(userForm, 0)
         );
     }
 
@@ -108,7 +108,7 @@ public class UserController extends Controller {
     public Result verifyAuth() {
         Form<User> userForm = formFactory.form(User.class);
         return ok(
-                views.html.verifyChangePwdAuth.render(userForm)
+                views.html.verifyChangePwdAuth.render(userForm, 0)
         );
     }
 
@@ -135,7 +135,6 @@ public class UserController extends Controller {
         //SendEmail.SendEmail(email, tmp_pwd);
         SendEmail(email,tmp_pwd);
         System.out.println("Email sent");
-        //TODO notify tmp pwd sent to register email
 
         new_user.AddTemporaryPwd(username, tmp_pwd);
 
@@ -183,7 +182,7 @@ public class UserController extends Controller {
         }
         //TODO notify frontend verification fail
 
-        return badRequest(views.html.verifyChangePwdAuth.render(userForm));
+        return ok(views.html.verifyChangePwdAuth.render(userForm,1));
     }
     /**
      * For login
@@ -247,7 +246,7 @@ public class UserController extends Controller {
                 }
             }
             System.out.println("Please correct the following errors: " + errorMsg);
-            return badRequest(views.html.register.render(userForm));
+            return ok(views.html.register.render(userForm,0));
         }
 
         try {
@@ -263,7 +262,7 @@ public class UserController extends Controller {
                 //flash("success", "Username " + username + " existed!");
                 //TODO notify frontend with error messgae here
 
-                return badRequest(views.html.register.render(userForm));
+                return badRequest(views.html.register.render(userForm,1));
             }else{
                 //if not exist, add user
                 new_user.password = MD5(password);
