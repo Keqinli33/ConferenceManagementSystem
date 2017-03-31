@@ -216,6 +216,8 @@ public class UserController extends Controller {
                 Long id = new_user.GetUserID(username);
                 session.put("username",username);
                 session.put("userid",id.toString());
+                String email = new_user.GetEmailByUsername(username);
+                session.put("email",email);
                 System.out.println("Login successfully");
                 flash("success", "Login success");
                 return GO_HOME;
@@ -252,6 +254,7 @@ public class UserController extends Controller {
             User new_user = userForm.get();
             String username = new_user.username;
             String password = new_user.password;
+            String email = new_user.email;
 
             //determine if the username exist (username needs to be unique)
             if(new_user.IfUserExist(username)){
@@ -271,6 +274,7 @@ public class UserController extends Controller {
                 Session session = Http.Context.current().session();
                 session.put("username",username);
                 session.put("userid",id.toString());
+                session.put("email",email);
 
                 System.out.println("User " + userForm.get().username + " has been created");
 

@@ -174,10 +174,13 @@ public class PaperController extends Controller {
 //            {
 //                return badRequest("Invalid request, only PDFs are allowed.");
 //            }
-
-            File file= filePart.getFile();
-            File destination = new File("/home/app/uploads/", file.getName());
-            FileUtils.moveFile(file, destination);
+            try {
+                File file = filePart.getFile();
+                File destination = new File("/Users/Ling/uploads", file.getName());
+                FileUtils.moveFile(file, destination);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
 //                savedPaper.ifsubmit = "Y";
 //                savedPaper.format = filePart.getContentType();
 //                savedPaper.papersize = String.valueOf(file.length());
