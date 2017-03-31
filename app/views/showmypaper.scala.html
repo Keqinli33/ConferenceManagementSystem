@@ -1,4 +1,4 @@
-@(paperForm: Form[Paper], paperInfo: List[Paper], authors: String)
+@(paperForm: Form[Paper], paperInfo: List[Paper], authors: List[String])
 
 @import helper._
 
@@ -41,12 +41,12 @@
                 </thead>
                 <tbody>
 
-                @for(paper <- paperInfo) {
+                @for(paper <- paperInfo; author <- authors) {
                     <tr>
                         <td>@paper.id    @paper.title</td>
                         <td>@paper.conference </td>
                         @*should deal if author exist*@
-                        <td>@authors</td>
+                        <td>@author</td>
                         <td>@paper.topic</td>
                         <td>@paper.status</td>
 

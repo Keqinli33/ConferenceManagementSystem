@@ -66,41 +66,45 @@ public class ShowPaperController extends Controller{
 //        String title = res.get(0).title;
 //        String conference = res.get(0).conference;
 //
-        String authors = "";
-        if(!res.get(0).firstname1.isEmpty()){
-            authors = authors + res.get(0).firstname1 + " ";
-            authors = authors + res.get(0).lastname1 + ", ";
-            authors = authors + res.get(0).email1 + " ";
-        }
-        if(!res.get(0).firstname2.isEmpty()){
-            authors = authors + res.get(0).firstname2 + " ";
-            authors = authors + res.get(0).lastname2 + ", ";
-            authors = authors + res.get(0).email2 + " ";
-        }
-        if(!res.get(0).firstname3.isEmpty()){
-            authors = authors + res.get(0).firstname3 + " ";
-            authors = authors + res.get(0).lastname3 + ", ";
-            authors = authors + res.get(0).email3 + " ";
-        }
-        if(!res.get(0).firstname4.isEmpty()){
-            authors = authors + res.get(0).firstname4 + " ";
-            authors = authors + res.get(0).lastname4 + ", ";
-            authors = authors + res.get(0).email4 + " ";
-        }
-        if(!res.get(0).firstname5.isEmpty()){
-            authors = authors + res.get(0).firstname5 + " ";
-            authors = authors + res.get(0).lastname5 + ", ";
-            authors = authors + res.get(0).email5 + " ";
-        }
-        if(!res.get(0).firstname6.isEmpty()){
-            authors = authors + res.get(0).firstname6 + " ";
-            authors = authors + res.get(0).lastname6 + ", ";
-            authors = authors + res.get(0).email6 + " ";
-        }
-        if(!res.get(0).firstname7.isEmpty()){
-            authors = authors + res.get(0).firstname7 + " ";
-            authors = authors + res.get(0).lastname7 + ", ";
-            authors = authors + res.get(0).email7 + " ";
+        List<String> authors =new ArrayList<String>();
+        for(int i =0; i<res.size(); i++) {
+            String author="";
+            if (!res.get(i).firstname1.isEmpty()) {
+                author = author + res.get(i).firstname1 + " ";
+                author = author + res.get(i).lastname1 + ", ";
+                author = author + res.get(i).email1 + " ";
+            }
+            if (!res.get(i).firstname2.isEmpty()) {
+                author = author + res.get(i).firstname2 + " ";
+                author = author + res.get(i).lastname2 + ", ";
+                author = author + res.get(i).email2 + " ";
+            }
+            if (!res.get(i).firstname3.isEmpty()) {
+                author = author + res.get(i).firstname3 + " ";
+                author = author + res.get(i).lastname3 + ", ";
+                author = author + res.get(i).email3 + " ";
+            }
+            if (!res.get(i).firstname4.isEmpty()) {
+                author = author + res.get(i).firstname4 + " ";
+                author = author + res.get(i).lastname4 + ", ";
+                author = author + res.get(i).email4 + " ";
+            }
+            if (!res.get(i).firstname5.isEmpty()) {
+                author = author + res.get(i).firstname5 + " ";
+                author = author + res.get(i).lastname5 + ", ";
+                author = author + res.get(i).email5 + " ";
+            }
+            if (!res.get(i).firstname6.isEmpty()) {
+                author = author + res.get(i).firstname6 + " ";
+                author = authors + res.get(i).lastname6 + ", ";
+                author = author + res.get(i).email6 + " ";
+            }
+            if (!res.get(i).firstname7.isEmpty()) {
+                author = author + res.get(i).firstname7 + " ";
+                author = author + res.get(i).lastname7 + ", ";
+                author = author + res.get(i).email7 + " ";
+            }
+            authors.add(author);
         }
 //        authors = authors + res.get(0).firstname1 + " ";
 //        authors = authors + res.get(0).lastname1 + ", ";
