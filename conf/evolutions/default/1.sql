@@ -23,6 +23,7 @@ create table paper (
   username                      varchar(255),
   title                         varchar(255),
   contactemail                  varchar(255),
+  authors                       varchar(255),
   confirmemail                  varchar(255),
   firstname1                    varchar(255),
   lastname1                     varchar(255),

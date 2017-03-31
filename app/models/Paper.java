@@ -25,6 +25,7 @@ public class Paper extends Model {
     public String title;
 //    @Constraints.Required
     public String contactemail;
+    public String authors;
 //    @Constraints.Required
     public String confirmemail;
 //    @Constraints.Required
