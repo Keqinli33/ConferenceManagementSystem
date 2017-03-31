@@ -19,6 +19,7 @@
     </table>
 
     <h1>Show My Paper</h1>
+
     <a class="btn success" id="add" href="@routes.PaperController.create()">Add a new paper</a>
     @b3.form(routes.ShowPaperController.showMyPaper()) {
 
@@ -64,8 +65,20 @@
 
         <div class="actions">
             <input type="submit" value="Show My Papers" class="btn primary"> or
-            <a href="@routes.HomeController.list()" class="btn">Cancel</a>
+            <a href="@routes.ShowPaperController.showMyPaper()" class="btn">Cancel</a>
         </div>
+
+    }
+
+    @if(session.containsKey("Submitted") && session.get("Submitted").toString == "ok"){
+        <script>
+            var str = "Thank you. Your paper abstract has been submitted successfully. Please keep your paper id:"+@Http.Context.current().session().get("paperid");
+            alert(str);
+        </script>
+        @{
+            session.remove("Submitted")
+            session.remove("paperid")
+        }
 
     }
 }

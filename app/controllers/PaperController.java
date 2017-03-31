@@ -139,7 +139,14 @@ public class PaperController extends Controller {
         newPaper.ifsubmit = "N";
         newPaper.date = new Date();
         paperForm.get().save();
-        flash("success", "Thank you. Your paper abstract has been submitted successfully. " + paperForm.get().title + " has been created" +" Please keep your paper id:" + paperForm.get().id);
+        String email = session.get("email");
+        //SendEmail(email, "Dear Sir/Madam, your paper is successfully submitted");
+
+        //TODO flash not working, switch to session way
+        //flash("success", "Thank you. Your paper abstract has been submitted successfully. " + paperForm.get().title + " has been created" +" Please keep your paper id:" + paperForm.get().id);
+        session.put("Submitted","ok");
+        session.put("paperid",Long.toString(paperForm.get().id));
+
         return GO_HOME;
     }
     public Result uploadFile(Long id) {
@@ -206,6 +213,23 @@ public class PaperController extends Controller {
 //        }
         flash("success", "Paper File has been submitted");
         return GO_HOME;
+    }
+
+    private static void SendEmail(String emailto, String content){
+        try {
+            Email email = new SimpleEmail();
+            email.setHostName("smtp.googlemail.com");
+            email.setSmtpPort(465);
+            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+            email.setSSLOnConnect(true);
+            email.setFrom("socandrew2017@gmail.com");
+            email.setSubject("Temporary password");
+            email.setMsg(content);
+            email.addTo(emailto);
+            email.send();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

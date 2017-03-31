@@ -13,7 +13,7 @@
 
             @b3.text(paperForm("title"), '_label -> "Title", '_help -> "")
             @b3.email(paperForm("contactemail"), '_label -> "Email of Contact Author", 'placeholder -> "example@mail.com")
-        @b3.email(paperForm("confirmemail"), '_label -> "Confirm Email", '_help -> "")
+       <br><br><br><br> @b3.email(paperForm("confirmemail"), '_label -> "Confirm Email", '_help -> "")
 
 
 
@@ -61,8 +61,8 @@
 
             @b3.text(paperForm("otherauthor"), '_label -> "Other authors", '_help -> "")
             @b3.radio( paperForm("candidate"), options = Seq("Y"->"Yes","N"->"No"), '_label -> "Best student paper award candidate", 'value -> "Y")
-       @b3.radio( paperForm("volunteer"), options = Seq("Y"->"Yes","N"->"No", "T"->"To be decided"), '_label -> "Student Volunteer?",'value -> "Y")
-        @b3.textarea(paperForm("paperabstract"), '_label -> "Abstract", 'rows -> 3)
+        <br><br><br><br>@b3.radio( paperForm("volunteer"), options = Seq("Y"->"Yes","N"->"No", "T"->"To be decided"), '_label -> "Student Volunteer?",'value -> "Y")
+        <br><br><br>@b3.textarea(paperForm("paperabstract"), '_label -> "Abstract", 'rows -> 3)
 
         <div class="actions">
             <input type="submit" value="Submit this paper" class="btn primary"> or
