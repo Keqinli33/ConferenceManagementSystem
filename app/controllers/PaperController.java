@@ -183,11 +183,12 @@ public class PaperController extends Controller {
 //            }
             try {
                 File file = filePart.getFile();
-                File destination = new File("/Users/Ling/uploads", file.getName());
+                File destination = new File("/Users/shuang/uploads", file.getName());
                 FileUtils.moveFile(file, destination);
                 savedPaper.ifsubmit = "Y";
                 savedPaper.format = filePart.getContentType();
                 savedPaper.papersize = String.valueOf(file.length());
+                System.out.println("File length  " + file.length());
                 savedPaper.update();
             } catch (Exception e){
                 e.printStackTrace();
