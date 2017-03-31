@@ -8,15 +8,15 @@
 
     <h1>Upload Paper</h1>
 
-    @b3.form(routes.PaperController.selectFile(id)) {
+    @b3.form(routes.PaperController.selectFile(id),'enctype -> "multipart/form-data") {
 
         <fieldset>
-            @b3.file(paperForm("file"), 'enctype -> "multipart/form-data", '_label -> "File", 'class -> "form-control" )
+        @b3.file(paperForm("file"), '_label -> "File", 'class -> "form-control" )
         </fieldset>
 
         <div class="actions">
             <input type="submit" value="Upload File" class="btn primary"> or
-            <a href="@routes.HomeController.list()" class="btn">Cancel</a>
+            <a href="@routes.ShowPaperController.showMyPaper()" class="btn">Cancel</a>
         </div>
 
     }

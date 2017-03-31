@@ -28,41 +28,21 @@ public class ProfileController extends Controller{
     /**
      * This result directly redirect to application home.
      */
-    public Result GO_HOME = Results.redirect(
+    /*public Result GO_HOME = Results.redirect(
             routes.HomeController.list(0, "name", "asc", "")
+    );*/
+    public Result GO_HOME = Results.redirect(
+            routes.ShowPaperController.showMyPaper()
     );
-
-    /**
-     * Handle default path requests, redirect to computers list
-     */
-    public Result index() {
-        return GO_HOME;
-    }
-
-    /**
-     * Display the paginated list of computers.
-     *
-     * @param page Current page number (starts from 0)
-     * @param sortBy Column to be sorted
-     * @param order Sort order (either asc or desc)
-     * @param filter Filter applied on computer names
-     */
-    public Result list(int page, String sortBy, String order, String filter) {
-        return ok(
-                views.html.list.render(
-                        Computer.page(page, 10, sortBy, order, filter),
-                        sortBy, order, filter
-                )
-        );
-    }
 
     public Result enterProfile(){
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
+        System.out.println("Enter profile page user id is "+userid.toString());
         Form<Profile> profileForm = formFactory.form(Profile.class);
         Profile profile = Profile.find.byId(userid);
         return ok(
-                views.html.profile.render(userid, profileForm, profile)
+                views.html.profile.render(profileForm, profile)
         );
     }
 
@@ -70,13 +50,15 @@ public class ProfileController extends Controller{
     /**
      * Handle the 'edit form' submission
      *
-     * @param userid Id of the user to edit
      */
-    public Result edit(Long userid) throws PersistenceException {
+    public Result edit() throws PersistenceException {
         Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
         if(profileForm.hasErrors()) {
-            return badRequest(views.html.profile.render(userid, profileForm, null));
+            return badRequest(views.html.profile.render(profileForm, null));
         }
+
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
 
         Transaction txn = Ebean.beginTransaction();
         try {
@@ -138,16 +120,6 @@ public class ProfileController extends Controller{
     }
 
     /**
-     * Edit the 'profile form'.
-     */
-//    public Result update(Long id) {
-//        Form<Profile> profileForm = formFactory.form(Profile.class);
-//        return ok(
-//                views.html.profile.render(id, profileForm)
-//        );
-//    }
-
-    /**
      * Handle the 'new profile form' submission
      */
     public Result save() {
@@ -160,8 +132,10 @@ public class ProfileController extends Controller{
     /**
      * Handle profile deletion
      */
-    public Result delete(Long id) {
-        Profile deletedProfile = Profile.find.byId(id);
+    public Result delete() {
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
+        Profile deletedProfile = Profile.find.byId(userid);
         if(deletedProfile != null){
             deletedProfile.delete();
             flash("success", "Computer has been deleted");

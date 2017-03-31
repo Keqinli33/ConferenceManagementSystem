@@ -54,7 +54,8 @@ public class ShowPaperController extends Controller{
      */
     public Result showMyPaper() {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        Paper paperInfo = paperForm.get();
+        //Paper paperInfo = paperForm.get();
+        Paper paperInfo = new Paper();
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
 

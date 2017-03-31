@@ -15,19 +15,11 @@
         
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")"/> 
     </head>
-    <body>
+    <body >
         
-        <header class="topbar">
-            <h1 class="fill">
-                @*<a href="@routes.HomeController.index()">*@
-                    Conference Management System
-                @*</a>*@
-            </h1>
-        </header>
-        
-        <section id="main">
+        <div id="main">
             @content
-        </section>
+        </div>
         
     </body>
 </html>

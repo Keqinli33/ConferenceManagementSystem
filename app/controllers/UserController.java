@@ -47,7 +47,7 @@ public class UserController extends Controller {
     }
 
     public Result GO_HOME = Results.redirect(
-            routes.HomeController.list(0, "name", "asc", "")
+            routes.ShowPaperController.showMyPaper()
     );
 
     public Result GO_LOGIN = Results.redirect(
@@ -57,7 +57,7 @@ public class UserController extends Controller {
     public Result register() {
         Form<User> userForm = formFactory.form(User.class);
         return ok(
-                views.html.register.render(userForm)
+                views.html.register.render(userForm, 0)
         );
     }
 
@@ -72,7 +72,7 @@ public class UserController extends Controller {
         );
     }
 
-    public Result changePwd(){
+    public Result changepwd(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         User new_user = userForm.get();
         String password = new_user.username;
@@ -108,7 +108,7 @@ public class UserController extends Controller {
     public Result verifyAuth() {
         Form<User> userForm = formFactory.form(User.class);
         return ok(
-                views.html.verifyChangePwdAuth.render(userForm)
+                views.html.verifyChangePwdAuth.render(userForm, 0)
         );
     }
 
@@ -135,7 +135,6 @@ public class UserController extends Controller {
         //SendEmail.SendEmail(email, tmp_pwd);
         SendEmail(email,tmp_pwd);
         System.out.println("Email sent");
-        //TODO notify tmp pwd sent to register email
 
         new_user.AddTemporaryPwd(username, tmp_pwd);
 
@@ -183,7 +182,7 @@ public class UserController extends Controller {
         }
         //TODO notify frontend verification fail
 
-        return badRequest(views.html.verifyChangePwdAuth.render(userForm));
+        return ok(views.html.verifyChangePwdAuth.render(userForm,1));
     }
     /**
      * For login
@@ -216,6 +215,8 @@ public class UserController extends Controller {
                 Long id = new_user.GetUserID(username);
                 session.put("username",username);
                 session.put("userid",id.toString());
+                String email = new_user.GetEmailByUsername(username);
+                session.put("email",email);
                 System.out.println("Login successfully");
                 flash("success", "Login success");
                 return GO_HOME;
@@ -245,13 +246,14 @@ public class UserController extends Controller {
                 }
             }
             System.out.println("Please correct the following errors: " + errorMsg);
-            return badRequest(views.html.register.render(userForm));
+            return ok(views.html.register.render(userForm,0));
         }
 
         try {
             User new_user = userForm.get();
             String username = new_user.username;
             String password = new_user.password;
+            String email = new_user.email;
 
             //determine if the username exist (username needs to be unique)
             if(new_user.IfUserExist(username)){
@@ -260,7 +262,7 @@ public class UserController extends Controller {
                 //flash("success", "Username " + username + " existed!");
                 //TODO notify frontend with error messgae here
 
-                return badRequest(views.html.register.render(userForm));
+                return badRequest(views.html.register.render(userForm,1));
             }else{
                 //if not exist, add user
                 new_user.password = MD5(password);
@@ -271,19 +273,28 @@ public class UserController extends Controller {
                 Session session = Http.Context.current().session();
                 session.put("username",username);
                 session.put("userid",id.toString());
+                session.put("email",email);
 
                 System.out.println("User " + userForm.get().username + " has been created");
 
                 Form<Profile> profileForm = formFactory.form(Profile.class);
                 Profile profile = Profile.find.byId(id);
                 return ok(
-                        views.html.profile.render(id, profileForm, profile)
+                        views.html.profile.render(profileForm, profile)
                 );
             }
         } catch (Exception e){
             e.printStackTrace();
         }
         return ok();
+    }
+
+    public Result logout(){
+        Session session = Http.Context.current().session();
+        session.clear();
+        return redirect(
+                routes.UserController.login()
+        );
     }
 
     /**

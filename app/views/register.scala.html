@@ -1,4 +1,4 @@
-@(userForm: Form[User])
+@(userForm: Form[User])(err: Integer)
 
 @import helper._
 
@@ -36,9 +36,11 @@
 
     <div class="actions">
       <input type="submit" value="Create Account" class="btn primary"> or
-      <a href="@routes.HomeController.list()" class="btn">Cancel</a>
+      <a href="@routes.ShowPaperController.showMyPaper()" class="btn">Cancel</a>
     </div>
 
   }
-
+  @if(err == 1){
+    <div style="color: red;">Username existed!</div>
+  }
 }

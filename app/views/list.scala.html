@@ -54,10 +54,9 @@
 
 
         <a class="btn success" id="changepwd" href="@routes.UserController.verifyAuth()">change password</a>
-        @*<a class="btn success" id="profile" href="@routes.ProfileController.edit()"></a>*@
+        <a class="btn success" id="profile" href="@routes.ProfileController.edit()"></a>
         
         <a class="btn success" id="add" href="@routes.PaperController.create()">Add a new paper</a>
-        <a class="btn success" id="upload" href="@routes.PaperController.uploadFile(1)">Upload a new paper</a>
     </div>
     
     @if(currentPage.getTotalRowCount == 0) {

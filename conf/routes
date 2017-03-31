@@ -23,9 +23,9 @@ POST    /computers/:id/delete       controllers.HomeController.delete(id:Long)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Edit profile
-GET     /profile/:id              controllers.ProfileController.edit(id:Long)
-GET    /profile/change               controllers.ProfileController.enterProfile()
-GET    /profiles/:id/delete        controllers.ProfileController.delete(id:Long)
+GET     /profile                   controllers.ProfileController.enterProfile()
+GET     /profile/edit              controllers.ProfileController.edit()
+GET    /profile/delete        controllers.ProfileController.delete()
 
 # Register a new user
 GET     /register                   controllers.UserController.register()
@@ -34,13 +34,14 @@ POST    /register                   controllers.UserController.addUser()
 # Login
 GET     /login                      controllers.UserController.login()
 POST    /login                      controllers.UserController.verifyUser()
+GET     /logout                     controllers.UserController.logout()
 
 # Set password
 GET     /verifyChangePwdAuth        controllers.UserController.verifyAuth()
 GET    /temporarypwd               controllers.UserController.sendTemporaryPwd()
 POST    /temporarypwd               controllers.UserController.verifyTmpPwd()
 POST    /verifyChangePwdAuth        controllers.UserController.verifyQA()
-POST     /changePwd                  controllers.UserController.changePwd()
+POST     /changePwd                  controllers.UserController.changepwd()
 
 # Submit paper
 

@@ -9,6 +9,7 @@ import play.data.*;
 import static play.data.Form.*;
 import play.mvc.Result;
 import play.mvc.Http;
+
 import models.*;
 
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import javax.persistence.PersistenceException;
 import java.util.Date;
 import java.io.File;
 import org.apache.commons.mail.*;
+import org.apache.commons.io.FileUtils;
 /**
  * Created by shuang on 3/29/17.
  */
@@ -27,8 +29,11 @@ public class PaperController extends Controller {
         this.formFactory = formFactory;
     }
 
-    public Result GO_HOME = Results.redirect(
+    /*public Result GO_HOME = Results.redirect(
             routes.HomeController.list(0, "name", "asc", "")
+    );*/
+    public Result GO_HOME = Results.redirect(
+            routes.ShowPaperController.showMyPaper()
     );
     /**
      * Handle default path requests, redirect to computers list
@@ -134,13 +139,20 @@ public class PaperController extends Controller {
         newPaper.ifsubmit = "N";
         newPaper.date = new Date();
         paperForm.get().save();
-        flash("success", "Thank you. Your paper abstract has been submitted successfully. " + paperForm.get().title + " has been created" +" Please keep your paper id:" + paperForm.get().id);
+        String email = session.get("email");
+        //SendEmail(email, "Dear Sir/Madam, your paper is successfully submitted");
+
+        //TODO flash not working, switch to session way
+        //flash("success", "Thank you. Your paper abstract has been submitted successfully. " + paperForm.get().title + " has been created" +" Please keep your paper id:" + paperForm.get().id);
+        session.put("Submitted","ok");
+        session.put("paperid",Long.toString(paperForm.get().id));
+
         return GO_HOME;
     }
     public Result uploadFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class);
         return ok(
-                views.html.uploadFile.render(id, paperForm)
+                views.html.selectFile.render(id, paperForm)
         );
     }
     public Result selectFile(Long id) {
@@ -150,7 +162,7 @@ public class PaperController extends Controller {
 //        }
         Paper savedPaper = Paper.find.byId(id);
         System.out.println("begin upload file");
-        if (savedPaper != null) {
+//        if (savedPaper != null) {
             System.out.println("upload file");
             Http.MultipartFormData body = request().body().asMultipartFormData();
             if(body == null)
@@ -169,15 +181,45 @@ public class PaperController extends Controller {
 //            {
 //                return badRequest("Invalid request, only PDFs are allowed.");
 //            }
-
-                File file= filePart.getFile();
+            try {
+                File file = filePart.getFile();
+                File destination = new File("/Users/Ling/uploads", file.getName());
+                FileUtils.moveFile(file, destination);
                 savedPaper.ifsubmit = "Y";
                 savedPaper.format = filePart.getContentType();
                 savedPaper.papersize = String.valueOf(file.length());
                 savedPaper.update();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+//                savedPaper.ifsubmit = "Y";
+//                savedPaper.format = filePart.getContentType();
+//                savedPaper.papersize = String.valueOf(file.length());
+//                savedPaper.update();
 
 
-        }
+//        }
+//        try {
+//            Email email = new SimpleEmail();
+//            email.setHostName("smtp.googlemail.com");
+//            email.setSmtpPort(465);
+//            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+//            email.setSSLOnConnect(true);
+//            email.setFrom("socandrew2017@gmail.com");
+//            email.setSubject("Paper submitted");
+//            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
+//            Http.Session session = Http.Context.current().session();
+//            String emailto = session.get("email");
+//            email.addTo(emailto);
+//            email.send();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+        flash("success", "Paper File has been submitted");
+        return GO_HOME;
+    }
+
+    private static void SendEmail(String emailto, String content){
         try {
             Email email = new SimpleEmail();
             email.setHostName("smtp.googlemail.com");
@@ -185,16 +227,13 @@ public class PaperController extends Controller {
             email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
             email.setSSLOnConnect(true);
             email.setFrom("socandrew2017@gmail.com");
-            email.setSubject("Paper submitted");
-            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
-            Http.Session session = Http.Context.current().session();
-            String emailto = session.get("email");
+            email.setSubject("Temporary password");
+            email.setMsg(content);
             email.addTo(emailto);
             email.send();
         }catch (Exception e){
             e.printStackTrace();
         }
-        return GO_HOME;
     }
 
 }
