@@ -187,8 +187,8 @@ public class PaperController extends Controller {
                 FileUtils.moveFile(file, destination);
                 savedPaper.ifsubmit = "Y";
                 savedPaper.format = filePart.getContentType();
-                savedPaper.papersize = String.valueOf(file.length());
-                System.out.println("File length  " + file.length());
+                savedPaper.papersize = String.valueOf(destination.length());
+                System.out.println("File length  " + destination.length());
                 savedPaper.update();
             } catch (Exception e){
                 e.printStackTrace();
