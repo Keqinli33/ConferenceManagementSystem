@@ -61,9 +61,9 @@ public class PaperController extends Controller {
             Paper savedPaper = Paper.find.byId(id);
             if (savedPaper != null) {
                 Paper newPaperData = paperForm.get();
-//                if(newPaperData.contactemail != newPaperData.confirmemail){
-//                    return badRequest(views.html.editPaper.render(id, paperForm));
-//                }
+                if(!newPaperData.contactemail.equals(newPaperData.confirmemail)){
+                    return badRequest(views.html.editPaper.render(id, paperForm));
+                }
                 savedPaper.title = newPaperData.title;
                 savedPaper.contactemail = newPaperData.contactemail;
                 savedPaper.firstname1 = newPaperData.firstname1;
@@ -130,9 +130,9 @@ public class PaperController extends Controller {
         }
 
         Paper newPaper = paperForm.get();
-//        if(newPaper.contactemail != newPaper.confirmemail){
-//            return badRequest(views.html.createPaper.render(paperForm));
-//        }
+        if(!newPaper.contactemail.equals(newPaper.confirmemail)){
+            return badRequest(views.html.createPaper.render(paperForm));
+        }
         Http.Session session = Http.Context.current().session();
 //        String username = session.get("username");
         newPaper.username= session.get("username");
