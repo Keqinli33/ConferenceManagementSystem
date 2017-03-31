@@ -68,7 +68,7 @@ create table paper (
 );
 
 create table profile (
-  userid                        bigint not null,
+  userid                        bigint auto_increment not null,
   title                         varchar(255),
   research                      varchar(255),
   firstname                     varchar(255),
