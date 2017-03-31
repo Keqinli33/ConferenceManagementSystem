@@ -51,7 +51,7 @@
                         <td>@paper.status</td>
 
                             @if(paper.ifsubmit == "Y") {
-                                <td>@paper.format @paper.papersize</td>
+                                <td>@paper.format @paper.papersize byte</td>
                             } else {
                                 <td><a class="btn success" id="upload" href="@routes.PaperController.uploadFile(paper.id)">Upload a new paper</a></td>
                             }

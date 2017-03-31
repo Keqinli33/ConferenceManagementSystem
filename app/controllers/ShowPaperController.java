@@ -70,37 +70,33 @@ public class ShowPaperController extends Controller{
         if(!res.get(0).firstname1.isEmpty()){
             authors = authors + res.get(0).firstname1 + " ";
             authors = authors + res.get(0).lastname1 + ", ";
-            authors = authors + res.get(0).email1 + " ";
         }
         if(!res.get(0).firstname2.isEmpty()){
             authors = authors + res.get(0).firstname2 + " ";
             authors = authors + res.get(0).lastname2 + ", ";
-            authors = authors + res.get(0).email2 + " ";
         }
         if(!res.get(0).firstname3.isEmpty()){
             authors = authors + res.get(0).firstname3 + " ";
             authors = authors + res.get(0).lastname3 + ", ";
-            authors = authors + res.get(0).email3 + " ";
         }
         if(!res.get(0).firstname4.isEmpty()){
             authors = authors + res.get(0).firstname4 + " ";
             authors = authors + res.get(0).lastname4 + ", ";
-            authors = authors + res.get(0).email4 + " ";
         }
         if(!res.get(0).firstname5.isEmpty()){
             authors = authors + res.get(0).firstname5 + " ";
             authors = authors + res.get(0).lastname5 + ", ";
-            authors = authors + res.get(0).email5 + " ";
         }
         if(!res.get(0).firstname6.isEmpty()){
             authors = authors + res.get(0).firstname6 + " ";
             authors = authors + res.get(0).lastname6 + ", ";
-            authors = authors + res.get(0).email6 + " ";
         }
         if(!res.get(0).firstname7.isEmpty()){
             authors = authors + res.get(0).firstname7 + " ";
             authors = authors + res.get(0).lastname7 + ", ";
-            authors = authors + res.get(0).email7 + " ";
+        }
+        if(!res.get(0).contactemail.isEmpty()){
+            authors = authors + res.get(0).contactemail + " ";
         }
 //        authors = authors + res.get(0).firstname1 + " ";
 //        authors = authors + res.get(0).lastname1 + ", ";

@@ -200,22 +200,22 @@ public class PaperController extends Controller {
 
 
 //        }
-//        try {
-//            Email email = new SimpleEmail();
-//            email.setHostName("smtp.googlemail.com");
-//            email.setSmtpPort(465);
-//            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
-//            email.setSSLOnConnect(true);
-//            email.setFrom("socandrew2017@gmail.com");
-//            email.setSubject("Paper submitted");
-//            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
-//            Http.Session session = Http.Context.current().session();
-//            String emailto = session.get("email");
-//            email.addTo(emailto);
-//            email.send();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            Email email = new SimpleEmail();
+            email.setHostName("smtp.googlemail.com");
+            email.setSmtpPort(465);
+            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+            email.setSSLOnConnect(true);
+            email.setFrom("socandrew2017@gmail.com");
+            email.setSubject("Paper submitted");
+            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
+            Http.Session session = Http.Context.current().session();
+            String emailto = session.get("email");
+            email.addTo(emailto);
+            email.send();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         flash("success", "Paper File has been submitted");
         return GO_HOME;
     }
