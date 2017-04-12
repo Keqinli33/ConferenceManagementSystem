@@ -1,0 +1,58 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Default path will just redirect to the computer list
+GET     /                           controllers.UserController.login()
+
+# Computers list (look at the default values for pagination parameters)
+GET     /computers                  controllers.HomeController.list(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
+
+# Add computer
+GET     /computers/new              controllers.HomeController.create()
+POST    /computers                  controllers.HomeController.save()
+
+# Edit existing computer
+GET     /computers/:id              controllers.HomeController.edit(id:Long)
+POST    /computers/:id              controllers.HomeController.update(id:Long)
+
+# Delete a computer
+POST    /computers/:id/delete       controllers.HomeController.delete(id:Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# Edit profile
+GET     /profile                   controllers.ProfileController.enterProfile()
+GET     /profile/edit              controllers.ProfileController.edit()
+GET    /profile/delete        controllers.ProfileController.delete()
+
+# Register a new user
+GET     /register                   controllers.UserController.register()
+POST    /register                   controllers.UserController.addUser()
+
+# Login
+GET     /login                      controllers.UserController.login()
+POST    /login                      controllers.UserController.verifyUser()
+GET     /logout                     controllers.UserController.logout()
+
+# Set password
+GET     /verifyChangePwdAuth        controllers.UserController.verifyAuth()
+GET    /temporarypwd               controllers.UserController.sendTemporaryPwd()
+POST    /temporarypwd               controllers.UserController.verifyTmpPwd()
+POST    /verifyChangePwdAuth        controllers.UserController.verifyQA()
+POST     /changePwd                  controllers.UserController.changepwd()
+
+# Submit paper
+
+GET  /papers/new                        controllers.PaperController.create()
+POST  /papers                           controllers.PaperController.save()
+
+#Edit paper
+GET     /papers/:id                     controllers.PaperController.edit(id:Long)
+POST    /papers/:id                     controllers.PaperController.update(id:Long)
+
+GET   /papers                      controllers.ShowPaperController.showMyPaper()
+#Upload paper
+GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
+POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
