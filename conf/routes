@@ -23,9 +23,8 @@ POST    /computers/:id/delete       controllers.HomeController.delete(id:Long)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Edit profile
-GET     /profile                   controllers.ProfileController.enterProfile()
-GET     /profile/edit              controllers.ProfileController.edit()
-GET    /profile/delete        controllers.ProfileController.delete()
+POST     /profile/edit              controllers.ProfileController.edit()
+POST    /profile/delete        controllers.ProfileController.delete()
 
 # Register a new user
 GET     /register                   controllers.UserController.register()

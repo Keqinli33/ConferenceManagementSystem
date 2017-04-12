@@ -54,7 +54,7 @@ public class ProfileController extends Controller{
     public Result edit() throws PersistenceException {
         Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
         if(profileForm.hasErrors()) {
-            return badRequest(views.html.profile.render(profileForm, null));
+            return ok();
         }
 
         Session session = Http.Context.current().session();
@@ -85,8 +85,9 @@ public class ProfileController extends Controller{
                 savedProfile.userid = userid;
 
                 savedProfile.update();
-                flash("success", "Profile " + userid + " has been updated");
+                //flash("success", "Profile " + userid + " has been updated");
                 txn.commit();
+                return ok("insert successfully");
             }
             else{
                 Profile newProfile = new Profile();
@@ -109,14 +110,13 @@ public class ProfileController extends Controller{
                 newProfile.userid = userid;
 
                 newProfile.insert();
-                flash("success", "Profile " + userid + " has been inserted");
+                //flash("success", "Profile " + userid + " has been inserted");
                 txn.commit();
+                return ok("update successfully");
             }
         } finally {
             txn.end();
         }
-
-        return GO_HOME;
     }
 
     /**
@@ -133,17 +133,15 @@ public class ProfileController extends Controller{
      * Handle profile deletion
      */
     public Result delete() {
-        Session session = Http.Context.current().session();
-        Long userid = Long.parseLong(session.get("userid"));
-        Profile deletedProfile = Profile.find.byId(userid);
+        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+        Profile deletedProfile = Profile.find.byId(profileForm.get().userid);
         if(deletedProfile != null){
             deletedProfile.delete();
-            flash("success", "Computer has been deleted");
+            return ok("delete successfully");
         }
         else{
-            flash("success", "You haven't created your profile yet");
+            return ok("you haven't create your profile yet");
         }
-        return GO_HOME;
     }
 
 }
