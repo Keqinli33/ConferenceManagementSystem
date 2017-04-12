@@ -195,44 +195,33 @@ public class UserController extends Controller {
      * Verify whether username and password is correct
      * @return To homepage if login success, else stay in login page
      */
-    public Result verifyUser(){
+    public CompletionStage<Result> verifyUser(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
-        if(userForm.hasErrors()) {
-            System.out.println("ERROR");
-            String errorMsg = "";
-            java.util.Map<String, List<play.data.validation.ValidationError>> errorsAll = userForm.errors();
-            for (String field : errorsAll.keySet()) {
-                errorMsg += field + " ";
-                for (ValidationError error : errorsAll.get(field)) {
-                    errorMsg += error.message() + ", ";
-                }
-            }
-            System.out.println("Please correct the following errors: " + errorMsg);
-            return badRequest(views.html.login.render(userForm, 1));
-        }
 
-            User new_user = userForm.get();
-            String username = new_user.username;
-            String password = new_user.password;
-            if(new_user.VerifyUser(username, password)){
-                System.out.println("User " + username + " login successfully!");
+        User new_user = userForm.get();
+        String username = new_user.username;
+        String password = new_user.password;
 
-                Session session = Http.Context.current().session();
-                Long id = new_user.GetUserID(username);
-                session.put("username",username);
-                session.put("userid",id.toString());
-                String email = new_user.GetEmailByUsername(username);
-                session.put("email",email);
-                System.out.println("Login successfully");
-                flash("success", "Login success");
+        JsonNode json = Json.newObject()
+                .put("username",username)
+                .put("password", password);
+
+        Session session = Http.Context.current().session();
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/login").post(json);
+        return res.thenApplyAsync(response -> {
+            JsonNode ret = response.asJson();
+            if ("successful".equals(ret.get("status").asText())) {
+                session.put("username", username);
+                session.put("email",ret.get("email").toString());
+                session.put("userid", ret.get("userid").toString());
+
+                System.out.println("In session: "+session.get("username") + session.get("email"));
                 return GO_HOME;
+            }else{
+                //return ok("hello world");
+                return ok(views.html.login.render(userForm, 1));
             }
-
-            //TODO notify frontend error message
-            System.out.println("Login unsuccessfully");
-            //flash("error", "Login error");
-            //return GO_LOGIN;
-            return ok(views.html.login.render(userForm, 1));
+        });
     }
     /**
      * Register a user
@@ -258,15 +247,20 @@ public class UserController extends Controller {
                     .put("security_question2", security_question2)
                     .put("security_answer1", security_answer1)
                     .put("security_answer2", security_answer2);
-
+            Session session = Http.Context.current().session();
             CompletionStage<WSResponse> res = ws.url("http://localhost:9000/register").post(json);
-            return res.thenApply(response -> {
-                String ret = response.getBody();
-                System.out.println("here is "+ret);
-                if ("successfully".equals(ret)) {
-                    return ok("succ");
+            return res.thenApplyAsync(response -> {
+                JsonNode ret = response.asJson();
+                if ("successful".equals(ret.get("status").asText())) {
+                    session.put("username", username);
+                    session.put("email",email);
+                    session.put("userid", ret.get("userid").toString());
+
+                    System.out.println("In session: "+session.get("username") + session.get("email"));
+                    return GO_HOME;
                 }else{
-                    return ok("hello world");
+                    //return ok("hello world");
+                    return ok(views.html.register.render(userForm, 1));
                 }
             });
     }

@@ -2,6 +2,7 @@ package controllers;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Transaction;
+import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
@@ -60,7 +61,7 @@ public class ShowPaperController extends Controller{
         String username = session.get("username");
 
         List<Paper> res = new ArrayList<Paper>();
-        res = paperInfo.GetMyPaper(username);
+        //res = paperInfo.GetMyPaper(username);
 
 //        Long id = res.get(0).id;
 //        String title = res.get(0).title;
@@ -119,7 +120,9 @@ public class ShowPaperController extends Controller{
 //        authors = authors + res.get(0).firstname7 + " ";
 //        authors = authors + res.get(0).lastname7;
 //
-        String email = User.GetEmailByUsername(username);
+        //String email = User.GetEmailByUsername(username);
+        String email = session.get("email");
+        System.out.println("In show my paper username "+username);
 //
 //        String topic = res.get(0).topic;
 //        String status = res.get(0).status;
