@@ -70,20 +70,60 @@ public class ProfileController extends Controller{
     /*public Result GO_HOME = Results.redirect(
             routes.HomeController.list(0, "name", "asc", "")
     );*/
+
+
     public Result GO_HOME = Results.redirect(
             routes.ShowPaperController.showMyPaper()
     );
 
-    public Result enterProfile(){
-//        Session session = Http.Context.current().session();
-//        Long userid = Long.parseLong(session.get("userid"));
+
+    public CompletionStage<Result> enterProfile(){
+        Form<Profile> profileForm = formFactory.form(Profile.class);
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
 //        System.out.println("Enter profile page user id is "+userid.toString());
 //        Profile profile = Profile.find.byId(userid);
-        Form<Profile> profileForm = formFactory.form(Profile.class);
 
-        return ok(
-                views.html.profile.render(profileForm, null)
-        );
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/profile/"+userid).get();
+        return res.thenApply(response -> {
+//            String str = response.getBody();
+//            System.out.println("there is "+str);
+//            Json js = new Json();
+//            JsonNode ret = js.parse(str);
+            JsonNode ret = response.asJson();
+
+
+            if(ret == null){
+                return ok(
+                        views.html.profile.render(profileForm, null, 0)
+                );
+            }
+
+            Profile savedProfile = new Profile();
+            savedProfile.title = ret.get("title").asText();
+            savedProfile.research = ret.get("research").asText();
+            savedProfile.firstname = ret.get("firstname").asText();
+            savedProfile.lastname = ret.get("lastname").asText();
+            savedProfile.position = ret.get("position").asText();
+            savedProfile.affiliation = ret.get("affiliation").asText();
+            savedProfile.email = ret.get("email").asText();
+            savedProfile.phone = ret.get("phone").asText();
+            savedProfile.fax = ret.get("fax").asText();
+            savedProfile.address = ret.get("address").asText();
+            savedProfile.city = ret.get("city").asText();
+            savedProfile.country = ret.get("country").asText();
+            savedProfile.region = ret.get("region").asText();
+            savedProfile.zipcode = null;
+            savedProfile.comment = ret.get("comment").asText();
+
+            savedProfile.userid = Long.parseLong(ret.get("userid").asText());
+
+            return ok(
+                    views.html.profile.render(profileForm, savedProfile, 0)
+            );
+        });
+
     }
 
 
@@ -123,77 +163,26 @@ public class ProfileController extends Controller{
             String ret = response.getBody();
             System.out.println("here is "+ret);
             if(profileForm.hasErrors()) {
-                return ok("failure!");
+                return ok(
+                        views.html.profile.render(profileForm, null, -1)
+                );
             }
             else if ("insert successfully".equals(ret)) {
-                return ok(ret);
+                return ok(
+                        views.html.profile.render(profileForm, newProfileData, 1)
+                );
             }
             else if ("update successfully".equals(ret)) {
-                return ok(ret);
+                return ok(
+                        views.html.profile.render(profileForm, newProfileData, 2)
+                );
             }
             else{
-                return ok("failure!");
+                return ok(
+                        views.html.profile.render(profileForm, null, -1)
+                );
             }
         });
-
-        /*
-        Transaction txn = Ebean.beginTransaction();
-        try {
-            Profile savedProfile = Profile.find.byId(userid);
-            Profile newProfileData = profileForm.get();
-
-            if (savedProfile != null) {
-                savedProfile.title = newProfileData.title;
-                savedProfile.research = newProfileData.research;
-                savedProfile.firstname = newProfileData.firstname;
-                savedProfile.lastname = newProfileData.lastname;
-                savedProfile.position = newProfileData.position;
-                savedProfile.affiliation = newProfileData.affiliation;
-                savedProfile.email = newProfileData.email;
-                savedProfile.phone = newProfileData.phone;
-                savedProfile.fax = newProfileData.fax;
-                savedProfile.address = newProfileData.address;
-                savedProfile.city = newProfileData.city;
-                savedProfile.country = newProfileData.country;
-                savedProfile.region = newProfileData.region;
-                savedProfile.zipcode = newProfileData.zipcode;
-                savedProfile.comment = newProfileData.comment;
-
-                savedProfile.userid = userid;
-
-                savedProfile.update();
-                flash("success", "Profile " + userid + " has been updated");
-                txn.commit();
-            }
-            else{
-                Profile newProfile = new Profile();
-                newProfile.title = newProfileData.title;
-                newProfile.research = newProfileData.research;
-                newProfile.firstname = newProfileData.firstname;
-                newProfile.lastname = newProfileData.lastname;
-                newProfile.position = newProfileData.position;
-                newProfile.affiliation = newProfileData.affiliation;
-                newProfile.email = newProfileData.email;
-                newProfile.phone = newProfileData.phone;
-                newProfile.fax = newProfileData.fax;
-                newProfile.address = newProfileData.address;
-                newProfile.city = newProfileData.city;
-                newProfile.country = newProfileData.country;
-                newProfile.region = newProfileData.region;
-                newProfile.zipcode = newProfileData.zipcode;
-                newProfile.comment = newProfileData.comment;
-
-                newProfile.userid = userid;
-
-                newProfile.insert();
-                flash("success", "Profile " + userid + " has been inserted");
-                txn.commit();
-            }
-        } finally {
-            txn.end();
-        }
-
-*/
     }
 
     /**
@@ -237,8 +226,21 @@ public class ProfileController extends Controller{
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/profile/delete").post(json);
         return res.thenApply(response -> {
             String ret = response.getBody();
-            System.out.println("here is "+ret);
-            return ok(ret);
+            if ("delete successfully".equals(ret)) {
+                return ok(
+                        views.html.profile.render(profileForm, null, 3)
+                );
+            }
+            else if ("you haven't create your profile yet".equals(ret)) {
+                return ok(
+                        views.html.profile.render(profileForm, null, 4)
+                );
+            }
+            else{
+                return ok(
+                        views.html.profile.render(profileForm, null, -1)
+                );
+            }
         });
     }
 

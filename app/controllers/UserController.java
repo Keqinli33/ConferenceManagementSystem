@@ -212,10 +212,10 @@ public class UserController extends Controller {
             JsonNode ret = response.asJson();
             if ("successful".equals(ret.get("status").asText())) {
                 session.put("username", username);
-                session.put("email",ret.get("email").toString());
-                session.put("userid", ret.get("userid").toString());
+                session.put("email",ret.get("email").asText());
+                session.put("userid", ret.get("userid").asText());
 
-                System.out.println("In session: "+session.get("username") + session.get("email"));
+                System.out.println("In session: "+session.get("username") + session.get("email")+session.get("userid"));
                 return GO_HOME;
             }else{
                 //return ok("hello world");
