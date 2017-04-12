@@ -1,5 +1,6 @@
 package controllers;
 
+import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
 import models.Profile;
 //import org.hibernate.validator.constraints.Email;
 import play.data.Form;
@@ -36,6 +37,7 @@ import java.util.Random;
 import org.apache.commons.mail.*;
 import play.libs.ws.*;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.CompletableFuture;
 import play.mvc.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
@@ -78,7 +80,7 @@ public class UserController extends Controller {
         );
     }
 
-    public Result changepwd(){
+    public CompletionStage<Result> changepwd(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         User new_user = userForm.get();
         String password = new_user.username;
@@ -88,23 +90,38 @@ public class UserController extends Controller {
         String verified = session.get("ChangePwdAuthVerified");
 
         if(!verified.equals("true")){
-            return badRequest(views.html.changepwd.render(userForm));
+            return CompletableFuture.completedFuture(badRequest(views.html.changepwd.render(userForm)));
         }
 
         if(!password.equals(password_again)){
-            return badRequest(views.html.changepwd.render(userForm));
+            return CompletableFuture.completedFuture(badRequest(views.html.changepwd.render(userForm)));
         }
 
         String username = session.get("username");
         Long userid = Long.parseLong(session.get("userid"));
-        User update_user = User.find.byId(userid);
+        /*User update_user = User.find.byId(userid);
         try {
-            update_user.password = MD5(password);
+            //update_user.password = MD5(password);
+            update_user.password = password;
             update_user.update();
         } catch (Exception e){
             e.printStackTrace();
         }
-        return GO_HOME;
+        return GO_HOME;*/
+        JsonNode json = Json.newObject()
+                .put("username", userid.toString())
+                .put("password", password);
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/changePwd").post(json);
+        return res.thenApplyAsync(response -> {
+            JsonNode ret = response.asJson();
+            if ("successful".equals(ret.get("status").asText())) {
+                System.out.println("Answer right");
+                return GO_HOME;
+            }else {
+                System.out.println("change password unsuccessfully");
+                return ok("password change unsuccessfully");
+            }
+        });
     }
 
     /**
@@ -134,7 +151,8 @@ public class UserController extends Controller {
         String username = session.get("username");
         System.out.println("Send tmp pwd Username "+username);
 
-        String email = new_user.GetEmailByUsername(username);
+        //String email = new_user.GetEmailByUsername(username);
+        String email = session.get("email");
         //String email = "linghl0915@163.com";
         System.out.println("Send tmp pwd Email "+email);
         //SendSimpleMessage(email, tmp_pwd);
@@ -164,7 +182,7 @@ public class UserController extends Controller {
         return badRequest(views.html.temporarypwd.render(userForm));
     }
 
-    public Result verifyQA(){
+    public CompletionStage<Result> verifyQA(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         User new_user = userForm.get();
 
@@ -176,19 +194,22 @@ public class UserController extends Controller {
         Session session = Http.Context.current().session();
         String username = session.get("username");
 
-        if(new_user.IfQACorrect(username, question1, answer1)){
-            if(new_user.IfQACorrect(username, question2, answer2)){
-                /*
-                return ok(
-                        views.html.temporarypwd.render(userForm)
-                );*/
-                flash("success","Answer right!");
+        JsonNode json = Json.newObject()
+                .put("security_question1", question1)
+                .put("security_question2", question2)
+                .put("security_answer1", answer1)
+                .put("security_answer2", answer2)
+                .put("username",username);
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/verifyChangePwdAuth").post(json);
+        return res.thenApplyAsync(response -> {
+            JsonNode ret = response.asJson();
+            if ("successful".equals(ret.get("status").asText())) {
+                System.out.println("Answer right");
                 return redirect("/temporarypwd");
+            }else{
+                return ok(views.html.verifyChangePwdAuth.render(userForm,1));
             }
-        }
-        //TODO notify frontend verification fail
-
-        return ok(views.html.verifyChangePwdAuth.render(userForm,1));
+        });
     }
     /**
      * For login
@@ -212,8 +233,8 @@ public class UserController extends Controller {
             JsonNode ret = response.asJson();
             if ("successful".equals(ret.get("status").asText())) {
                 session.put("username", username);
-                session.put("email",ret.get("email").toString());
-                session.put("userid", ret.get("userid").toString());
+                session.put("email",ret.get("email").asText());
+                session.put("userid", ret.get("userid").asText());
 
                 System.out.println("In session: "+session.get("username") + session.get("email"));
                 return GO_HOME;
@@ -254,7 +275,7 @@ public class UserController extends Controller {
                 if ("successful".equals(ret.get("status").asText())) {
                     session.put("username", username);
                     session.put("email",email);
-                    session.put("userid", ret.get("userid").toString());
+                    session.put("userid", ret.get("userid").asText());
 
                     System.out.println("In session: "+session.get("username") + session.get("email"));
                     return GO_HOME;
@@ -273,37 +294,6 @@ public class UserController extends Controller {
         );
     }
 
-    /**
-     *
-     * @param password
-     * @return password after encryed
-     * @throws Exception
-     */
-    private static String MD5(String password) throws Exception{
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        md.update(StandardCharsets.UTF_8.encode(password));
-        return String.format("%032x", new BigInteger(1, md.digest()));
-    }
-
-    /**
-     * Send temporary password for password changing
-     * @param email
-     * @return
-     */
-    private static ClientResponse SendSimpleMessage(String email, String tmp_pwd) {
-        String name = "customer";
-        String SendTo = name + " <" + email + ">";
-        Client client = Client.create();
-        client.addFilter(new HTTPBasicAuthFilter("api", "key-8bcaf224a0a4a59388e4dd33683d61e2"));
-        WebResource webResource = client.resource("https://api.mailgun.net/v3/sandboxb3bf5434ac5e4fba8a88fa29a6bc8b74.mailgun.org/messages");
-        MultivaluedMapImpl formData = new MultivaluedMapImpl();
-        formData.add("from", "Mailgun Sandbox <postmaster@sandboxb3bf5434ac5e4fba8a88fa29a6bc8b74.mailgun.org>");
-        formData.add("to", SendTo);
-        formData.add("subject", "Hello customer");
-        formData.add("text", "Dear Sir/Madam, your temporary password is "+tmp_pwd);
-        return webResource.type(MediaType.APPLICATION_FORM_URLENCODED).
-                post(ClientResponse.class, formData);
-    }
 
     private static void SendEmail(String emailto, String pwd){
         try {
