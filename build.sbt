@@ -13,6 +13,10 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
 
 libraryDependencies += "org.apache.commons" % "commons-email" % "1.4"
 
+libraryDependencies ++= Seq(
+  javaWs
+)
+
 //libraryDependencies += "org.apache.commons" % "commons-io" % "2.5"
 libraryDependencies ++= Seq(
   "com.sun.jersey" % "jersey-core" % "1.19.1",

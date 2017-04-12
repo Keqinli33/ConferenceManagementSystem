@@ -34,11 +34,17 @@ import java.util.Random;
 
 //import play.libs.Mail;
 import org.apache.commons.mail.*;
-
+import play.libs.ws.*;
+import java.util.concurrent.CompletionStage;
+import play.mvc.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
 /**
  * Created by Ling on 2017/3/27.
  */
 public class UserController extends Controller {
+    @Inject WSClient ws;
+
     private FormFactory formFactory;
 
     @Inject
@@ -231,62 +237,38 @@ public class UserController extends Controller {
     /**
      * Register a user
      */
-    public Result addUser() {
+    public CompletionStage<Result> addUser() {
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         System.out.println("Start inserting");
-        if(userForm.hasErrors()) {
-            //print error msg
-            System.out.println("ERROR");
-            String errorMsg = "";
-            java.util.Map<String, List<play.data.validation.ValidationError>> errorsAll = userForm.errors();
-            for (String field : errorsAll.keySet()) {
-                errorMsg += field + " ";
-                for (ValidationError error : errorsAll.get(field)) {
-                    errorMsg += error.message() + ", ";
-                }
-            }
-            System.out.println("Please correct the following errors: " + errorMsg);
-            return ok(views.html.register.render(userForm,0));
-        }
 
-        try {
             User new_user = userForm.get();
             String username = new_user.username;
             String password = new_user.password;
             String email = new_user.email;
+            String security_question1 = new_user.security_question1;
+            String security_question2 = new_user.security_question2;
+            String security_answer1 = new_user.security_answer1;
+            String security_answer2 = new_user.security_answer2;
 
-            //determine if the username exist (username needs to be unique)
-            if(new_user.IfUserExist(username)){
-                //if exist
-                System.out.println("Username exists!");
-                //flash("success", "Username " + username + " existed!");
-                //TODO notify frontend with error messgae here
+            JsonNode json = Json.newObject()
+                    .put("username", username)
+                    .put("password", password)
+                    .put("email",email)
+                    .put("security_question1", security_question1)
+                    .put("security_question2", security_question2)
+                    .put("security_answer1", security_answer1)
+                    .put("security_answer1", security_answer2);
 
-                return badRequest(views.html.register.render(userForm,1));
-            }else{
-                //if not exist, add user
-                new_user.password = MD5(password);
-                new_user.save();
-
-                //the user has been logged in, save username and id to session
-                Long id = new_user.GetUserID(username);
-                Session session = Http.Context.current().session();
-                session.put("username",username);
-                session.put("userid",id.toString());
-                session.put("email",email);
-
-                System.out.println("User " + userForm.get().username + " has been created");
-
-                Form<Profile> profileForm = formFactory.form(Profile.class);
-                Profile profile = Profile.find.byId(id);
-                return ok(
-                        views.html.profile.render(profileForm, profile)
-                );
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return ok();
+            CompletionStage<WSResponse> res = ws.url("http://localhost:9000/register").post(json);
+            return res.thenApply(response -> {
+                String ret = response.getBody();
+                System.out.println("here is "+ret);
+                if ("successfully".equals(ret)) {
+                    return ok("succ");
+                }else{
+                    return ok("hello world");
+                }
+            });
     }
 
     public Result logout(){
