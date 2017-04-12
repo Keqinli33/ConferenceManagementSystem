@@ -1,5 +1,37 @@
 package controllers;
 
+import models.Profile;
+//import org.hibernate.validator.constraints.Email;
+import play.data.Form;
+import play.data.FormFactory;
+import play.mvc.Controller;
+
+import javax.inject.Inject;
+import models.User;
+import play.mvc.Result;
+import play.mvc.Results;
+
+import java.util.*;
+import play.data.validation.ValidationError;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.file.FileDataBodyPart;
+
+import javax.ws.rs.core.MediaType;
+import play.mvc.Http.Session;
+import play.mvc.Http;
+
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
+import java.math.BigInteger;
+
+import java.util.Random;
+
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Transaction;
 import play.mvc.*;
@@ -13,10 +45,17 @@ import javax.persistence.PersistenceException;
 
 import play.mvc.Http.Session;
 
+import play.libs.ws.*;
+import java.util.concurrent.CompletionStage;
+import play.mvc.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
+
 /**
  * Created by sxh on 17/3/26.
  */
 public class ProfileController extends Controller{
+    @Inject WSClient ws;
 
     private FormFactory formFactory;
 
@@ -36,13 +75,14 @@ public class ProfileController extends Controller{
     );
 
     public Result enterProfile(){
-        Session session = Http.Context.current().session();
-        Long userid = Long.parseLong(session.get("userid"));
-        System.out.println("Enter profile page user id is "+userid.toString());
+//        Session session = Http.Context.current().session();
+//        Long userid = Long.parseLong(session.get("userid"));
+//        System.out.println("Enter profile page user id is "+userid.toString());
+//        Profile profile = Profile.find.byId(userid);
         Form<Profile> profileForm = formFactory.form(Profile.class);
-        Profile profile = Profile.find.byId(userid);
+
         return ok(
-                views.html.profile.render(profileForm, profile)
+                views.html.profile.render(profileForm, null)
         );
     }
 
@@ -51,15 +91,52 @@ public class ProfileController extends Controller{
      * Handle the 'edit form' submission
      *
      */
-    public Result edit() throws PersistenceException {
+    public CompletionStage<Result> edit() throws PersistenceException {
         Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
-        if(profileForm.hasErrors()) {
-            return badRequest(views.html.profile.render(profileForm, null));
-        }
+
 
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
 
+        Profile newProfileData = profileForm.get();
+
+        JsonNode json = Json.newObject()
+                .put("title", newProfileData.title)
+                .put("research", newProfileData.research)
+                .put("firstname",newProfileData.firstname)
+                .put("lastname", newProfileData.lastname)
+                .put("position", newProfileData.position)
+                .put("affiliation", newProfileData.affiliation)
+                .put("email", newProfileData.email)
+                .put("phone", newProfileData.phone)
+                .put("fax", newProfileData.fax)
+                .put("address",newProfileData.address)
+                .put("city", newProfileData.city)
+                .put("country", newProfileData.country)
+                .put("region", newProfileData.region)
+                .put("zipcode", newProfileData.zipcode)
+                .put("comment", newProfileData.comment)
+                .put("userid", userid);
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/profile/edit").post(json);
+        return res.thenApply(response -> {
+            String ret = response.getBody();
+            System.out.println("here is "+ret);
+            if(profileForm.hasErrors()) {
+                return ok("failure!");
+            }
+            else if ("insert successfully".equals(ret)) {
+                return ok(ret);
+            }
+            else if ("update successfully".equals(ret)) {
+                return ok(ret);
+            }
+            else{
+                return ok("failure!");
+            }
+        });
+
+        /*
         Transaction txn = Ebean.beginTransaction();
         try {
             Profile savedProfile = Profile.find.byId(userid);
@@ -116,7 +193,7 @@ public class ProfileController extends Controller{
             txn.end();
         }
 
-        return GO_HOME;
+*/
     }
 
     /**
@@ -132,18 +209,37 @@ public class ProfileController extends Controller{
     /**
      * Handle profile deletion
      */
-    public Result delete() {
+    public CompletionStage<Result> delete() {
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
-        Profile deletedProfile = Profile.find.byId(userid);
-        if(deletedProfile != null){
-            deletedProfile.delete();
-            flash("success", "Computer has been deleted");
-        }
-        else{
-            flash("success", "You haven't created your profile yet");
-        }
-        return GO_HOME;
+
+        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+        Profile newProfileData = profileForm.get();
+
+        JsonNode json = Json.newObject()
+                .put("title", newProfileData.title)
+                .put("research", newProfileData.research)
+                .put("firstname",newProfileData.firstname)
+                .put("lastname", newProfileData.lastname)
+                .put("position", newProfileData.position)
+                .put("affiliation", newProfileData.affiliation)
+                .put("email", newProfileData.email)
+                .put("phone", newProfileData.phone)
+                .put("fax", newProfileData.fax)
+                .put("address",newProfileData.address)
+                .put("city", newProfileData.city)
+                .put("country", newProfileData.country)
+                .put("region", newProfileData.region)
+                .put("zipcode", newProfileData.zipcode)
+                .put("comment", newProfileData.comment)
+                .put("userid", userid);
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/profile/delete").post(json);
+        return res.thenApply(response -> {
+            String ret = response.getBody();
+            System.out.println("here is "+ret);
+            return ok(ret);
+        });
     }
 
 }
