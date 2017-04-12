@@ -13,6 +13,9 @@ import javax.persistence.PersistenceException;
 
 import play.mvc.Http.Session;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
+
 /**
  * Created by sxh on 17/3/26.
  */
@@ -35,15 +38,36 @@ public class ProfileController extends Controller{
             routes.ShowPaperController.showMyPaper()
     );
 
-    public Result enterProfile(){
-        Session session = Http.Context.current().session();
-        Long userid = Long.parseLong(session.get("userid"));
-        System.out.println("Enter profile page user id is "+userid.toString());
+    public Result findById(Long id){
         Form<Profile> profileForm = formFactory.form(Profile.class);
-        Profile profile = Profile.find.byId(userid);
-        return ok(
-                views.html.profile.render(profileForm, profile)
-        );
+        Profile newProfileData = Profile.find.byId(id);
+
+        JsonNode json;
+
+        if(newProfileData == null){
+            json = null;
+        }
+        else {
+            json = Json.newObject()
+                    .put("title", newProfileData.title)
+                    .put("research", newProfileData.research)
+                    .put("firstname", newProfileData.firstname)
+                    .put("lastname", newProfileData.lastname)
+                    .put("position", newProfileData.position)
+                    .put("affiliation", newProfileData.affiliation)
+                    .put("email", newProfileData.email)
+                    .put("phone", newProfileData.phone)
+                    .put("fax", newProfileData.fax)
+                    .put("address", newProfileData.address)
+                    .put("city", newProfileData.city)
+                    .put("country", newProfileData.country)
+                    .put("region", newProfileData.region)
+                    .put("zipcode", newProfileData.zipcode)
+                    .put("comment", newProfileData.comment)
+                    .put("userid", newProfileData.userid);
+        }
+
+        return ok(json);
     }
 
 
@@ -57,13 +81,10 @@ public class ProfileController extends Controller{
             return ok();
         }
 
-        Session session = Http.Context.current().session();
-        Long userid = Long.parseLong(session.get("userid"));
-
         Transaction txn = Ebean.beginTransaction();
         try {
-            Profile savedProfile = Profile.find.byId(userid);
             Profile newProfileData = profileForm.get();
+            Profile savedProfile = Profile.find.byId(newProfileData.userid);
 
             if (savedProfile != null) {
                 savedProfile.title = newProfileData.title;
@@ -82,7 +103,7 @@ public class ProfileController extends Controller{
                 savedProfile.zipcode = newProfileData.zipcode;
                 savedProfile.comment = newProfileData.comment;
 
-                savedProfile.userid = userid;
+                savedProfile.userid = newProfileData.userid;
 
                 savedProfile.update();
                 //flash("success", "Profile " + userid + " has been updated");
@@ -107,7 +128,7 @@ public class ProfileController extends Controller{
                 newProfile.zipcode = newProfileData.zipcode;
                 newProfile.comment = newProfileData.comment;
 
-                newProfile.userid = userid;
+                newProfile.userid = newProfileData.userid;
 
                 newProfile.insert();
                 //flash("success", "Profile " + userid + " has been inserted");

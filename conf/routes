@@ -23,6 +23,7 @@ POST    /computers/:id/delete       controllers.HomeController.delete(id:Long)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Edit profile
+GET     /profile/:id                    controllers.ProfileController.findById(id:Long)
 POST     /profile/edit              controllers.ProfileController.edit()
 POST    /profile/delete        controllers.ProfileController.delete()
 
