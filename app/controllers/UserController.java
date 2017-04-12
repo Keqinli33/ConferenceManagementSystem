@@ -78,22 +78,9 @@ public class UserController extends Controller {
     public Result changepwd(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         User new_user = userForm.get();
-        String password = new_user.username;
-        String password_again = new_user.password;
 
-        Session session = Http.Context.current().session();
-        String verified = session.get("ChangePwdAuthVerified");
-
-        if(!verified.equals("true")){
-            return badRequest(views.html.changepwd.render(userForm));
-        }
-
-        if(!password.equals(password_again)){
-            return badRequest(views.html.changepwd.render(userForm));
-        }
-
-        String username = session.get("username");
-        Long userid = Long.parseLong(session.get("userid"));
+        Long userid = Long.parseLong(new_user.username);
+        String password = new_user.password;
         User update_user = User.find.byId(userid);
         try {
             update_user.password = MD5(password);
@@ -101,7 +88,9 @@ public class UserController extends Controller {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return GO_HOME;
+        JsonNode res_json = Json.newObject()
+                .put("status","successful");
+        return ok(res_json);
     }
 
     /**
@@ -170,22 +159,18 @@ public class UserController extends Controller {
         String question2 = new_user.security_question2;
         String answer2 = new_user.security_answer2;
 
-        Session session = Http.Context.current().session();
-        String username = session.get("username");
+        String username = new_user.username;
 
         if(new_user.IfQACorrect(username, question1, answer1)){
             if(new_user.IfQACorrect(username, question2, answer2)){
-                /*
-                return ok(
-                        views.html.temporarypwd.render(userForm)
-                );*/
-                flash("success","Answer right!");
-                return redirect("/temporarypwd");
+                JsonNode res_json = Json.newObject()
+                        .put("status","successful");
+                return ok(res_json);
             }
         }
-        //TODO notify frontend verification fail
-
-        return ok(views.html.verifyChangePwdAuth.render(userForm,1));
+        JsonNode res_json = Json.newObject()
+                .put("status","error");
+        return ok(res_json);
     }
     /**
      * For login
