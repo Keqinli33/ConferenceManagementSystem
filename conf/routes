@@ -30,6 +30,7 @@ POST    /profile/delete        controllers.ProfileController.delete()
 GET     /register                   controllers.UserController.register()
 POST    /register                   controllers.UserController.addUser()
 
+
 # Login
 GET     /login                      controllers.UserController.login()
 POST    /login                      controllers.UserController.verifyUser()

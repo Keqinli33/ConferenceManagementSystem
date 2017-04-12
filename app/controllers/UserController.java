@@ -36,6 +36,8 @@ import java.util.Random;
 //import play.libs.Mail;
 import org.apache.commons.mail.*;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
 /**
  * Created by Ling on 2017/3/27.
  */
@@ -219,15 +221,25 @@ public class UserController extends Controller {
                 String email = new_user.GetEmailByUsername(username);
                 session.put("email",email);
                 System.out.println("Login successfully");
-                flash("success", "Login success");
-                return GO_HOME;
+
+                JsonNode res_json = Json.newObject()
+                        .put("username", username.toString())
+                        .put("userid", id.toString())
+                        .put("email",email.toString())
+                        .put("status","successful");
+
+
+                return ok(res_json);
             }
 
             //TODO notify frontend error message
             System.out.println("Login unsuccessfully");
-            //flash("error", "Login error");
-            //return GO_LOGIN;
-            return ok(views.html.login.render(userForm, 1));
+        JsonNode res_json = Json.newObject()
+                .put("username", "")
+                .put("userid", "")
+                .put("email","")
+                .put("status","error");
+        return ok(res_json);
     }
     /**
      * Register a user
@@ -235,6 +247,7 @@ public class UserController extends Controller {
     public Result addUser() {
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         System.out.println("Start inserting");
+
         if(userForm.hasErrors()) {
             //print error msg
             System.out.println("ERROR");
@@ -251,6 +264,7 @@ public class UserController extends Controller {
         }
 
         try {
+            //Thread.sleep(3000);
             User new_user = userForm.get();
             String username = new_user.username;
             String password = new_user.password;
@@ -262,9 +276,13 @@ public class UserController extends Controller {
                 //if exist
                 System.out.println("Username exists!");
                 //flash("success", "Username " + username + " existed!");
-                //TODO notify frontend with error messgae here
 
-                return ok("username exitst");
+                JsonNode res_json = Json.newObject()
+                        .put("username", "")
+                        .put("userid", "")
+                        .put("email","")
+                        .put("status","error");
+                return ok(res_json);
 
                 //return badRequest(views.html.register.render(userForm,1));
             }else{
@@ -283,7 +301,15 @@ public class UserController extends Controller {
 
                 Form<Profile> profileForm = formFactory.form(Profile.class);
                 Profile profile = Profile.find.byId(id);
-                return ok("successfully");
+
+                JsonNode res_json = Json.newObject()
+                        .put("username", username.toString())
+                        .put("userid", id.toString())
+                        .put("email",email.toString())
+                        .put("status","successful");
+
+
+                return ok(res_json);
             }
         } catch (Exception e){
             e.printStackTrace();
