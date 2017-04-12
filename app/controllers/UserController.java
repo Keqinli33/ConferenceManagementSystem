@@ -257,7 +257,7 @@ public class UserController extends Controller {
                     .put("security_question1", security_question1)
                     .put("security_question2", security_question2)
                     .put("security_answer1", security_answer1)
-                    .put("security_answer1", security_answer2);
+                    .put("security_answer2", security_answer2);
 
             CompletionStage<WSResponse> res = ws.url("http://localhost:9000/register").post(json);
             return res.thenApply(response -> {
