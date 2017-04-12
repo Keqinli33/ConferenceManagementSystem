@@ -1,5 +1,6 @@
 package controllers;
 
+import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
 import models.Profile;
 //import org.hibernate.validator.constraints.Email;
 import play.data.Form;
@@ -253,6 +254,7 @@ public class UserController extends Controller {
             User new_user = userForm.get();
             String username = new_user.username;
             String password = new_user.password;
+            System.out.println("password"+password);
             String email = new_user.email;
 
             //determine if the username exist (username needs to be unique)
@@ -262,7 +264,9 @@ public class UserController extends Controller {
                 //flash("success", "Username " + username + " existed!");
                 //TODO notify frontend with error messgae here
 
-                return badRequest(views.html.register.render(userForm,1));
+                return ok("username exitst");
+
+                //return badRequest(views.html.register.render(userForm,1));
             }else{
                 //if not exist, add user
                 new_user.password = MD5(password);
@@ -279,9 +283,7 @@ public class UserController extends Controller {
 
                 Form<Profile> profileForm = formFactory.form(Profile.class);
                 Profile profile = Profile.find.byId(id);
-                return ok(
-                        views.html.profile.render(profileForm, profile)
-                );
+                return ok("successfully");
             }
         } catch (Exception e){
             e.printStackTrace();
