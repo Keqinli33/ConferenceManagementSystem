@@ -18,12 +18,22 @@
     </tr>
     </table>
 
-    <h1>Show My Paper</h1>
+    <h1>Show My Conference</h1>
 
     <a class="btn success" id="add" href="@routes.PaperController.create()">Add a new paper</a>
     @b3.form(routes.ShowPaperController.showMyPaper()) {
 
         <fieldset>
+            <div id="actions">
+
+                <form action="@link(0, "name")" method="GET">
+                    <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by computer name...">
+                    <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
+                </form>
+
+                <a class="btn success" id="add" href="@routes.HomeController.create()">Add a new computer</a>
+
+            </div>
             @b3.select( paperForm("conference"), options({"C" -> "myConference"}), '_label -> "Select" )
 
             <table class="mypaper zebra-striped">
@@ -74,15 +84,5 @@
 
     }
 
-    @if(session.containsKey("Submitted") && session.get("Submitted").toString == "ok"){
-        <script>
-            var str = "Thank you. Your paper abstract has been submitted successfully. Please keep your paper id:"+paper.id;
-            alert(str);
-        </script>
-        @{
-            session.remove("Submitted")
-            session.remove("paperid")
-        }
 
-    }
 }
