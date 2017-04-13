@@ -94,34 +94,35 @@ public class ProfileController extends Controller{
             JsonNode ret = response.asJson();
 
 
-            if(ret == null){
+            if(ret.get("userid").asText().equals("-1")){
                 return ok(
                         views.html.profile.render(profileForm, null, 0)
                 );
+            }else {
+
+                Profile savedProfile = new Profile();
+                savedProfile.title = ret.get("title").asText();
+                savedProfile.research = ret.get("research").asText();
+                savedProfile.firstname = ret.get("firstname").asText();
+                savedProfile.lastname = ret.get("lastname").asText();
+                savedProfile.position = ret.get("position").asText();
+                savedProfile.affiliation = ret.get("affiliation").asText();
+                savedProfile.email = ret.get("email").asText();
+                savedProfile.phone = ret.get("phone").asText();
+                savedProfile.fax = ret.get("fax").asText();
+                savedProfile.address = ret.get("address").asText();
+                savedProfile.city = ret.get("city").asText();
+                savedProfile.country = ret.get("country").asText();
+                savedProfile.region = ret.get("region").asText();
+                savedProfile.zipcode = null;
+                savedProfile.comment = ret.get("comment").asText();
+
+                savedProfile.userid = Long.parseLong(ret.get("userid").asText());
+
+                return ok(
+                        views.html.profile.render(profileForm, savedProfile, 0)
+                );
             }
-
-            Profile savedProfile = new Profile();
-            savedProfile.title = ret.get("title").asText();
-            savedProfile.research = ret.get("research").asText();
-            savedProfile.firstname = ret.get("firstname").asText();
-            savedProfile.lastname = ret.get("lastname").asText();
-            savedProfile.position = ret.get("position").asText();
-            savedProfile.affiliation = ret.get("affiliation").asText();
-            savedProfile.email = ret.get("email").asText();
-            savedProfile.phone = ret.get("phone").asText();
-            savedProfile.fax = ret.get("fax").asText();
-            savedProfile.address = ret.get("address").asText();
-            savedProfile.city = ret.get("city").asText();
-            savedProfile.country = ret.get("country").asText();
-            savedProfile.region = ret.get("region").asText();
-            savedProfile.zipcode = null;
-            savedProfile.comment = ret.get("comment").asText();
-
-            savedProfile.userid = Long.parseLong(ret.get("userid").asText());
-
-            return ok(
-                    views.html.profile.render(profileForm, savedProfile, 0)
-            );
         });
 
     }

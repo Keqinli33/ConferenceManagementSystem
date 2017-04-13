@@ -62,14 +62,6 @@ public class ShowPaperController extends Controller{
         return GO_HOME;
     }
 
-    public Result list(int page, String sortBy, String order, String filter) {
-        return ok(
-                views.html.list.render(
-                        Computer.page(page, 10, sortBy, order, filter),
-                        sortBy, order, filter
-                )
-        );
-    }
 
     /**
      * Handle profile deletion

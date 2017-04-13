@@ -73,8 +73,8 @@ public class Paper extends Model {
     public String topic;
     public String status;
 
-    @Formats.DateTime(pattern="yyyy-MM-dd")
-    public Date date;
+//    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public String date;
 
     public static Find<Long,Paper> find = new Find<Long,Paper>(){};
 
