@@ -76,7 +76,7 @@ public class ShowPaperController extends Controller{
 
         JsonNode json = Json.newObject()
                 .put("username", username);
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers/").get();
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers/" + username).get();
         return res.thenApplyAsync(response -> {
             JsonNode ret = response.asJson();
             if ("successful".equals(ret.get("status").asText())) {
