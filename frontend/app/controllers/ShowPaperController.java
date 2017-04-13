@@ -91,30 +91,8 @@ public class ShowPaperController extends Controller{
                 List<Paper> res = new ArrayList<Paper>();
                 for(JsonNode res1 : ret){
                     Paper tem1 = new Paper();
-                    tem1.id=Long.parseLong(res1.get("id"));
+                    tem1.id=res1.get("id").asText();
                     tem1.username=res.get("username").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.authors=res.get("authors").asText();
-                    tem1.confirmemail=res.get("confirmemail").asText();
-                    tem1.contactemail=res.get("contactemail").asText();
-                    tem1.firstname1=res.get("firstname1").asText();
-                    tem1.lastname1=res.get("lastname1").asText();
-                    tem1.email1=res.get("email1").asText();
-                    tem1.affilation1=res.get("affilation1").asText();
-                    tem1.firstname2=res.get("firstname2").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-                    tem1.title=res.get("title").asText();
-
                 }
                 return ok(
                         views.html.showmypaper.render(paperForm,res));

@@ -35,6 +35,7 @@ import java.util.concurrent.CompletionStage;
  * Created by shuang on 3/29/17.
  */
 public class PaperController extends Controller {
+    @Inject WSClient ws;
     private FormFactory formFactory;
 
     @Inject
@@ -118,18 +119,18 @@ public class PaperController extends Controller {
     }
     public CompletionStage<Result> update(Long id) throws PersistenceException {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        if(paperForm.hasErrors()) {
-            return badRequest(views.html.editPaper.render(id, paperForm));
-        }
+//        if(paperForm.hasErrors()) {
+//            return badRequest(views.html.editPaper.render(id, paperForm));
+//        }
 
 //        Transaction txn = Ebean.beginTransaction();
 //        try {
 //            Paper savedPaper = Paper.find.byId(id);
 //            if (savedPaper != null) {
-                Paper newPaperData = paperForm.get();
-                if(!newPaperData.contactemail.equals(newPaperData.confirmemail)){
-                    return badRequest(views.html.editPaper.render(id, paperForm));
-                }
+                Paper newPaper = paperForm.get();
+//                if(!newPaperData.contactemail.equals(newPaperData.confirmemail)){
+//                    return badRequest(views.html.editPaper.render(id, paperForm));
+//                }
 //                savedPaper.title = newPaperData.title;
 //                savedPaper.contactemail = newPaperData.contactemail;
 //                savedPaper.firstname1 = newPaperData.firstname1;
@@ -243,14 +244,14 @@ public class PaperController extends Controller {
     }
     public CompletionStage<Result> save() {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        if(paperForm.hasErrors()) {
-            return badRequest(views.html.createPaper.render(paperForm));
-        }
+//        if(paperForm.hasErrors()) {
+//            return badRequest(views.html.createPaper.render(paperForm));
+//        }
 
         Paper newPaper = paperForm.get();
-        if(!newPaper.contactemail.equals(newPaper.confirmemail)){
-            return badRequest(views.html.createPaper.render(paperForm));
-        }
+//        if(!newPaper.contactemail.equals(newPaper.confirmemail)){
+//            return badRequest(views.html.createPaper.render(paperForm));
+//        }
 
         Http.Session session = Http.Context.current().session();
 //        String username = session.get("username");
