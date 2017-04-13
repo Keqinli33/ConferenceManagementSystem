@@ -45,7 +45,7 @@ public class ProfileController extends Controller{
         JsonNode json;
 
         if(newProfileData == null){
-            json = null;
+            json = Json.newObject().put("userid", -1);
         }
         else {
             json = Json.newObject()
