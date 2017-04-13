@@ -163,7 +163,7 @@ public class ShowPaperController extends Controller{
                     .put("candidate", res.get(i).candidate)
                     .put("volunteer", res.get(i).volunteer)
                     .put("paperabstract", res.get(i).paperabstract)
-                    .put("topic", res.get(i).topic);
+                    .put("topic", res.get(i).topic)
                     .put("ifsubmit", res.get(i).ifsubmit)
                     .put("format", res.get(i).format)
                     .put("papersize", res.get(i).papersize)
