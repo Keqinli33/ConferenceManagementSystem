@@ -223,7 +223,9 @@ public class PaperController extends Controller {
 //                session.put("paperid",Long.toString(paperForm.get().id));
 
                 return GO_HOME;
-            }
+            }else{
+                    return GO_HOME;
+                }
 
         });
 
@@ -301,16 +303,20 @@ public class PaperController extends Controller {
                 .put("ifsubmit", newPaper.ifsubmit)
                 .put("format", newPaper.format)
                 .put("papersize", newPaper.papersize)
-                .put("date", newPaper.date)
+                .put("date", newPaper.date.toString())
                 .put("conference", newPaper.conference)
                 .put("file", newPaper.file);
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers").post(json);
         return res.thenApply(response -> {
+            String ret = response.getBody();
+            System.out.println("here is "+ret);
             if ("save successfully".equals(ret)) {
                 session.put("Submitted","ok");
                 session.put("paperid",Long.toString(paperForm.get().id));
 
+                return GO_HOME;
+            }else{
                 return GO_HOME;
             }
 

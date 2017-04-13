@@ -8,6 +8,8 @@ import play.data.*;
 import static play.data.Form.*;
 import play.libs.ws.*;
 import java.util.concurrent.CompletionStage;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import models.*;
 import java.util.*;
@@ -37,7 +39,7 @@ import play.libs.Json;
  * Created by keqinli on 3/29/17.
  */
 public class ShowPaperController extends Controller{
-
+    @Inject WSClient ws;
     private FormFactory formFactory;
 
     @Inject
@@ -49,7 +51,7 @@ public class ShowPaperController extends Controller{
      * This result directly redirect to application home.
      */
     public Result GO_HOME = Results.redirect(
-            routes.HomeController.list(0, "name", "asc", "")
+            routes.ShowPaperController.showMyPaper()
     );
 
     /**
@@ -80,18 +82,19 @@ public class ShowPaperController extends Controller{
 
         JsonNode json = Json.newObject()
                 .put("username", username);
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers/" + username).get();
-        List<Paper> restemp =new Arraylist<Paper>();
-        return res.thenApplyAsync(response -> {
-            ArrayNode ret = response.asJson();
-            //if ("successful".equals(ret.get("status").asText())) {
+        CompletionStage<WSResponse> resofres = ws.url("http://localhost:9000/papers/" + username).get();
+//        List<Paper> restemp =new Arraylist<Paper>();
+        return resofres.thenApplyAsync(response -> {
+            JsonNode arr = response.asJson();
+            ArrayNode ret = (ArrayNode) arr;
+            if ("successful".equals(ret.get("status").asText())) {
 //                ObjectMapper objectMapper = new ObjectMapper();
 //                Paper[] reslist = objectMapper.readValue(ret, Paper[].class);
 //                List<Paper> res = Array.asList(reslist);
                 List<Paper> res = new ArrayList<Paper>();
                 for(JsonNode res1 : ret){
                     Paper savedPaper = new Paper();
-                    savedPaper.id = res1.get("id").asText();
+                    savedPaper.id = Long.parseLong(res1.get("id").asText());
                     savedPaper.username = res1.get("username").asText();
                     savedPaper.title = res1.get("title").asText();
                     savedPaper.contactemail = res1.get("contactemail").asText();
@@ -134,87 +137,23 @@ public class ShowPaperController extends Controller{
                 savedPaper.conference = res1.get("conference").asText();
                     savedPaper.topic = res1.get("topic").asText();
                 savedPaper.status = res1.get("status").asText();
-                savedPaper.date = res1.get("date").asText();
+                try{
+                savedPaper.date = new SimpleDateFormat("yyyy-MM-dd").parse(res1.get("date").asText());
+                }
+                catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     res.add(savedPaper);
-               // }
+                }
                 return ok(
                         views.html.showmypaper.render(paperForm,res));
             }
-//            else{
-//                return ok(views.html.showmypaper.render(paperForm,restemp));
-//            }
+            else{
+                return GO_HOME;
+            }
         });
 
-//        List<Paper> res = new ArrayList<Paper>();
-        //res = paperInfo.GetMyPaper(username);
 
-//        Long id = res.get(0).id;
-//        String title = res.get(0).title;
-//        String conference = res.get(0).conference;
-//
-
-//         String authors = "";
-//        for(int i =0; i <res.size(); i++){
-//            res.get(i).authors = "";
-//            if(!res.get(i).firstname1.isEmpty()){
-//                res.get(i).authors = res.get(i).authors + res.get(i).firstname1 + " ";
-//                res.get(i).authors = res.get(i).authors + res.get(i).lastname1 + ", ";
-//            }
-//            if(!res.get(i).firstname2.isEmpty()){
-//                res.get(i).authors = res.get(i).authors + res.get(i).firstname2 + " ";
-//                res.get(i).authors = res.get(i).authors + res.get(i).lastname2 + ", ";
-//            }
-//            if(!res.get(i).firstname3.isEmpty()){
-//                res.get(i).authors = res.get(i).authors + res.get(i).firstname3 + " ";
-//                res.get(i).authors = res.get(i).authors + res.get(i).lastname3 + ", ";
-//            }
-//            if(!res.get(i).firstname4.isEmpty()){
-//                res.get(i).authors = res.get(i).authors + res.get(i).firstname4 + " ";
-//                res.get(i).authors = res.get(i).authors + res.get(i).lastname4 + ", ";
-//            }
-//            if(!res.get(i).firstname5.isEmpty()){
-//                res.get(i).authors = res.get(i).authors + res.get(i).firstname5 + " ";
-//                res.get(i).authors = res.get(i).authors + res.get(i).lastname5 + ", ";
-//            }
-//            if(!res.get(i).firstname6.isEmpty()){
-//                res.get(i).authors = res.get(i).authors + res.get(i).firstname6 + " ";
-//                res.get(i).authors = res.get(i).authors + res.get(i).lastname6 + ", ";
-//            }
-//            if(!res.get(i).firstname7.isEmpty()){
-//                res.get(i).authors = res.get(i).authors + res.get(i).firstname7 + " ";
-//                res.get(i).authors = res.get(i).authors + res.get(i).lastname7 + ", ";
-//            }
-//            if(!res.get(i).contactemail.isEmpty()){
-//                res.get(i).authors = res.get(i).authors + res.get(i).contactemail + " ";
-//            }
-//        }
-
-
-//        authors = authors + res.get(0).firstname1 + " ";
-//        authors = authors + res.get(0).lastname1 + ", ";
-//        authors = authors + res.get(0).firstname2 + " ";
-//        authors = authors + res.get(0).lastname2 + ", ";
-//        authors = authors + res.get(0).firstname3 + " ";
-//        authors = authors + res.get(0).lastname3 + ", ";
-//        authors = authors + res.get(0).firstname4 + " ";
-//        authors = authors + res.get(0).lastname4 + ", ";
-//        authors = authors + res.get(0).firstname5 + " ";
-//        authors = authors + res.get(0).lastname5 + ", ";
-//        authors = authors + res.get(0).firstname6 + " ";
-//        authors = authors + res.get(0).lastname6 + ", ";
-//        authors = authors + res.get(0).firstname7 + " ";
-//        authors = authors + res.get(0).lastname7;
-//
-        //String email = User.GetEmailByUsername(username);
-//        String email = session.get("email");
-//        System.out.println("In show my paper username "+username);
-//
-//        String topic = res.get(0).topic;
-//        String status = res.get(0).status;
-//        String format = res.get(0).format;
-//        String filesize = res.get(0).papersize;
-//        Date date = res.get(0).date;
-//        String action = "Modify";
 
         
     }
