@@ -180,7 +180,7 @@ public class ShowPaperController extends Controller{
                     .put("ifsubmit", res.get(i).ifsubmit)
                     .put("format", res.get(i).format)
                     .put("papersize", res.get(i).papersize)
-                    .put("date", res.get(i).date.toString())
+                    .put("date", res.get(i).date)
                     .put("conference", res.get(i).conference)
                     .put("file", res.get(i).file)
                     .put("status", res.get(i).status);

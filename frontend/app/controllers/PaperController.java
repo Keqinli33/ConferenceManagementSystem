@@ -260,7 +260,8 @@ public class PaperController extends Controller {
 //        String username = session.get("username");
         newPaper.username= session.get("username");
         newPaper.ifsubmit = "N";
-        newPaper.date = new Date();
+        Date date = new Date();
+        newPaper.date = date.toString();
         JsonNode json = Json.newObject()
                 .put("username", newPaper.username)
                 .put("title", newPaper.title)
@@ -303,7 +304,7 @@ public class PaperController extends Controller {
                 .put("ifsubmit", newPaper.ifsubmit)
                 .put("format", newPaper.format)
                 .put("papersize", newPaper.papersize)
-                .put("date", newPaper.date.toString())
+                .put("date", newPaper.date)
                 .put("conference", newPaper.conference)
                 .put("file", newPaper.file);
 
