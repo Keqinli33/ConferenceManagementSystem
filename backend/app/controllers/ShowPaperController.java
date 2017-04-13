@@ -33,7 +33,7 @@ import org.apache.commons.mail.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
-import javax.json;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 /**
  * Created by keqinli on 3/29/17.
  */
@@ -122,7 +122,7 @@ public class ShowPaperController extends Controller{
             }
         }
 
-        JSONArray jsonarray = new JSONArray();
+        ArrayNode jsonarray = new ArrayNode();
         for(int i=0; i< res.size; i++){
             JsonNode json = Json.newObject()
                     .put("id", res.get(i).id)
@@ -132,33 +132,33 @@ public class ShowPaperController extends Controller{
                     .put("confirmemail", res.get(i).confirmemail)
                     .put("contactemail",res.get(i).contactemail)
                     .put("firstname1",res.get(i).firstname1)
-                    .put("lastname1",res.get(i).firstname1)
-                    .put("email1",res.get(i).firstname1)
-                    .put("affilation1",res.get(i).firstname1)
-                    .put("firstname2",res.get(i).firstname1)
-                    .put("lastname2",res.get(i).firstname1)
-                    .put("email2",res.get(i).firstname1)
-                    .put("affilation2",res.get(i).firstname1)
-                    .put("firstname3",res.get(i).firstname1)
-                    .put("lastname3",res.get(i).firstname1)
-                    .put("email3",res.get(i).firstname1)
-                    .put("affilation3",res.get(i).firstname1)
-                    .put("firstname4",res.get(i).firstname1)
-                    .put("lastname4",res.get(i).firstname1)
-                    .put("email4",res.get(i).firstname1)
-                    .put("affilation4",res.get(i).firstname1)
-                    .put("firstname5",res.get(i).firstname1)
-                    .put("lastname5",res.get(i).firstname1)
-                    .put("email5",res.get(i).firstname1)
-                    .put("affilation5",res.get(i).firstname1)
-                    .put("firstname6",res.get(i).firstname1)
-                    .put("lastname6",res.get(i).firstname1)
-                    .put("email6",res.get(i).firstname1)
-                    .put("affilation6",res.get(i).firstname1)
-                    .put("firstname7",res.get(i).firstname1)
-                    .put("lastname7",res.get(i).firstname1)
-                    .put("email7",res.get(i).firstname1)
-                    .put("affilation7",res.get(i).firstname1)
+                    .put("lastname1",res.get(i).lastname1)
+                    .put("email1",res.get(i).email1)
+                    .put("affilation1",res.get(i).affilation1)
+                    .put("firstname2",res.get(i).firstname2)
+                    .put("lastname2",res.get(i).lastname2)
+                    .put("email2",res.get(i).email2)
+                    .put("affilation2",res.get(i).affilation2)
+                    .put("firstname3",res.get(i).firstname3)
+                    .put("lastname3",res.get(i).lastname3)
+                    .put("email3",res.get(i).email3)
+                    .put("affilation3",res.get(i).affilation3)
+                    .put("firstname4",res.get(i).firstname4)
+                    .put("lastname4",res.get(i).lastname4)
+                    .put("email4",res.get(i).email4)
+                    .put("affilation4",res.get(i).affilation4)
+                    .put("firstname5",res.get(i).firstname5)
+                    .put("lastname5",res.get(i).lastname5)
+                    .put("email5",res.get(i).email5)
+                    .put("affilation5",res.get(i).affilation5)
+                    .put("firstname6",res.get(i).firstname6)
+                    .put("lastname6",res.get(i).lastname6)
+                    .put("email6",res.get(i).email6)
+                    .put("affilation6",res.get(i).affilation6)
+                    .put("firstname7",res.get(i).firstname7)
+                    .put("lastname7",res.get(i).lastname7)
+                    .put("email7",res.get(i).email7)
+                    .put("affilation7",res.get(i).affilation7)
                     .put("otherauthor", res.get(i).otherauthor)
                     .put("candidate", res.get(i).candidate)
                     .put("volunteer", res.get(i).volunteer)
@@ -170,7 +170,7 @@ public class ShowPaperController extends Controller{
                     .put("date", res.get(i).date)
                     .put("conference", res.get(i).conference)
                     .put("file", res.get(i).file);
-             jsonarray.put(json);
+             jsonarray.add(json);
 
         }
         return ok(jsonarray);
