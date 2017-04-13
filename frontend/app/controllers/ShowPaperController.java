@@ -6,6 +6,8 @@ import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
+import play.libs.ws.*;
+import java.util.concurrent.CompletionStage;
 
 import models.*;
 import java.util.*;
@@ -27,6 +29,8 @@ import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
 
 import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import play.libs.Json;
 
 /**
@@ -77,17 +81,23 @@ public class ShowPaperController extends Controller{
         JsonNode json = Json.newObject()
                 .put("username", username);
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers/" + username).get();
+        List<Paper> restemp =new Arraylist<Paper>();
         return res.thenApplyAsync(response -> {
-            JsonNode ret = response.asJson();
+            ArrayNode ret = response.asJson();
             if ("successful".equals(ret.get("status").asText())) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                Paper[] reslist = objectMapper.readValue(json, Paper[].class);
-                List<Paper> res = Array.asList(reslist);
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                Paper[] reslist = objectMapper.readValue(ret, Paper[].class);
+//                List<Paper> res = Array.asList(reslist);
+                List<Paper> res = new ArrayList<Paper>();
+                for(JsonNode res1 : ret){
+                    Paper tem1 = new Paper();
+                    tem1.id=res1.get("id").asText();
+                    tem1.username=res.get("username").asText();
+                }
                 return ok(
-                        views.html.showmypaper.render(paperForm,res);
-                );
+                        views.html.showmypaper.render(paperForm,res));
             }else{
-                return ok(views.html.showmypaper.render(paperForm,1));
+                return ok(views.html.showmypaper.render(paperForm,restemp));
             }
         });
 

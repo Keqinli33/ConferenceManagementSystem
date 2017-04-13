@@ -7,6 +7,8 @@ import com.avaje.ebean.Transaction;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
+import play.libs.ws.*;
+import java.util.concurrent.CompletionStage;
 
 import models.*;
 import java.util.*;
@@ -173,6 +175,7 @@ public class ShowPaperController extends Controller{
              jsonarray.add(json);
 
         }
+        jsonarray.add({"status": "successful"});
         return ok(jsonarray);
 //
 //        String topic = res.get(0).topic;
