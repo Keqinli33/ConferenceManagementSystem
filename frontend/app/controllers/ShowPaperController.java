@@ -40,6 +40,7 @@ import play.libs.Json;
  */
 public class ShowPaperController extends Controller{
     @Inject WSClient ws;
+//    @Inject HttpExecutionContext ec;
     private FormFactory formFactory;
 
     @Inject
@@ -147,7 +148,7 @@ public class ShowPaperController extends Controller{
                     res.add(savedPaper);
                 }
                 return ok(
-                        views.html.showmypaper.render(paperForm,res));
+                        views.html.showmypaper.render(paperForm,res,session));
 //            }
 //            else{
 //                return GO_HOME;
