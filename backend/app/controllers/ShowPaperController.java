@@ -125,7 +125,11 @@ public class ShowPaperController extends Controller{
         JSONArray jsonarray = new JSONArray();
         for(int i=0; i< res.size; i++){
             JsonNode json = Json.newObject()
+                    .put("id", res.get(i).id)
+                    .put("username", username)
                     .put("title", res.get(i).title)
+                    .put("authors", res.get(i).authors)
+                    .put("confirmemail", res.get(i).confirmemail)
                     .put("contactemail",res.get(i).contactemail)
                     .put("firstname1",res.get(i).firstname1)
                     .put("lastname1",res.get(i).firstname1)
@@ -160,6 +164,11 @@ public class ShowPaperController extends Controller{
                     .put("volunteer", res.get(i).volunteer)
                     .put("paperabstract", res.get(i).paperabstract)
                     .put("topic", res.get(i).topic);
+                    .put("ifsubmit", res.get(i).ifsubmit)
+                    .put("format", res.get(i).format)
+                    .put("papersize", res.get(i).papersize)
+                    .put("date", res.get(i).date)
+                    .put("conference", res.get(i).conference)
              jsonarray.put(json);
 
         }

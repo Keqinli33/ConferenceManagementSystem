@@ -87,7 +87,7 @@ public class ShowPaperController extends Controller{
                         views.html.showmypaper.render(paperForm,res);
                 );
             }else{
-                return ok(views.html.verifyChangePwdAuth.render(userForm,1));
+                return ok(views.html.showmypaper.render(paperForm,1));
             }
         });
 
