@@ -52,7 +52,7 @@ POST  /papers                           controllers.PaperController.save()
 GET     /papers/:id                     controllers.PaperController.edit(id:Long)
 POST    /papers/:id                     controllers.PaperController.update(id:Long)
 
-GET   /papers/                      controllers.ShowPaperController.showMyPaper()
+GET   /papers                      controllers.ShowPaperController.showMyPaper()
 #Upload paper
 GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
 POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
