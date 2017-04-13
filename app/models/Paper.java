@@ -73,6 +73,10 @@ public class Paper extends Model {
     public String topic;
     public String status;
 
+
+    public String reviewstatus;
+    public long reviewerid;
+
     @Formats.DateTime(pattern="yyyy-MM-dd")
     public Date date;
 
@@ -82,6 +86,14 @@ public class Paper extends Model {
         List<Paper> results =
                 find.where()
                         .eq("username",username)
+                        .findList();
+        return results;
+    }
+
+    public static List<Paper> ReviewPapers(Long userid){
+        List<Paper> results =
+                find.where()
+                        .eq("reviewerid",userid)
                         .findList();
         return results;
     }

@@ -57,3 +57,6 @@ GET   /papers                      controllers.ShowPaperController.showMyPaper()
 #Upload paper
 GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
 POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
+
+# Reviewer page
+GET    /review/conf/:id                controllers.ReviewerController.getconf(id:Long)
