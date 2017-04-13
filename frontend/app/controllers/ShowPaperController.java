@@ -216,13 +216,7 @@ public class ShowPaperController extends Controller{
 //        Date date = res.get(0).date;
 //        String action = "Modify";
 
-
-
-//        return ok(
-//                views.html.showmypaper.render(paperForm,res, authors)
-//        );
-
-        //return GO_HOME;
+        
     }
 
 }
