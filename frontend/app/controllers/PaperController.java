@@ -211,13 +211,14 @@ public class PaperController extends Controller {
                 
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers"+id).post(json);
-        return res.thenApply(response -> {
+        return res.thenApplyAsync(response -> {
             String ret = response.getBody();
             System.out.println("here is "+ret);
-            if(paperForm.hasErrors()) {
-                return badRequest(views.html.createPaper.render(paperForm));
-            }
-            else if ("update successfully".equals(ret)) {
+//            if(paperForm.hasErrors()) {
+//                return badRequest(views.html.createPaper.render(paperForm));
+//            }
+//            else
+                if ("update successfully".equals(ret)) {
 //                session.put("Submitted","ok");
 //                session.put("paperid",Long.toString(paperForm.get().id));
 
