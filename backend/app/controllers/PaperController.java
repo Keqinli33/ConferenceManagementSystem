@@ -11,6 +11,14 @@ import play.mvc.Result;
 import play.mvc.Http;
 
 import models.*;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.file.FileDataBodyPart;
+import javax.ws.rs.core.MediaType;
 
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
@@ -18,6 +26,10 @@ import java.util.Date;
 import java.io.File;
 import org.apache.commons.mail.*;
 import org.apache.commons.io.FileUtils;
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
+import play.libs.ws.*;
+import java.util.concurrent.CompletionStage;
 /**
  * Created by shuang on 3/29/17.
  */
@@ -43,12 +55,53 @@ public class PaperController extends Controller {
     }
 
     public Result edit(Long id) {
-        Form<Paper> paperForm = formFactory.form(Paper.class).fill(
-                Paper.find.byId(id)
-        );
-        return ok(
-                views.html.editPaper.render(id, paperForm)
-        );
+//        Form<Paper> paperForm = formFactory.form(Paper.class).fill(
+//                Paper.find.byId(id)
+//        );
+//        return ok(
+//                views.html.editPaper.render(id, paperForm)
+//        );
+        Form<Profile> paperForm = formFactory.form(Paper.class);
+        Paper newPaperData = Paper.find.byId(id);
+
+        JsonNode json = Json.newObject()
+                .put("title", newPaper.title)
+                .put("contactemail",newPaper.contactemail)
+                .put("firstname1",newPaper.firstname1)
+                .put("lastname1",newPaper.lastname1)
+                .put("email1",newPaper.email1)
+                .put("affilation1",newPaper.affilation1)
+                .put("firstname2",newPaper.firstname2)
+                .put("lastname2",newPaper.lastname2)
+                .put("email2",newPaper.email2)
+                .put("affilation2",newPaper.affilation2)
+                .put("firstname3",newPaper.firstname3)
+                .put("lastname3",newPaper.lastname3)
+                .put("email3",newPaper.email3)
+                .put("affilation3",newPaper.affilation3)
+                .put("firstname4",newPaper.firstname4)
+                .put("lastname4",newPaper.lastname4)
+                .put("email4",newPaper.email4)
+                .put("affilation4",newPaper.affilation4)
+                .put("firstname5",newPaper.firstname5)
+                .put("lastname5",newPaper.lastname5)
+                .put("email5",newPaper.email5)
+                .put("affilation5",newPaper.affilation5)
+                .put("firstname6",newPaper.firstname6)
+                .put("lastname6",newPaper.lastname6)
+                .put("email6",newPaper.email6)
+                .put("affilation6",newPaper.affilation6)
+                .put("firstname7",newPaper.firstname7)
+                .put("lastname7",newPaper.lastname7)
+                .put("email7",newPaper.email7)
+                .put("affilation7",newPaper.affilation7)
+                .put("otherauthor", newPaper.otherauthor)
+                .put("candidate", newPaper.candidate)
+                .put("volunteer", newPaper.volunteer)
+                .put("paperabstract", newPaper.paperabstract)
+                .put("topic", newPaper.topic);
+
+        return ok(json);
     }
     public Result update(Long id) throws PersistenceException {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
@@ -115,7 +168,7 @@ public class PaperController extends Controller {
             txn.end();
         }
 
-        return GO_HOME;
+        return ok("update successfully");
     }
     public Result create() {
         Form<Paper> paperForm = formFactory.form(Paper.class);
@@ -130,24 +183,24 @@ public class PaperController extends Controller {
         }
 
         Paper newPaper = paperForm.get();
-        if(!newPaper.contactemail.equals(newPaper.confirmemail)){
-            return badRequest(views.html.createPaper.render(paperForm));
-        }
-        Http.Session session = Http.Context.current().session();
-//        String username = session.get("username");
-        newPaper.username= session.get("username");
-        newPaper.ifsubmit = "N";
-        newPaper.date = new Date();
+//        if(!newPaper.contactemail.equals(newPaper.confirmemail)){
+//            return badRequest(views.html.createPaper.render(paperForm));
+//        }
+//        Http.Session session = Http.Context.current().session();
+////        String username = session.get("username");
+//        newPaper.username= session.get("username");
+//        newPaper.ifsubmit = "N";
+//        newPaper.date = new Date();
         paperForm.get().save();
-        String email = session.get("email");
+//        String email = session.get("email");
         //SendEmail(email, "Dear Sir/Madam, your paper is successfully submitted");
 
         //TODO flash not working, switch to session way
         //flash("success", "Thank you. Your paper abstract has been submitted successfully. " + paperForm.get().title + " has been created" +" Please keep your paper id:" + paperForm.get().id);
-        session.put("Submitted","ok");
-        session.put("paperid",Long.toString(paperForm.get().id));
+//        session.put("Submitted","ok");
+//        session.put("paperid",Long.toString(paperForm.get().id));
 
-        return GO_HOME;
+        return ok("save successfully");
     }
     public Result uploadFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class);
