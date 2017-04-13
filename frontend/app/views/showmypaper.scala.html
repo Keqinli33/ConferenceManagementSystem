@@ -76,7 +76,7 @@
 
     @if(session.containsKey("Submitted") && session.get("Submitted").toString == "ok"){
         <script>
-            var str = "Thank you. Your paper abstract has been submitted successfully. Please keep your paper id:"+@Http.Context.current().session().get("paperid");
+            var str = "Thank you. Your paper abstract has been submitted successfully. Please keep your paper id:"+@session.get("paperid");
             alert(str);
         </script>
         @{
