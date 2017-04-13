@@ -88,6 +88,71 @@ public class ReviewerController extends Controller{
     }
 
     /**
+     * Handle get conf info
+     */
+    public Result getpapers(Long id, String name) {
+
+        List<Paper> paperList = Paper.ConfPapers(id,name);
+
+        int i = 0;
+        //ObjectNode node = Json.newObject();
+
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode arr = new ArrayNode(factory);
+
+        for(Paper newPaper : paperList){
+            JsonNode json = Json.newObject()
+                    .put("id", newPaper.id)
+                    .put("title", newPaper.title)
+                    .put("contactemail",newPaper.contactemail)
+                    .put("authors",newPaper.authors)
+                    .put("firstname1",newPaper.firstname1)
+                    .put("lastname1",newPaper.lastname1)
+                    .put("email1",newPaper.email1)
+                    .put("affilation1",newPaper.affilation1)
+                    .put("firstname2",newPaper.firstname2)
+                    .put("lastname2",newPaper.lastname2)
+                    .put("email2",newPaper.email2)
+                    .put("affilation2",newPaper.affilation2)
+                    .put("firstname3",newPaper.firstname3)
+                    .put("lastname3",newPaper.lastname3)
+                    .put("email3",newPaper.email3)
+                    .put("affilation3",newPaper.affilation3)
+                    .put("firstname4",newPaper.firstname4)
+                    .put("lastname4",newPaper.lastname4)
+                    .put("email4",newPaper.email4)
+                    .put("affilation4",newPaper.affilation4)
+                    .put("firstname5",newPaper.firstname5)
+                    .put("lastname5",newPaper.lastname5)
+                    .put("email5",newPaper.email5)
+                    .put("affilation5",newPaper.affilation5)
+                    .put("firstname6",newPaper.firstname6)
+                    .put("lastname6",newPaper.lastname6)
+                    .put("email6",newPaper.email6)
+                    .put("affilation6",newPaper.affilation6)
+                    .put("firstname7",newPaper.firstname7)
+                    .put("lastname7",newPaper.lastname7)
+                    .put("email7",newPaper.email7)
+                    .put("affilation7",newPaper.affilation7)
+                    .put("otherauthor", newPaper.otherauthor)
+                    .put("candidate", newPaper.candidate)
+                    .put("volunteer", newPaper.volunteer)
+                    .put("paperabstract", newPaper.paperabstract)
+                    .put("topic", newPaper.topic)
+                    .put("reviewstatus", newPaper.reviewstatus)
+                    .put("reviewerid", newPaper.reviewerid)
+                    .put("review", newPaper.review);
+            //node.put(Integer.toString(i++), json);
+            arr.add(json);
+        }
+//        System.out.println(arr);
+        JsonNode temp = (JsonNode)arr;
+
+        return ok(temp);
+    }
+
+
+    /**
      * Handle the 'new profile form' submission
      */
     public Result save() {

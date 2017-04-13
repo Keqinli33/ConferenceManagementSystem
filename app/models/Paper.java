@@ -76,6 +76,7 @@ public class Paper extends Model {
 
     public String reviewstatus;
     public long reviewerid;
+    public String review;
 
     @Formats.DateTime(pattern="yyyy-MM-dd")
     public Date date;
@@ -97,4 +98,14 @@ public class Paper extends Model {
                         .findList();
         return results;
     }
+
+    public static List<Paper> ConfPapers(Long reviewid, String conf){
+        List<Paper> results =
+                find.where()
+                        .eq("reviewerid",reviewid)
+                        .eq("conference",conf)
+                        .findList();
+        return results;
+    }
+
 }
