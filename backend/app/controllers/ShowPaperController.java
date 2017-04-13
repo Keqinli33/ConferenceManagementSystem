@@ -33,6 +33,7 @@ import play.mvc.Http;
 //import play.libs.Mail;
 import org.apache.commons.mail.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -51,25 +52,25 @@ public class ShowPaperController extends Controller{
     /**
      * This result directly redirect to application home.
      */
-    public Result GO_HOME = Results.redirect(
-            routes.HomeController.list(0, "name", "asc", "")
-    );
+//    public Result GO_HOME = Results.redirect(
+//            routes.HomeController.list(0, "name", "asc", "")
+//    );
 
     /**
      * Handle default path requests, redirect to computers list
      */
-    public Result index() {
-        return GO_HOME;
-    }
-
-    public Result list(int page, String sortBy, String order, String filter) {
-        return ok(
-                views.html.list.render(
-                        Computer.page(page, 10, sortBy, order, filter),
-                        sortBy, order, filter
-                )
-        );
-    }
+//    public Result index() {
+//        return GO_HOME;
+//    }
+//
+//    public Result list(int page, String sortBy, String order, String filter) {
+//        return ok(
+//                views.html.list.render(
+//                        Computer.page(page, 10, sortBy, order, filter),
+//                        sortBy, order, filter
+//                )
+//        );
+//    }
 
     /**
      * Handle profile deletion
@@ -124,8 +125,9 @@ public class ShowPaperController extends Controller{
             }
         }
 
-        ArrayNode jsonarray = new ArrayNode();
-        for(int i=0; i< res.size; i++){
+        ObjectMapper mapper= new ObjectMapper();
+        ArrayNode jsonarray = mapper.createArrayNode();
+        for(int i=0; i< res.size(); i++){
             JsonNode json = Json.newObject()
                     .put("id", res.get(i).id)
                     .put("username", username)
@@ -169,7 +171,7 @@ public class ShowPaperController extends Controller{
                     .put("ifsubmit", res.get(i).ifsubmit)
                     .put("format", res.get(i).format)
                     .put("papersize", res.get(i).papersize)
-                    .put("date", res.get(i).date)
+                    .put("date", res.get(i).date.toString())
                     .put("conference", res.get(i).conference)
                     .put("file", res.get(i).file)
                     .put("status", res.get(i).status);

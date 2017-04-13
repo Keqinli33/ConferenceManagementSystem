@@ -44,9 +44,9 @@ public class PaperController extends Controller {
     /*public Result GO_HOME = Results.redirect(
             routes.HomeController.list(0, "name", "asc", "")
     );*/
-//    public Result GO_HOME = Results.redirect(
-//            routes.ShowPaperController.showMyPaper()
-//    );
+    public Result GO_HOME = Results.redirect(
+            routes.ShowPaperController.showMyPaper("a")
+    );
     /**
      * Handle default path requests, redirect to computers list
      */
@@ -61,8 +61,8 @@ public class PaperController extends Controller {
 //        return ok(
 //                views.html.editPaper.render(id, paperForm)
 //        );
-        Form<Profile> paperForm = formFactory.form(Paper.class);
-        Paper newPaperData = Paper.find.byId(id);
+        Form<Paper> paperForm = formFactory.form(Paper.class);
+        Paper newPaper = Paper.find.byId(id);
 
         JsonNode json = Json.newObject()
                 .put("title", newPaper.title)
@@ -105,18 +105,18 @@ public class PaperController extends Controller {
     }
     public Result update(Long id) throws PersistenceException {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        if(paperForm.hasErrors()) {
-            return badRequest(views.html.editPaper.render(id, paperForm));
-        }
+//        if(paperForm.hasErrors()) {
+//            return badRequest(views.html.editPaper.render(id, paperForm));
+//        }
 
         Transaction txn = Ebean.beginTransaction();
         try {
             Paper savedPaper = Paper.find.byId(id);
             if (savedPaper != null) {
                 Paper newPaperData = paperForm.get();
-                if(!newPaperData.contactemail.equals(newPaperData.confirmemail)){
-                    return badRequest(views.html.editPaper.render(id, paperForm));
-                }
+//                if(!newPaperData.contactemail.equals(newPaperData.confirmemail)){
+//                    return badRequest(views.html.editPaper.render(id, paperForm));
+//                }
                 savedPaper.title = newPaperData.title;
                 savedPaper.contactemail = newPaperData.contactemail;
                 savedPaper.firstname1 = newPaperData.firstname1;
@@ -170,17 +170,17 @@ public class PaperController extends Controller {
 
         return ok("update successfully");
     }
-//    public Result create() {
-//        Form<Paper> paperForm = formFactory.form(Paper.class);
-//        return ok(
-//                views.html.createPaper.render(paperForm)
-//        );
-//    }
+    public Result create() {
+        Form<Paper> paperForm = formFactory.form(Paper.class);
+        return ok(
+                views.html.createPaper.render(paperForm)
+        );
+    }
     public Result save() {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        if(paperForm.hasErrors()) {
-            return badRequest(views.html.createPaper.render(paperForm));
-        }
+//        if(paperForm.hasErrors()) {
+//            return badRequest(views.html.createPaper.render(paperForm));
+//        }
 
         Paper newPaper = paperForm.get();
 //        if(!newPaper.contactemail.equals(newPaper.confirmemail)){
@@ -202,76 +202,76 @@ public class PaperController extends Controller {
 
         return ok("save successfully");
     }
-//    public Result uploadFile(Long id) {
-//        Form<Paper> paperForm = formFactory.form(Paper.class);
-//        return ok(
-//                views.html.selectFile.render(id, paperForm)
-//        );
-//    }
-//    public Result selectFile(Long id) {
-//        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-////        if(paperForm.hasErrors()) {
-////            return badRequest(views.html.editPaper.render(id, paperForm));
-////        }
-//        Paper savedPaper = Paper.find.byId(id);
-//        System.out.println("begin upload file");
-////        if (savedPaper != null) {
-//            System.out.println("upload file");
-//            Http.MultipartFormData body = request().body().asMultipartFormData();
-//            if(body == null)
+    public Result uploadFile(Long id) {
+        Form<Paper> paperForm = formFactory.form(Paper.class);
+        return ok(
+                views.html.selectFile.render(id, paperForm)
+        );
+    }
+    public Result selectFile(Long id) {
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+//        if(paperForm.hasErrors()) {
+//            return badRequest(views.html.editPaper.render(id, paperForm));
+//        }
+        Paper savedPaper = Paper.find.byId(id);
+        System.out.println("begin upload file");
+//        if (savedPaper != null) {
+            System.out.println("upload file");
+            Http.MultipartFormData body = request().body().asMultipartFormData();
+            if(body == null)
+            {
+                return badRequest("Invalid request, required is POST with enctype=multipart/form-data.");
+            }
+
+            Http.MultipartFormData.FilePart<File> filePart = body.getFile("file");
+            if(filePart == null)
+            {
+                return badRequest("Invalid request, no file has been sent.");
+            }
+
+            // getContentType can return null, so we check the other way around to prevent null exception
+//            if(!"application/pdf".equalsIgnoreCase(filePart.getContentType()))
 //            {
-//                return badRequest("Invalid request, required is POST with enctype=multipart/form-data.");
+//                return badRequest("Invalid request, only PDFs are allowed.");
 //            }
-//
-//            Http.MultipartFormData.FilePart<File> filePart = body.getFile("file");
-//            if(filePart == null)
-//            {
-//                return badRequest("Invalid request, no file has been sent.");
-//            }
-//
-//            // getContentType can return null, so we check the other way around to prevent null exception
-////            if(!"application/pdf".equalsIgnoreCase(filePart.getContentType()))
-////            {
-////                return badRequest("Invalid request, only PDFs are allowed.");
-////            }
-//            try {
-//                File file = filePart.getFile();
-//                File destination = new File("/Users/shuang/uploads", file.getName());
-//                FileUtils.moveFile(file, destination);
+            try {
+                File file = filePart.getFile();
+                File destination = new File("/Users/shuang/uploads", file.getName());
+                FileUtils.moveFile(file, destination);
+                savedPaper.ifsubmit = "Y";
+                savedPaper.format = filePart.getContentType();
+                savedPaper.papersize = String.valueOf(destination.length());
+                System.out.println("File length  " + destination.length());
+                savedPaper.update();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
 //                savedPaper.ifsubmit = "Y";
 //                savedPaper.format = filePart.getContentType();
-//                savedPaper.papersize = String.valueOf(destination.length());
-//                System.out.println("File length  " + destination.length());
+//                savedPaper.papersize = String.valueOf(file.length());
 //                savedPaper.update();
-//            } catch (Exception e){
-//                e.printStackTrace();
-//            }
-////                savedPaper.ifsubmit = "Y";
-////                savedPaper.format = filePart.getContentType();
-////                savedPaper.papersize = String.valueOf(file.length());
-////                savedPaper.update();
-//
-//
-////        }
-//        try {
-//            Email email = new SimpleEmail();
-//            email.setHostName("smtp.googlemail.com");
-//            email.setSmtpPort(465);
-//            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
-//            email.setSSLOnConnect(true);
-//            email.setFrom("socandrew2017@gmail.com");
-//            email.setSubject("Paper submitted");
-//            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
-//            Http.Session session = Http.Context.current().session();
-//            String emailto = session.get("email");
-//            email.addTo(emailto);
-//            email.send();
-//        }catch (Exception e){
-//            e.printStackTrace();
+
+
 //        }
-//        flash("success", "Paper File has been submitted");
-//        return GO_HOME;
-//    }
+        try {
+            Email email = new SimpleEmail();
+            email.setHostName("smtp.googlemail.com");
+            email.setSmtpPort(465);
+            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+            email.setSSLOnConnect(true);
+            email.setFrom("socandrew2017@gmail.com");
+            email.setSubject("Paper submitted");
+            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
+            Http.Session session = Http.Context.current().session();
+            String emailto = session.get("email");
+            email.addTo(emailto);
+            email.send();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        flash("success", "Paper File has been submitted");
+        return GO_HOME;
+    }
 //
 //    private static void SendEmail(String emailto, String content){
 //        try {

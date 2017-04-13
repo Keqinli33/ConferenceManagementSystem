@@ -35,7 +35,7 @@ public class ProfileController extends Controller{
             routes.HomeController.list(0, "name", "asc", "")
     );*/
     public Result GO_HOME = Results.redirect(
-            routes.ShowPaperController.showMyPaper()
+            routes.ShowPaperController.showMyPaper("a")
     );
 
     public Result findById(Long id){
