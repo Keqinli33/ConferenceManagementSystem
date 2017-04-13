@@ -64,6 +64,8 @@ create table paper (
   conference                    varchar(255),
   topic                         varchar(255),
   status                        varchar(255),
+  reviewstatus                  varchar(255),
+  reviewerid                    bigint,
   date                          datetime(6),
   constraint pk_paper primary key (id)
 );

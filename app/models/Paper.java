@@ -21,20 +21,20 @@ public class Paper extends Model {
     @Id
     public long id;
     public String username;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String title;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String contactemail;
     public String authors;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String confirmemail;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String firstname1;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String lastname1;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String email1;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String affilation1;
     public String firstname2;
     public String lastname2;
@@ -63,7 +63,7 @@ public class Paper extends Model {
     public String otherauthor;
     public String candidate;
     public String volunteer;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String paperabstract;
     public String ifsubmit;
     public String format;
@@ -72,6 +72,10 @@ public class Paper extends Model {
     public String conference;
     public String topic;
     public String status;
+
+
+    public String reviewstatus;
+    public long reviewerid;
 
     @Formats.DateTime(pattern="yyyy-MM-dd")
     public Date date;
@@ -82,6 +86,14 @@ public class Paper extends Model {
         List<Paper> results =
                 find.where()
                         .eq("username",username)
+                        .findList();
+        return results;
+    }
+
+    public static List<Paper> ReviewPapers(Long userid){
+        List<Paper> results =
+                find.where()
+                        .eq("reviewerid",userid)
                         .findList();
         return results;
     }
