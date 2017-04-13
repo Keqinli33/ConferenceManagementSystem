@@ -1,4 +1,4 @@
-@(id: Long, paperForm: Form[Paper])
+@(id: Long, paperForm: Form[Paper], paperInfo: Paper)
 
 @import helper._
 
@@ -10,62 +10,62 @@
     
     @b3.form(routes.PaperController.update(id)) {
 
-            @b3.text(paperForm("title"), '_label -> "Title", '_help -> "")
-            @b3.text(paperForm("topic"), '_label -> "Topic", '_help -> "")
-            @b3.email(paperForm("contactemail"), '_label -> "Email of Contact Author", 'placeholder -> "example@mail.com")
-            <br><br><br><br>@b3.email(paperForm("confirmemail"), '_label -> "Confirm Email", '_help -> "")
+            @b3.text(paperForm("title"), '_label -> "Title", '_help -> "",'value ->paperInfo.title)
+            @b3.text(paperForm("topic"), '_label -> "Topic", '_help -> "",'value ->paperInfo.topic)
+            @b3.email(paperForm("contactemail"), '_label -> "Email of Contact Author", 'placeholder -> "example@mail.com",'value ->paperInfo.contactemail)
+            <br><br><br><br>@b3.email(paperForm("confirmemail"), '_label -> "Confirm Email", '_help -> "",'value ->paperInfo.confirmemail)
 
-            @b3.text(paperForm("firstname1"), '_label -> "First Name", '_help -> "")
-            @b3.text(paperForm("lastname1"), '_label -> "Last Name", '_help -> "")
-            @b3.text(paperForm("affiliation1"), '_label -> "Affiliation", '_help -> "")
-            @b3.email(paperForm("email1"), '_label -> "Email", '_help -> "")
-
-
-            @b3.text(paperForm("firstname2"), '_label -> "First Name", '_help -> "")
-            @b3.text(paperForm("lastname2"), '_label -> "Last Name", '_help -> "")
-            @b3.text(paperForm("affiliation2"), '_label -> "Affiliation", '_help -> "")
-            @b3.email(paperForm("email2"), '_label -> "Email", '_help -> "")
+            @b3.text(paperForm("firstname1"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname1)
+            @b3.text(paperForm("lastname1"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname1)
+            @b3.text(paperForm("affilation1"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation1)
+            @b3.email(paperForm("email1"), '_label -> "Email", '_help -> "",'value ->paperInfo.email1)
 
 
-
-            @b3.text(paperForm("firstname3"), '_label -> "First Name", '_help -> "")
-            @b3.text(paperForm("lastname3"), '_label -> "Last Name", '_help -> "")
-            @b3.text(paperForm("affiliation3"), '_label -> "Affiliation", '_help -> "")
-            @b3.email(paperForm("email3"), '_label -> "Email", '_help -> "")
-
-
-            @b3.text(paperForm("firstname4"), '_label -> "First Name", '_help -> "")
-            @b3.text(paperForm("lastname4"), '_label -> "Last Name", '_help -> "")
-            @b3.text(paperForm("affiliation4"), '_label -> "Affiliation", '_help -> "")
-            @b3.email(paperForm("email4"), '_label -> "Email", '_help -> "")
+            @b3.text(paperForm("firstname2"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname2)
+            @b3.text(paperForm("lastname2"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname2)
+            @b3.text(paperForm("affilation2"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation2)
+            @b3.email(paperForm("email2"), '_label -> "Email", '_help -> "",'value ->paperInfo.email2)
 
 
 
-            @b3.text(paperForm("firstname5"), '_label -> "First Name", '_help -> "")
-            @b3.text(paperForm("lastname5"), '_label -> "Last Name", '_help -> "")
-            @b3.text(paperForm("affiliation5"), '_label -> "Affiliation", '_help -> "")
-            @b3.email(paperForm("email5"), '_label -> "Email", '_help -> "")
+            @b3.text(paperForm("firstname3"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname3)
+            @b3.text(paperForm("lastname3"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname3)
+            @b3.text(paperForm("affilation3"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation3)
+            @b3.email(paperForm("email3"), '_label -> "Email", '_help -> "",'value ->paperInfo.email3)
 
 
-            @b3.text(paperForm("firstname6"), '_label -> "First Name", '_help -> "")
-            @b3.text(paperForm("lastname6"), '_label -> "Last Name", '_help -> "")
-            @b3.text(paperForm("affiliation6"), '_label -> "Affiliation", '_help -> "")
-            @b3.email(paperForm("email6"), '_label -> "Email", '_help -> "")
-
-
-
-
-            @b3.text(paperForm("firstname7"), '_label -> "First Name", '_help -> "")
-            @b3.text(paperForm("lastname7"), '_label -> "Last Name", '_help -> "")
-            @b3.text(paperForm("affiliation7"), '_label -> "Affiliation", '_help -> "")
-            @b3.email(paperForm("email7"), '_label -> "Email", '_help -> "")
+            @b3.text(paperForm("firstname4"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname4)
+            @b3.text(paperForm("lastname4"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname4)
+            @b3.text(paperForm("affilation4"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation4)
+            @b3.email(paperForm("email4"), '_label -> "Email", '_help -> "",'value ->paperInfo.email4)
 
 
 
-            @b3.text(paperForm("otherauthor"), '_label -> "Other authors", '_help -> "")
-            @b3.radio( paperForm("candidate"), options = Seq("Y"->"Yes","N"->"No"), '_label -> "Best student paper award candidate", 'value -> "Y")
-            <br><br><br><br>@b3.radio( paperForm("volunteer"), options = Seq("Y"->"Yes","N"->"No", "T"->"To be decided"), '_label -> "Student Volunteer?",'value -> "Y")
-            <br><br><br>@b3.textarea(paperForm("paperabstract"), '_label -> "Abstract", 'rows -> 3)
+            @b3.text(paperForm("firstname5"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname5)
+            @b3.text(paperForm("lastname5"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname5)
+            @b3.text(paperForm("affilation5"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation5)
+            @b3.email(paperForm("email5"), '_label -> "Email", '_help -> "",'value ->paperInfo.email5)
+
+
+            @b3.text(paperForm("firstname6"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname6)
+            @b3.text(paperForm("lastname6"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname6)
+            @b3.text(paperForm("affilation6"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation6)
+            @b3.email(paperForm("email6"), '_label -> "Email", '_help -> "",'value ->paperInfo.email6)
+
+
+
+
+            @b3.text(paperForm("firstname7"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname7)
+            @b3.text(paperForm("lastname7"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname7)
+            @b3.text(paperForm("affilation7"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation7)
+            @b3.email(paperForm("email7"), '_label -> "Email", '_help -> "",'value ->paperInfo.email7)
+
+
+
+            @b3.text(paperForm("otherauthor"), '_label -> "Other authors", '_help -> "",'value ->paperInfo.otherauthor)
+            @b3.radio( paperForm("candidate"), options = Seq("Y"->"Yes","N"->"No"), '_label -> "Best student paper award candidate", 'value -> paperInfo.candidate)
+            <br><br><br><br>@b3.radio( paperForm("volunteer"), options = Seq("Y"->"Yes","N"->"No", "T"->"To be decided"), '_label -> "Student Volunteer?",'value -> paperInfo.volunteer)
+            <br><br><br>@b3.textarea(paperForm("paperabstract"), '_label -> "Abstract", 'rows -> 3,'value ->paperInfo.paperabstract)
 
 
         <div class="actions">

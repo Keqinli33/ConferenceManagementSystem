@@ -9,7 +9,10 @@ import play.data.*;
 import static play.data.Form.*;
 import play.mvc.Result;
 import play.mvc.Http;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import models.*;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -64,6 +67,7 @@ public class PaperController extends Controller {
 //                views.html.editPaper.render(id, paperForm)
 //        );
         Form<Paper> paperForm = formFactory.form(Paper.class);
+        System.out.println("here is " + id);
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers/"+id).get();
         return res.thenApply(response -> {
@@ -112,7 +116,7 @@ public class PaperController extends Controller {
 //                savedPaper.status = ret.get("status").asText();
 //                savedPaper.date = ret.get("date").asText();
             return ok(
-                    views.html.editPaper.render(id, paperForm)
+                    views.html.editPaper.render(id, paperForm,savedPaper)
             );
         });
 
@@ -260,6 +264,13 @@ public class PaperController extends Controller {
 //        String username = session.get("username");
         newPaper.username= session.get("username");
         newPaper.ifsubmit = "N";
+//        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+//
+//        // Get the date today using Calendar object.
+//        Date today = Calendar.getInstance().getTime();
+//        // Using DateFormat format method we can create a string
+//        // representation of a date with the defined format.
+//        String reportDate = df.format(today);
         Date date = new Date();
         newPaper.date = date.toString();
         JsonNode json = Json.newObject()
