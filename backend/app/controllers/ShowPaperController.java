@@ -32,7 +32,7 @@ import play.mvc.Http;
 
 //import play.libs.Mail;
 import org.apache.commons.mail.*;
-
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
@@ -125,12 +125,14 @@ public class ShowPaperController extends Controller{
             }
         }
 
-        ObjectMapper mapper= new ObjectMapper();
-        ArrayNode jsonarray = mapper.createArrayNode();
+//        ObjectMapper mapper= new ObjectMapper();
+//        ArrayNode jsonarray = mapper.createArrayNode();
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode jsonarray = new ArrayNode(factory);
         for(int i=0; i< res.size(); i++){
             JsonNode json = Json.newObject()
                     .put("id", res.get(i).id)
-                    .put("username", username)
+//                    .put("username", username)
                     .put("title", res.get(i).title)
                     .put("authors", res.get(i).authors)
                     .put("confirmemail", res.get(i).confirmemail)
@@ -179,7 +181,8 @@ public class ShowPaperController extends Controller{
 
         }
         //jsonarray.add({"status": "successful"});
-        return ok(jsonarray);
+        JsonNode temp = (JsonNode) jsonarray;
+        return ok(temp);
 //
 //        String topic = res.get(0).topic;
 //        String status = res.get(0).status;

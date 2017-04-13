@@ -82,12 +82,13 @@ public class ShowPaperController extends Controller{
 
         JsonNode json = Json.newObject()
                 .put("username", username);
-        CompletionStage<WSResponse> resofres = ws.url("http://localhost:9000/papers/" + username).get();
+        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/papers/" + username).get();
 //        List<Paper> restemp =new Arraylist<Paper>();
-        return resofres.thenApplyAsync(response -> {
+        return resofrest.thenApply(response -> {
+            System.out.println("here is "+response);
             JsonNode arr = response.asJson();
             ArrayNode ret = (ArrayNode) arr;
-            if ("successful".equals(ret.get("status").asText())) {
+//            if ("successful".equals(ret.get("status").asText())) {
 //                ObjectMapper objectMapper = new ObjectMapper();
 //                Paper[] reslist = objectMapper.readValue(ret, Paper[].class);
 //                List<Paper> res = Array.asList(reslist);
@@ -95,7 +96,7 @@ public class ShowPaperController extends Controller{
                 for(JsonNode res1 : ret){
                     Paper savedPaper = new Paper();
                     savedPaper.id = Long.parseLong(res1.get("id").asText());
-                    savedPaper.username = res1.get("username").asText();
+//                    savedPaper.username = res1.get("username").asText();
                     savedPaper.title = res1.get("title").asText();
                     savedPaper.contactemail = res1.get("contactemail").asText();
                     savedPaper.authors = res1.get("authors").asText();
@@ -147,10 +148,10 @@ public class ShowPaperController extends Controller{
                 }
                 return ok(
                         views.html.showmypaper.render(paperForm,res));
-            }
-            else{
-                return GO_HOME;
-            }
+//            }
+//            else{
+//                return GO_HOME;
+//            }
         });
 
 
