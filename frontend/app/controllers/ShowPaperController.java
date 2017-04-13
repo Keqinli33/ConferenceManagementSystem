@@ -15,6 +15,20 @@ import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.file.FileDataBodyPart;
+
+import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
+
+import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
+
 /**
  * Created by keqinli on 3/29/17.
  */
@@ -53,14 +67,31 @@ public class ShowPaperController extends Controller{
     /**
      * Handle profile deletion
      */
-    public Result showMyPaper() {
+    public CompletionStage<Result> showMyPaper() {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
         //Paper paperInfo = paperForm.get();
         Paper paperInfo = new Paper();
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
 
-        List<Paper> res = new ArrayList<Paper>();
+        JsonNode json = Json.newObject()
+                .put("username", username);
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers/").get();
+        return res.thenApplyAsync(response -> {
+            JsonNode ret = response.asJson();
+            if ("successful".equals(ret.get("status").asText())) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                Paper[] reslist = objectMapper.readValue(json, Paper[].class);
+                List<Paper> res = Array.asList(reslist);
+                return ok(
+                        views.html.showmypaper.render(paperForm,res);
+                );
+            }else{
+                return ok(views.html.verifyChangePwdAuth.render(userForm,1));
+            }
+        });
+
+//        List<Paper> res = new ArrayList<Paper>();
         //res = paperInfo.GetMyPaper(username);
 
 //        Long id = res.get(0).id;
@@ -68,41 +99,41 @@ public class ShowPaperController extends Controller{
 //        String conference = res.get(0).conference;
 //
 
-         String authors = "";
-        for(int i =0; i <res.size(); i++){
-            res.get(i).authors = "";
-            if(!res.get(i).firstname1.isEmpty()){
-                res.get(i).authors = res.get(i).authors + res.get(i).firstname1 + " ";
-                res.get(i).authors = res.get(i).authors + res.get(i).lastname1 + ", ";
-            }
-            if(!res.get(i).firstname2.isEmpty()){
-                res.get(i).authors = res.get(i).authors + res.get(i).firstname2 + " ";
-                res.get(i).authors = res.get(i).authors + res.get(i).lastname2 + ", ";
-            }
-            if(!res.get(i).firstname3.isEmpty()){
-                res.get(i).authors = res.get(i).authors + res.get(i).firstname3 + " ";
-                res.get(i).authors = res.get(i).authors + res.get(i).lastname3 + ", ";
-            }
-            if(!res.get(i).firstname4.isEmpty()){
-                res.get(i).authors = res.get(i).authors + res.get(i).firstname4 + " ";
-                res.get(i).authors = res.get(i).authors + res.get(i).lastname4 + ", ";
-            }
-            if(!res.get(i).firstname5.isEmpty()){
-                res.get(i).authors = res.get(i).authors + res.get(i).firstname5 + " ";
-                res.get(i).authors = res.get(i).authors + res.get(i).lastname5 + ", ";
-            }
-            if(!res.get(i).firstname6.isEmpty()){
-                res.get(i).authors = res.get(i).authors + res.get(i).firstname6 + " ";
-                res.get(i).authors = res.get(i).authors + res.get(i).lastname6 + ", ";
-            }
-            if(!res.get(i).firstname7.isEmpty()){
-                res.get(i).authors = res.get(i).authors + res.get(i).firstname7 + " ";
-                res.get(i).authors = res.get(i).authors + res.get(i).lastname7 + ", ";
-            }
-            if(!res.get(i).contactemail.isEmpty()){
-                res.get(i).authors = res.get(i).authors + res.get(i).contactemail + " ";
-            }
-        }
+//         String authors = "";
+//        for(int i =0; i <res.size(); i++){
+//            res.get(i).authors = "";
+//            if(!res.get(i).firstname1.isEmpty()){
+//                res.get(i).authors = res.get(i).authors + res.get(i).firstname1 + " ";
+//                res.get(i).authors = res.get(i).authors + res.get(i).lastname1 + ", ";
+//            }
+//            if(!res.get(i).firstname2.isEmpty()){
+//                res.get(i).authors = res.get(i).authors + res.get(i).firstname2 + " ";
+//                res.get(i).authors = res.get(i).authors + res.get(i).lastname2 + ", ";
+//            }
+//            if(!res.get(i).firstname3.isEmpty()){
+//                res.get(i).authors = res.get(i).authors + res.get(i).firstname3 + " ";
+//                res.get(i).authors = res.get(i).authors + res.get(i).lastname3 + ", ";
+//            }
+//            if(!res.get(i).firstname4.isEmpty()){
+//                res.get(i).authors = res.get(i).authors + res.get(i).firstname4 + " ";
+//                res.get(i).authors = res.get(i).authors + res.get(i).lastname4 + ", ";
+//            }
+//            if(!res.get(i).firstname5.isEmpty()){
+//                res.get(i).authors = res.get(i).authors + res.get(i).firstname5 + " ";
+//                res.get(i).authors = res.get(i).authors + res.get(i).lastname5 + ", ";
+//            }
+//            if(!res.get(i).firstname6.isEmpty()){
+//                res.get(i).authors = res.get(i).authors + res.get(i).firstname6 + " ";
+//                res.get(i).authors = res.get(i).authors + res.get(i).lastname6 + ", ";
+//            }
+//            if(!res.get(i).firstname7.isEmpty()){
+//                res.get(i).authors = res.get(i).authors + res.get(i).firstname7 + " ";
+//                res.get(i).authors = res.get(i).authors + res.get(i).lastname7 + ", ";
+//            }
+//            if(!res.get(i).contactemail.isEmpty()){
+//                res.get(i).authors = res.get(i).authors + res.get(i).contactemail + " ";
+//            }
+//        }
 
 
 //        authors = authors + res.get(0).firstname1 + " ";
@@ -121,8 +152,8 @@ public class ShowPaperController extends Controller{
 //        authors = authors + res.get(0).lastname7;
 //
         //String email = User.GetEmailByUsername(username);
-        String email = session.get("email");
-        System.out.println("In show my paper username "+username);
+//        String email = session.get("email");
+//        System.out.println("In show my paper username "+username);
 //
 //        String topic = res.get(0).topic;
 //        String status = res.get(0).status;
@@ -133,9 +164,9 @@ public class ShowPaperController extends Controller{
 
 
 
-        return ok(
-                views.html.showmypaper.render(paperForm,res, authors)
-        );
+//        return ok(
+//                views.html.showmypaper.render(paperForm,res, authors)
+//        );
 
         //return GO_HOME;
     }

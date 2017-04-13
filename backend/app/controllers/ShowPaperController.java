@@ -1,5 +1,7 @@
 package controllers;
 
+import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
+
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Transaction;
 import play.mvc.*;
@@ -14,6 +16,24 @@ import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.file.FileDataBodyPart;
+
+import javax.ws.rs.core.MediaType;
+import play.mvc.Http.Session;
+import play.mvc.Http;
+
+//import play.libs.Mail;
+import org.apache.commons.mail.*;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
+import javax.json;
 /**
  * Created by keqinli on 3/29/17.
  */
@@ -52,12 +72,11 @@ public class ShowPaperController extends Controller{
     /**
      * Handle profile deletion
      */
-    public Result showMyPaper() {
+    public Result showMyPaper(String username) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
         //Paper paperInfo = paperForm.get();
         Paper paperInfo = new Paper();
-        Http.Session session = Http.Context.current().session();
-        String username = session.get("username");
+
 
         List<Paper> res = new ArrayList<Paper>();
         res = paperInfo.GetMyPaper(username);
@@ -103,23 +122,48 @@ public class ShowPaperController extends Controller{
             }
         }
 
+        JSONArray jsonarray = new JSONArray();
+        for(int i=0; i< res.size; i++){
+            JsonNode json = Json.newObject()
+                    .put("title", res.get(i).title)
+                    .put("contactemail",res.get(i).contactemail)
+                    .put("firstname1",res.get(i).firstname1)
+                    .put("lastname1",res.get(i).firstname1)
+                    .put("email1",res.get(i).firstname1)
+                    .put("affilation1",res.get(i).firstname1)
+                    .put("firstname2",res.get(i).firstname1)
+                    .put("lastname2",res.get(i).firstname1)
+                    .put("email2",res.get(i).firstname1)
+                    .put("affilation2",res.get(i).firstname1)
+                    .put("firstname3",res.get(i).firstname1)
+                    .put("lastname3",res.get(i).firstname1)
+                    .put("email3",res.get(i).firstname1)
+                    .put("affilation3",res.get(i).firstname1)
+                    .put("firstname4",res.get(i).firstname1)
+                    .put("lastname4",res.get(i).firstname1)
+                    .put("email4",res.get(i).firstname1)
+                    .put("affilation4",res.get(i).firstname1)
+                    .put("firstname5",res.get(i).firstname1)
+                    .put("lastname5",res.get(i).firstname1)
+                    .put("email5",res.get(i).firstname1)
+                    .put("affilation5",res.get(i).firstname1)
+                    .put("firstname6",res.get(i).firstname1)
+                    .put("lastname6",res.get(i).firstname1)
+                    .put("email6",res.get(i).firstname1)
+                    .put("affilation6",res.get(i).firstname1)
+                    .put("firstname7",res.get(i).firstname1)
+                    .put("lastname7",res.get(i).firstname1)
+                    .put("email7",res.get(i).firstname1)
+                    .put("affilation7",res.get(i).firstname1)
+                    .put("otherauthor", res.get(i).otherauthor)
+                    .put("candidate", res.get(i).candidate)
+                    .put("volunteer", res.get(i).volunteer)
+                    .put("paperabstract", res.get(i).paperabstract)
+                    .put("topic", res.get(i).topic);
+             jsonarray.put(json);
 
-//        authors = authors + res.get(0).firstname1 + " ";
-//        authors = authors + res.get(0).lastname1 + ", ";
-//        authors = authors + res.get(0).firstname2 + " ";
-//        authors = authors + res.get(0).lastname2 + ", ";
-//        authors = authors + res.get(0).firstname3 + " ";
-//        authors = authors + res.get(0).lastname3 + ", ";
-//        authors = authors + res.get(0).firstname4 + " ";
-//        authors = authors + res.get(0).lastname4 + ", ";
-//        authors = authors + res.get(0).firstname5 + " ";
-//        authors = authors + res.get(0).lastname5 + ", ";
-//        authors = authors + res.get(0).firstname6 + " ";
-//        authors = authors + res.get(0).lastname6 + ", ";
-//        authors = authors + res.get(0).firstname7 + " ";
-//        authors = authors + res.get(0).lastname7;
-//
-        String email = User.GetEmailByUsername(username);
+        }
+        return ok(jsonarray);
 //
 //        String topic = res.get(0).topic;
 //        String status = res.get(0).status;
@@ -130,9 +174,9 @@ public class ShowPaperController extends Controller{
 
 
 
-        return ok(
-                views.html.showmypaper.render(paperForm,res, authors)
-        );
+//        return ok(
+//                views.html.showmypaper.render(paperForm,res, authors)
+//        );
 
         //return GO_HOME;
     }
