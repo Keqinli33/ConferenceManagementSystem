@@ -82,7 +82,7 @@ public class ReviewerController extends Controller{
     );
 
 
-    public CompletionStage<Result> enterReview(){
+    public CompletionStage<Result> enterReviewConf(){
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
 //        System.out.println("Enter profile page user id is "+userid.toString());
@@ -138,45 +138,97 @@ public class ReviewerController extends Controller{
 
     }
 
-    /**
-     * Handle get conf info
-     */
-//    public Result getconf() {
-//        List<Paper> paperList = Paper.ReviewPapers;
-//
-//        Map<String, Integer> reviewcount = new HashMap<String, Integer>();
-//        Map<String, Integer> leftcount = new HashMap<String, Integer>();
-//
-//        for(Paper paper : paperList){
-//            String conf = paper.conference;
-//            if(paper.reviewstatus == "assigned"){
-//                leftcount.put(conf, leftcount.getOrDefault(conf, 0) + 1);
-//                if(!reviewcount.containsKey(conf)){
-//                    reviewcount.put(conf, 0);
-//                }
+    public CompletionStage<Result> enterReviewPaper(String confName){
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
+//        System.out.println("Enter profile page user id is "+userid.toString());
+//        Profile profile = Profile.find.byId(userid);
+
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/paper/"+userid+"/"+confName).get();
+        return res.thenApply(response -> {
+//            String str = response.getBody();
+//            System.out.println("there is "+str);
+//            Json js = new Json();
+//            JsonNode ret = js.parse(str);
+            JsonNode ret = response.asJson();
+            ArrayNode arr = (ArrayNode)ret;
+
+            List<Paper> list = new ArrayList();
+
+            if(ret == null){
+                return ok(
+                        views.html.reviewPaper.render(list)
+                );
+            }
+
+            for(int i = 0; i < arr.size(); i++){
+                ret = arr.get(i);
+                Paper savedPaper = new Paper();
+                savedPaper.id = Long.parseLong(ret.get("id").asText());
+                savedPaper.title = ret.get("title").asText();
+                savedPaper.contactemail = ret.get("contactemail").asText();
+                savedPaper.authors = ret.get("authors").asText();
+                savedPaper.firstname1 = ret.get("firstname1").asText();
+                savedPaper.lastname1 = ret.get("lastname1").asText();
+                savedPaper.email1 = ret.get("email1").asText();
+                savedPaper.affilation1 = ret.get("affilation1").asText();
+                savedPaper.firstname2 = ret.get("firstname2").asText();
+                savedPaper.lastname2 = ret.get("lastname2").asText();
+                savedPaper.email2 = ret.get("email2").asText();
+                savedPaper.affilation2 = ret.get("affilation2").asText();
+                savedPaper.firstname3 = ret.get("firstname3").asText();
+                savedPaper.lastname3 = ret.get("lastname3").asText();
+                savedPaper.email3 = ret.get("email3").asText();
+                savedPaper.affilation3 = ret.get("affilation3").asText();
+                savedPaper.firstname4 = ret.get("firstname4").asText();
+                savedPaper.lastname4 = ret.get("lastname4").asText();
+                savedPaper.email4 = ret.get("email4").asText();
+                savedPaper.affilation4 = ret.get("affilation4").asText();
+                savedPaper.firstname5 = ret.get("firstname5").asText();
+                savedPaper.lastname5 = ret.get("lastname5").asText();
+                savedPaper.email5 = ret.get("email5").asText();
+                savedPaper.affilation5 = ret.get("affilation5").asText();
+                savedPaper.firstname6 = ret.get("firstname6").asText();
+                savedPaper.lastname6 = ret.get("lastname6").asText();
+                savedPaper.email6 = ret.get("email6").asText();
+                savedPaper.affilation6 = ret.get("affilation6").asText();
+                savedPaper.firstname7 = ret.get("firstname7").asText();
+                savedPaper.lastname7 = ret.get("lastname7").asText();
+                savedPaper.email7 = ret.get("email7").asText();
+                savedPaper.affilation7 = ret.get("affilation7").asText();
+                savedPaper.otherauthor = ret.get("otherauthor").asText();
+                savedPaper.candidate = ret.get("candidate").asText();
+                savedPaper.volunteer = ret.get("volunteer").asText();
+                savedPaper.paperabstract = ret.get("paperabstract").asText();
+                savedPaper.topic = ret.get("topic").asText();
+                savedPaper.reviewstatus = ret.get("reviewstatus").asText();
+                savedPaper.reviewerid = Long.parseLong(ret.get("reviewerid").asText());
+                savedPaper.review = ret.get("review").asText();
+                list.add(savedPaper);
+            }
+
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            //new TypeReference<List<ConfCount>>(){}
+//            ConfCount[] reslist = objectMapper.readValue(ret, ConfCount[].class);
+//            List<ConfCount> res = Array.asList(reslist);
+
+//            for (Map.Entry<String, JsonNode> elt : ret.fields()){
+//                JsonNode node = elt.getValue();
+//                ConfCount count = new ConfCount();
+//                count.conf = node.get("conf");
+//                count.assigned = node.get("assigned");
+//                count.reviewed = node.get("reviewed");
+//                count.left = node.get("left");
+//                list.add(count);
 //            }
-//            else if(paper.reviewstatus == "reviewed"){
-//                reviewcount.put(conf, reviewcount.getOrDefault(conf, 0) + 1);
-//                if(!leftcount.containsKey(conf)){
-//                    leftcount.put(conf, 0);
-//                }
-//            }
-//        }
-//
-//        int i = 0;
-//        JsonNode confJson = new JsonNode();
-//        for(Map.Entry<String, Integer> entry : leftcount.entrySet()){
-//            String key = entry.getKey();
-//            JsonNode json = Json.newObject()
-//                    .put("conf", key)
-//                    .put("assigned", Integer.parseInt(entry.getValue() + reviewcount.get(key)))
-//                    .put("reviewed", Integer.parseInt(reviewcount.get(key)))
-//                    .put("left", Integer.parseInt(entry.getValue()));
-//            confJson.put(Integer.toString(i++), json);
-//        }
-//
-//        return ok(confJson);
-//    }
+
+            return ok(
+                    views.html.reviewPaper.render(list)
+            );
+        });
+
+    }
 
 
     /**

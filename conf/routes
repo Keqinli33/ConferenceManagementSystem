@@ -58,6 +58,7 @@ GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Lo
 POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
 
 # Reviewer page
-GET     /review                    controllers.ReviewerController.enterReview()
+GET     /review                    controllers.ReviewerController.enterReviewConf()
+GET     /review/paper              controllers.ReviewerController.enterReviewPaper(confName:String)
 
 #GET    /review/conf                controllers.ReviewerController.getconf()
