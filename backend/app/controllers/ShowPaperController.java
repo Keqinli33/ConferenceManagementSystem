@@ -169,6 +169,7 @@ public class ShowPaperController extends Controller{
                     .put("papersize", res.get(i).papersize)
                     .put("date", res.get(i).date)
                     .put("conference", res.get(i).conference)
+                    .put("file", res.get(i).file);
              jsonarray.put(json);
 
         }
