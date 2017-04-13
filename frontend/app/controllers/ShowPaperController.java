@@ -82,9 +82,9 @@ public class ShowPaperController extends Controller{
 
         JsonNode json = Json.newObject()
                 .put("username", username);
-        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/papers/" + username).get();
+        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/paper/" + username).get();
 //        List<Paper> restemp =new Arraylist<Paper>();
-        return resofrest.thenApply(response -> {
+        return resofrest.thenApplyAsync(response -> {
             System.out.println("here is "+response);
             JsonNode arr = response.asJson();
             ArrayNode ret = (ArrayNode) arr;
