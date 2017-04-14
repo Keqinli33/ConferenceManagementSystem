@@ -73,7 +73,7 @@ public class ProfileController extends Controller{
 
 
     public Result GO_HOME = Results.redirect(
-            routes.ShowPaperController.showMyPaper()
+            routes.ShowConferenceController.showMyConference()
     );
 
 

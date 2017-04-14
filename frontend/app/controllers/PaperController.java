@@ -205,12 +205,15 @@ public class PaperController extends Controller {
 //        return GO_HOME;
     }
     public Result create() {
-        Form<Paper> paperForm = formFactory.form(Paper.class);
+//        Form<Paper> paperForm = formFactory.form(Paper.class);
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        Paper newPaper = paperForm.get();
+        String conf = newPaper.conference;
         return ok(
-                views.html.createPaper.render(paperForm)
+                views.html.createPaper.render(paperForm, conf)
         );
     }
-    public CompletionStage<Result> save() {
+    public CompletionStage<Result> save(String conf) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
 //        if(paperForm.hasErrors()) {
 //            return badRequest(views.html.createPaper.render(paperForm));
@@ -277,7 +280,7 @@ public class PaperController extends Controller {
                 .put("format", newPaper.format)
                 .put("papersize", newPaper.papersize)
                 .put("date", newPaper.date)
-                .put("conference", newPaper.conference)
+                .put("conference", conf)
                 .put("file", newPaper.file);
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers").post(json);
