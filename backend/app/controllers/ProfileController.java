@@ -34,9 +34,9 @@ public class ProfileController extends Controller{
     /*public Result GO_HOME = Results.redirect(
             routes.HomeController.list(0, "name", "asc", "")
     );*/
-    public Result GO_HOME = Results.redirect(
-            routes.ShowPaperController.showMyPaper("a")
-    );
+//    public Result GO_HOME = Results.redirect(
+//            routes.ShowPaperController.showMyPaper("a")
+//    );
 
     public Result findById(Long id){
         Form<Profile> profileForm = formFactory.form(Profile.class);
@@ -143,12 +143,12 @@ public class ProfileController extends Controller{
     /**
      * Handle the 'new profile form' submission
      */
-    public Result save() {
-        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
-        profileForm.get().save();
-        flash("success", "Profile " + profileForm.get().title + profileForm.get().lastname + " has been created");
-        return GO_HOME;
-    }
+//    public Result save() {
+//        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+//        profileForm.get().save();
+//        flash("success", "Profile " + profileForm.get().title + profileForm.get().lastname + " has been created");
+//        return GO_HOME;
+//    }
 
     /**
      * Handle profile deletion

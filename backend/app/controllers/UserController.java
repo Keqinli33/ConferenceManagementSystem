@@ -49,106 +49,112 @@ public class UserController extends Controller {
         this.formFactory = formFactory;
     }
 
-    public Result GO_HOME = Results.redirect(
-            routes.ShowPaperController.showMyPaper("a")
-    );
+//    public Result GO_HOME = Results.redirect(
+//            routes.ShowPaperController.showMyPaper("a")
+//    );
+//
+//    public Result GO_LOGIN = Results.redirect(
+//            routes.UserController.login()
+//    );
+//
+//    public Result register() {
+//        Form<User> userForm = formFactory.form(User.class);
+//        return ok(
+//                views.html.register.render(userForm, 0)
+//        );
+//    }
 
-    public Result GO_LOGIN = Results.redirect(
-            routes.UserController.login()
-    );
-
-    public Result register() {
-        Form<User> userForm = formFactory.form(User.class);
-        return ok(
-                views.html.register.render(userForm, 0)
-        );
-    }
-
-    /**
-     * login when get request for login page
-     * @return login html page
-     */
-    public Result login() {
-        Form<User> userForm = formFactory.form(User.class);
-        return ok(
-                views.html.login.render(userForm, 0)
-        );
-    }
+//    /**
+//     * login when get request for login page
+//     * @return login html page
+//     */
+//    public Result login() {
+//        Form<User> userForm = formFactory.form(User.class);
+//        return ok(
+//                views.html.login.render(userForm, 0)
+//        );
+//    }
 
     public Result changepwd(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
         User new_user = userForm.get();
 
-        Long userid = Long.parseLong(new_user.username);
+        String username = new_user.username;
         String password = new_user.password;
-        User update_user = User.find.byId(userid);
-        try {
-            update_user.password = MD5(password);
-            update_user.update();
-        } catch (Exception e){
-            e.printStackTrace();
+        System.out.println("in backend change password "+username);
+        List<User> update_users = User.find.where()
+                .eq("username", username).findList();
+        System.out.println("get size "+update_users.size());
+        if(update_users.size()!=0) {
+            User update_user = update_users.get(0);
+            try {
+                update_user.password = MD5(password);
+                update_user.update();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         JsonNode res_json = Json.newObject()
                 .put("status","successful");
         return ok(res_json);
     }
 
-    /**
-     * Get request for verify auth for changing password
-     * @return
-     */
-    public Result verifyAuth() {
-        Form<User> userForm = formFactory.form(User.class);
-        return ok(
-                views.html.verifyChangePwdAuth.render(userForm, 0)
-        );
-    }
+//    /**
+//     * Get request for verify auth for changing password
+//     * @return
+//     */
+//    public Result verifyAuth() {
+//        Form<User> userForm = formFactory.form(User.class);
+//        return ok(
+//                views.html.verifyChangePwdAuth.render(userForm, 0)
+//        );
+//    }
 
-    public Result sendTemporaryPwd(){
-        Form<User> userForm = formFactory.form(User.class).bindFromRequest();
-        User new_user = userForm.get();
-        //String email = new_user.email;
+//    public Result sendTemporaryPwd(){
+//        Form<User> userForm = formFactory.form(User.class).bindFromRequest();
+//        User new_user = userForm.get();
+//        //String email = new_user.email;
+//
+//        //generate temporary password
+//        Random r = new Random();
+//        int max = 100000;
+//        int min = 0;
+//        String tmp_pwd =  Integer.toString(r.nextInt((max - min) + 1) + min);
+//
+//        //save tmp password into User
+//        Session session = Http.Context.current().session();
+//        String username = session.get("username");
+//        System.out.println("Send tmp pwd Username "+username);
+//
+//        String email = new_user.GetEmailByUsername(username);
+//        //String email = "linghl0915@163.com";
+//        System.out.println("Send tmp pwd Email "+email);
+//        //SendSimpleMessage(email, tmp_pwd);
+//        //SendEmail.SendEmail(email, tmp_pwd);
+//        SendEmail(email,tmp_pwd);
+//        System.out.println("Email sent");
+//
+//        new_user.AddTemporaryPwd(username, tmp_pwd);
+//
+//        return ok(
+//                views.html.temporarypwd.render(userForm)
+//        );
+//    }
 
-        //generate temporary password
-        Random r = new Random();
-        int max = 100000;
-        int min = 0;
-        String tmp_pwd =  Integer.toString(r.nextInt((max - min) + 1) + min);
-
-        //save tmp password into User
-        Session session = Http.Context.current().session();
-        String username = session.get("username");
-        System.out.println("Send tmp pwd Username "+username);
-
-        String email = new_user.GetEmailByUsername(username);
-        //String email = "linghl0915@163.com";
-        System.out.println("Send tmp pwd Email "+email);
-        //SendSimpleMessage(email, tmp_pwd);
-        //SendEmail.SendEmail(email, tmp_pwd);
-        SendEmail(email,tmp_pwd);
-        System.out.println("Email sent");
-
-        new_user.AddTemporaryPwd(username, tmp_pwd);
-
-        return ok(
-                views.html.temporarypwd.render(userForm)
-        );
-    }
-
-    public Result verifyTmpPwd(){
-        Form<User> userForm = formFactory.form(User.class).bindFromRequest();
-        User new_user = userForm.get();
-        Session session = Http.Context.current().session();
-        String username = session.get("username");
-        String tmp_pwd = new_user.password;
-        if(new_user.IfTemporaryPwdCorrect(username, tmp_pwd)){
-            session.put("ChangePwdAuthVerified", "true");
-            return ok(
-                    views.html.changepwd.render(userForm)
-            );
-        }
-        return badRequest(views.html.temporarypwd.render(userForm));
-    }
+//    public Result verifyTmpPwd(){
+//        Form<User> userForm = formFactory.form(User.class).bindFromRequest();
+//        User new_user = userForm.get();
+//        Session session = Http.Context.current().session();
+//        String username = session.get("username");
+//        String tmp_pwd = new_user.password;
+//        if(new_user.IfTemporaryPwdCorrect(username, tmp_pwd)){
+//            session.put("ChangePwdAuthVerified", "true");
+//            return ok(
+//                    views.html.changepwd.render(userForm)
+//            );
+//        }
+//        return badRequest(views.html.temporarypwd.render(userForm));
+//    }
 
     public Result verifyQA(){
         Form<User> userForm = formFactory.form(User.class).bindFromRequest();
@@ -190,7 +196,13 @@ public class UserController extends Controller {
                 }
             }
             System.out.println("Please correct the following errors: " + errorMsg);
-            return badRequest(views.html.login.render(userForm, 1));
+            //return badRequest(views.html.login.render(userForm, 1));
+            JsonNode res_json = Json.newObject()
+                    .put("username", "")
+                    .put("userid", "")
+                    .put("email","")
+                    .put("status","error");
+            return ok(res_json);
         }
 
             User new_user = userForm.get();
@@ -245,7 +257,13 @@ public class UserController extends Controller {
                 }
             }
             System.out.println("Please correct the following errors: " + errorMsg);
-            return ok(views.html.register.render(userForm,0));
+            //return ok(views.html.register.render(userForm,0));
+            JsonNode res_json = Json.newObject()
+                    .put("username", "")
+                    .put("userid", "")
+                    .put("email","")
+                    .put("status","error");
+            return ok(res_json);
         }
 
         try {
@@ -302,13 +320,13 @@ public class UserController extends Controller {
         return ok();
     }
 
-    public Result logout(){
-        Session session = Http.Context.current().session();
-        session.clear();
-        return redirect(
-                routes.UserController.login()
-        );
-    }
+//    public Result logout(){
+//        Session session = Http.Context.current().session();
+//        session.clear();
+//        return redirect(
+//                routes.UserController.login()
+//        );
+//    }
 
     /**
      *
@@ -322,41 +340,41 @@ public class UserController extends Controller {
         return String.format("%032x", new BigInteger(1, md.digest()));
     }
 
-    /**
-     * Send temporary password for password changing
-     * @param email
-     * @return
-     */
-    private static ClientResponse SendSimpleMessage(String email, String tmp_pwd) {
-        String name = "customer";
-        String SendTo = name + " <" + email + ">";
-        Client client = Client.create();
-        client.addFilter(new HTTPBasicAuthFilter("api", "key-8bcaf224a0a4a59388e4dd33683d61e2"));
-        WebResource webResource = client.resource("https://api.mailgun.net/v3/sandboxb3bf5434ac5e4fba8a88fa29a6bc8b74.mailgun.org/messages");
-        MultivaluedMapImpl formData = new MultivaluedMapImpl();
-        formData.add("from", "Mailgun Sandbox <postmaster@sandboxb3bf5434ac5e4fba8a88fa29a6bc8b74.mailgun.org>");
-        formData.add("to", SendTo);
-        formData.add("subject", "Hello customer");
-        formData.add("text", "Dear Sir/Madam, your temporary password is "+tmp_pwd);
-        return webResource.type(MediaType.APPLICATION_FORM_URLENCODED).
-                post(ClientResponse.class, formData);
-    }
+//    /**
+//     * Send temporary password for password changing
+//     * @param email
+//     * @return
+//     */
+//    private static ClientResponse SendSimpleMessage(String email, String tmp_pwd) {
+//        String name = "customer";
+//        String SendTo = name + " <" + email + ">";
+//        Client client = Client.create();
+//        client.addFilter(new HTTPBasicAuthFilter("api", "key-8bcaf224a0a4a59388e4dd33683d61e2"));
+//        WebResource webResource = client.resource("https://api.mailgun.net/v3/sandboxb3bf5434ac5e4fba8a88fa29a6bc8b74.mailgun.org/messages");
+//        MultivaluedMapImpl formData = new MultivaluedMapImpl();
+//        formData.add("from", "Mailgun Sandbox <postmaster@sandboxb3bf5434ac5e4fba8a88fa29a6bc8b74.mailgun.org>");
+//        formData.add("to", SendTo);
+//        formData.add("subject", "Hello customer");
+//        formData.add("text", "Dear Sir/Madam, your temporary password is "+tmp_pwd);
+//        return webResource.type(MediaType.APPLICATION_FORM_URLENCODED).
+//                post(ClientResponse.class, formData);
+//    }
 
-    private static void SendEmail(String emailto, String pwd){
-        try {
-            Email email = new SimpleEmail();
-            email.setHostName("smtp.googlemail.com");
-            email.setSmtpPort(465);
-            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
-            email.setSSLOnConnect(true);
-            email.setFrom("socandrew2017@gmail.com");
-            email.setSubject("Temporary password");
-            email.setMsg("Dear Sir/Madam, your temporary password is "+pwd);
-            email.addTo(emailto);
-            email.send();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+//    private static void SendEmail(String emailto, String pwd){
+//        try {
+//            Email email = new SimpleEmail();
+//            email.setHostName("smtp.googlemail.com");
+//            email.setSmtpPort(465);
+//            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+//            email.setSSLOnConnect(true);
+//            email.setFrom("socandrew2017@gmail.com");
+//            email.setSubject("Temporary password");
+//            email.setMsg("Dear Sir/Madam, your temporary password is "+pwd);
+//            email.addTo(emailto);
+//            email.send();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
 }

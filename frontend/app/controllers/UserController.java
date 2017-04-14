@@ -97,8 +97,8 @@ public class UserController extends Controller {
             return CompletableFuture.completedFuture(badRequest(views.html.changepwd.render(userForm)));
         }
 
-        String username = session.get("username");
-        Long userid = Long.parseLong(session.get("userid"));
+        String username = session.get("tmpusername");
+        //Long userid = Long.parseLong(session.get("userid"));
         /*User update_user = User.find.byId(userid);
         try {
             //update_user.password = MD5(password);
@@ -109,14 +109,15 @@ public class UserController extends Controller {
         }
         return GO_HOME;*/
         JsonNode json = Json.newObject()
-                .put("username", userid.toString())
+                .put("username", username)
                 .put("password", password);
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/changePwd").post(json);
         return res.thenApplyAsync(response -> {
             JsonNode ret = response.asJson();
             if ("successful".equals(ret.get("status").asText())) {
                 System.out.println("Answer right");
-                return GO_HOME;
+                session.clear();
+                return GO_LOGIN;
             }else {
                 System.out.println("change password unsuccessfully");
                 return ok("password change unsuccessfully");
@@ -152,7 +153,7 @@ public class UserController extends Controller {
         System.out.println("Send tmp pwd Username "+username);
 
         //String email = new_user.GetEmailByUsername(username);
-        String email = session.get("email");
+        String email = session.get("tmpemail");
         //String email = "linghl0915@163.com";
         System.out.println("Send tmp pwd Email "+email);
         //SendSimpleMessage(email, tmp_pwd);
@@ -190,9 +191,11 @@ public class UserController extends Controller {
         String answer1 = new_user.security_answer1;
         String question2 = new_user.security_question2;
         String answer2 = new_user.security_answer2;
+        String username = new_user.username;
+        String email = new_user.email;
 
         Session session = Http.Context.current().session();
-        String username = session.get("username");
+        //String username = session.get("username");
 
         JsonNode json = Json.newObject()
                 .put("security_question1", question1)
@@ -205,6 +208,8 @@ public class UserController extends Controller {
             JsonNode ret = response.asJson();
             if ("successful".equals(ret.get("status").asText())) {
                 System.out.println("Answer right");
+                session.put("tmpemail",email);
+                session.put("tmpusername", username);
                 return redirect("/temporarypwd");
             }else{
                 return ok(views.html.verifyChangePwdAuth.render(userForm,1));
