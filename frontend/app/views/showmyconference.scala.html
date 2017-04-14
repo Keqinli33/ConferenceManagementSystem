@@ -57,7 +57,7 @@
                         <td>@conference.status</td>
                         <td><a href="@routes.ShowPaperController.getConferencePaper(conference.title)">Paper</a></td>
                             @if(conference.ifreviewer == "Y") {
-                                @*<td><a href="@routes.ReviewerController.enterReviewPaper(conference.title)">Review</a></td>*@
+                                <td><a href="@routes.ReviewerController.enterReviewPaper(conference.title)">Review</a></td>
                                 <td>Review</td>
                             } else {
                                 <td>Review</td>
