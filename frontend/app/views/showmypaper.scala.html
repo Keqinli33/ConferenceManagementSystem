@@ -1,4 +1,4 @@
-@(paperForm: Form[Paper], paperInfo: List[Paper], session: Http.Session)
+@(paperForm: Form[Paper], paperInfo: List[Paper], session: Http.Session, conference:String)
 
 @import helper._
 
@@ -24,7 +24,7 @@
     @b3.form(routes.ShowPaperController.showMyPaper()) {
 
         <fieldset>
-            @b3.select( paperForm("conference"), options({"C" -> "myConference"}), '_label -> "Select" )
+            @b3.select( paperForm("conference"), options("a" -> "AA", "b" -> "BB", "c" -> "CC", "d"->"DD"), '_label -> "Select", '_default ->conference )
 
             <table class="mypaper zebra-striped">
                 <thead>

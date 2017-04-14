@@ -53,7 +53,7 @@
                         <td>@conference.title</td>
                         <td>@conference.location / @conference.date</td>
                         <td>@conference.status</td>
-                        <td><a href="@routes.ShowPaperController.showMyPaper()">Paper</a></td>
+                        <td><a href="@routes.ShowPaperController.showMyPaperFromConference(conference.title)">Paper</a></td>
                             @if(conference.ifreviewer == "Y") {
                                 @*should revise to review page*@
                                 <td><a href="@routes.ShowPaperController.showMyPaper()">Review</a></td>

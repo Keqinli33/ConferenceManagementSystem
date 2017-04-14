@@ -53,6 +53,8 @@ GET     /papers/:id                     controllers.PaperController.edit(id:Long
 POST    /papers/:id                     controllers.PaperController.update(id:Long)
 #show all papers of a user
 GET   /paper                      controllers.ShowPaperController.showMyPaper()
+GET   /paperconference             controllers.ShowPaperController.showMyPaperFromConference(s:String)
+
 #Upload paper
 GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
 POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)

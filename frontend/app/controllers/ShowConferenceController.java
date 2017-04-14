@@ -73,6 +73,12 @@ public class ShowConferenceController extends Controller{
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
 
+//        session.put("AA","AA");
+//        session.put("BB","BB");
+//        session.put("CC","CC");
+//        session.put("DD","DD");
+
+
         JsonNode json = Json.newObject()
                 .put("username", username);
         CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/conference/" + username ).get();
@@ -82,12 +88,6 @@ public class ShowConferenceController extends Controller{
             System.out.println("here is ");
             ArrayNode ret =(ArrayNode) response.asJson();
             System.out.println("here is ");
-            //ArrayNode ret = (ArrayNode) arr;
-//            if(ret.get("username").asText().equals("null")){
-//                return ok(
-//                        views.html.showmyconference.render(conferenceForm, null, session)
-//                );
-//            }else {
                 List<Conference> res = new ArrayList<Conference>();
                 for (JsonNode res1 : ret) {
                     Conference savedConference = new Conference();
@@ -102,7 +102,6 @@ public class ShowConferenceController extends Controller{
                 }
                 return ok(
                         views.html.showmyconference.render(conferenceForm, res, session));
-            //}
 
         });
 
