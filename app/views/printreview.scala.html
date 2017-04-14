@@ -1,4 +1,4 @@
-@(papers: List[Paper])
+@(review: String)
 
 @import helper._
 
@@ -19,42 +19,18 @@
     </tr>
     </table>
 
-    <h1>Here is the list of papers assigned to you. Use the download link to get the file, and the submit review link to enter or modify your review results.</h1>
+    <h6 id="printarea">@review</h6>
 
-    @b3.form(routes.ShowPaperController.showMyPaper()) {
-
-        <fieldset>
-
-            <table class="mypaper zebra-striped">
-                <thead>
-                    <tr>
-                        <th>paper id </th>
-                        <th>paper title</th>
-                        <th>paper authors</th>
-                        <th>action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                @for(paper <- papers) {
-                    <tr>
-                        <td>@paper.id</td>
-                        <td>@paper.title</td>
-                        <td>@paper.authors</td>
-                        <td>
-                            <a href="@routes.ReviewerController.download(paper.title)">download</a>
-                            <a href="@routes.ReviewerController.review(paper.review, paper.id)">Update review</a>
-                            <a href="@routes.ReviewerController.showreview(paper.review)">See review</a>
-                            <a href="@routes.ReviewerController.printreview(paper.review)">Print review</a>
-                        </td>
-                    </tr>
-                }
-
-                </tbody>
-            </table>
-
-        </fieldset>
+    <button onclick="myFunction()">Print this page</button>
+    <div class="actions">
+        <a class="btn success" id="register" href="@routes.ShowPaperController.showMyPaper()">Cancel</a>
+    </div>
+    <script>
+            function myFunction() {
+                document.getElementById('printarea').focus();
+                window.print();
+            }
+    </script>
 
 
-    }
 }

@@ -389,4 +389,8 @@ public class ReviewerController extends Controller{
         return ok(views.html.showreview.render(review));
     }
 
+    public Result printreview(String review){
+        return ok(views.html.printreview.render(review));
+    }
+
 }
