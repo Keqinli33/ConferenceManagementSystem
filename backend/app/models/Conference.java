@@ -27,6 +27,7 @@ public class Conference extends Model {
     public String location;
     public String date;
     public String status;
+    public String searchstatus;
     public String ifreviewer;
     public String ifadmin;
     public String keyword;
