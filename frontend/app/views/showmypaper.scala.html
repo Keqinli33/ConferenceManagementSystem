@@ -22,7 +22,6 @@
     <h1>Show My Paper</h1>
     @b3.form(routes.PaperController.create()) {
 
-        <fieldset>
 
         @b3.select(
             paperForm("conference"),
@@ -30,7 +29,6 @@
             '_label -> "Select", 'value -> defaultConf,
             '_showConstraints -> false
         )
-        </fieldset>
 
         <div class="actions">
             <input type="submit" value="Create A New Paper" class="btn primary">
