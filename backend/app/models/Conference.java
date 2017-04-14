@@ -29,6 +29,7 @@ public class Conference extends Model {
     public String status;
     public String ifreviewer;
     public String ifadmin;
+    public String ifpaper;  //
 
 
     public static Find<Long,Conference> find = new Find<Long,Conference>(){};

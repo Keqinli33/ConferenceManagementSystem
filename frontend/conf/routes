@@ -59,4 +59,4 @@ POST    /papers/:id/upload           controllers.PaperController.selectFile(id:L
 
 #show all conference of a user
 GET   /conference                      controllers.ShowConferenceController.showMyConference()
-POST  /conference/search                controllers.ShowConferenceController.searchConference()
+#POST  /conference/search                controllers.ShowConferenceController.searchConference()
