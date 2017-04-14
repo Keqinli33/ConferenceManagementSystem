@@ -168,7 +168,7 @@ public class ReviewerController extends Controller{
                 savedPaper.id = Long.parseLong(ret.get("id").asText());
                 savedPaper.title = ret.get("title").asText();
                 savedPaper.contactemail = ret.get("contactemail").asText();
-                savedPaper.authors = ret.get("authors").asText();
+
                 savedPaper.firstname1 = ret.get("firstname1").asText();
                 savedPaper.lastname1 = ret.get("lastname1").asText();
                 savedPaper.email1 = ret.get("email1").asText();
@@ -205,24 +205,126 @@ public class ReviewerController extends Controller{
                 savedPaper.reviewstatus = ret.get("reviewstatus").asText();
                 savedPaper.reviewerid = Long.parseLong(ret.get("reviewerid").asText());
                 savedPaper.review = ret.get("review").asText();
+
+                String affauthors = "";
+                if(savedPaper.firstname1 != null || savedPaper.lastname1 != null){
+                    if(savedPaper.firstname1 != null){
+                        affauthors = affauthors + savedPaper.firstname1 + " ";
+                    }
+                    if(savedPaper.lastname1 != null){
+                        affauthors = affauthors + savedPaper.lastname1 + " ";
+                    }
+
+                    if(savedPaper.affilation1 != null){
+                        affauthors = savedPaper.affilation1 + " " + affauthors;
+                    }
+
+                    if(!affauthors.equals("")){
+                        affauthors = ", " + affauthors;
+                    }
+                }
+                if(savedPaper.firstname2 != null || savedPaper.lastname2 != null){
+                    if(savedPaper.firstname2 != null){
+                        affauthors = affauthors + savedPaper.firstname2 + " ";
+                    }
+                    if(savedPaper.lastname2 != null){
+                        affauthors = affauthors + savedPaper.lastname2 + " ";
+                    }
+
+                    if(savedPaper.affilation2 != null){
+                        affauthors = savedPaper.affilation2 + " " + affauthors;
+                    }
+
+                    if(!affauthors.equals("")){
+                        affauthors = ", " + affauthors;
+                    }
+                }
+                if(savedPaper.firstname3 != null || savedPaper.lastname3 != null){
+                    if(savedPaper.firstname3 != null){
+                        affauthors = affauthors + savedPaper.firstname3 + " ";
+                    }
+                    if(savedPaper.lastname3 != null){
+                        affauthors = affauthors + savedPaper.lastname3 + " ";
+                    }
+
+                    if(savedPaper.affilation3 != null){
+                        affauthors = savedPaper.affilation3 + " " + affauthors;
+                    }
+
+                    if(!affauthors.equals("")){
+                        affauthors = ", " + affauthors;
+                    }
+                }
+                if(savedPaper.firstname4 != null || savedPaper.lastname4 != null){
+                    if(savedPaper.firstname4 != null){
+                        affauthors = affauthors + savedPaper.firstname4 + " ";
+                    }
+                    if(savedPaper.lastname4 != null){
+                        affauthors = affauthors + savedPaper.lastname4 + " ";
+                    }
+
+                    if(savedPaper.affilation4 != null){
+                        affauthors = savedPaper.affilation4 + " " + affauthors;
+                    }
+
+                    if(!affauthors.equals("")){
+                        affauthors = ", " + affauthors;
+                    }
+                }
+                if(savedPaper.firstname5 != null || savedPaper.lastname5 != null){
+                    if(savedPaper.firstname5 != null){
+                        affauthors = affauthors + savedPaper.firstname5 + " ";
+                    }
+                    if(savedPaper.lastname5 != null){
+                        affauthors = affauthors + savedPaper.lastname5 + " ";
+                    }
+
+                    if(savedPaper.affilation5 != null){
+                        affauthors = savedPaper.affilation5 + " " + affauthors;
+                    }
+
+                    if(!affauthors.equals("")){
+                        affauthors = ", " + affauthors;
+                    }
+                }
+                if(savedPaper.firstname6 != null || savedPaper.lastname6 != null){
+                    if(savedPaper.firstname6 != null){
+                        affauthors = affauthors + savedPaper.firstname6 + " ";
+                    }
+                    if(savedPaper.lastname6 != null){
+                        affauthors = affauthors + savedPaper.lastname6 + " ";
+                    }
+
+                    if(savedPaper.affilation6 != null){
+                        affauthors = savedPaper.affilation6 + " " + affauthors;
+                    }
+
+                    if(!affauthors.equals("")){
+                        affauthors = ", " + affauthors;
+                    }
+                }
+                if(savedPaper.firstname7 != null || savedPaper.lastname7 != null){
+                    if(savedPaper.firstname7 != null){
+                        affauthors = affauthors + savedPaper.firstname7 + " ";
+                    }
+                    if(savedPaper.lastname7 != null){
+                        affauthors = affauthors + savedPaper.lastname7 + " ";
+                    }
+
+                    if(savedPaper.affilation7 != null){
+                        affauthors = savedPaper.affilation7 + " " + affauthors;
+                    }
+
+                    if(!affauthors.equals("")){
+                        affauthors = ", " + affauthors;
+                    }
+                }
+
+                savedPaper.authors = ret.get("authors").asText();
                 list.add(savedPaper);
                 System.out.println("IN WWWWWW "+ret.get("review").asText());
             }
 
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            //new TypeReference<List<ConfCount>>(){}
-//            ConfCount[] reslist = objectMapper.readValue(ret, ConfCount[].class);
-//            List<ConfCount> res = Array.asList(reslist);
-
-//            for (Map.Entry<String, JsonNode> elt : ret.fields()){
-//                JsonNode node = elt.getValue();
-//                ConfCount count = new ConfCount();
-//                count.conf = node.get("conf");
-//                count.assigned = node.get("assigned");
-//                count.reviewed = node.get("reviewed");
-//                count.left = node.get("left");
-//                list.add(count);
-//            }
 
             return ok(
                     views.html.reviewPaper.render(list)
