@@ -64,4 +64,5 @@ GET     /review/paper              controllers.ReviewerController.enterReviewPap
 GET     /download                   controllers.ReviewerController.download(filename:String)
 GET     /editreview                     controllers.ReviewerController.review(review:String, paperid:Long)
 POST    /editreview                     controllers.ReviewerController.updateReview(paperid:Long)
+GET     /showreview                     controllers.ReviewerController.showreview(review:String)
 #GET    /review/conf                controllers.ReviewerController.getconf()

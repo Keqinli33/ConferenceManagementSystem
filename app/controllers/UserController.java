@@ -254,7 +254,7 @@ public class UserController extends Controller {
                 if ("successful".equals(ret.get("status").asText())) {
                     session.put("username", username);
                     session.put("email",email);
-                    session.put("userid", ret.get("userid").toString());
+                    session.put("userid", ret.get("userid").asText());
 
                     System.out.println("In session: "+session.get("username") + session.get("email"));
                     return GO_HOME;

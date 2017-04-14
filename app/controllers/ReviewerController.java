@@ -376,8 +376,17 @@ public class ReviewerController extends Controller{
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
         Paper new_paper = paperForm.get();
         System.out.println("===IN REVIEW PAPER ID IS "+Long.toString(paperid) + "REVIEW IS "+new_paper.review);
-        //TODO
-        return ok("hahahaha");
+
+        JsonNode json = Json.newObject()
+                .put("id", Long.toString(paperid))
+                .put("review", new_paper.review);
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(json);
+
+        return GO_HOME;
+    }
+
+    public Result showreview(String review){
+        return ok(views.html.showreview.render(review));
     }
 
 }
