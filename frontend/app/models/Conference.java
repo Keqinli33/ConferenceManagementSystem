@@ -30,11 +30,20 @@ public class Conference extends Model {
     public String ifreviewer;
     public String ifadmin;
 //    public String ifpaper;  //
+    public String keysearch;
 
 
     public static Find<Long,Conference> find = new Find<Long,Conference>(){};
 
     public static List<Conference> GetMyConference(String username){
+        List<Conference> results =
+                find.where()
+                        .eq("username",username)
+                        .findList();
+        return results;
+    }
+
+    public static List<Conference> SearchMyConference(String username, String keysearch){
         List<Conference> results =
                 find.where()
                         .eq("username",username)

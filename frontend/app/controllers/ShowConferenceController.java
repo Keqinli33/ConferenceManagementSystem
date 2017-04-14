@@ -69,21 +69,27 @@ public class ShowConferenceController extends Controller{
     public CompletionStage<Result> showMyConference() {
         Form<Conference> conferenceForm = formFactory.form(Conference.class).bindFromRequest();
         //Paper paperInfo = paperForm.get();
-        Conference conferenceInfo = new conferenceForm.get();
+        Conference conferenceInfo = conferenceForm.get();
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
 
         JsonNode json = Json.newObject()
                 .put("username", username);
-        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/conference" ).get();
+        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/conference/" + username ).get();
 //        List<Paper> restemp =new Arraylist<Paper>();
         return resofrest.thenApplyAsync(response -> {
-            System.out.println("here is "+response);
-            JsonNode arr = response.asJson();
-            ArrayNode ret = (ArrayNode) arr;
-
+            //System.out.println("here is "+response);
+            System.out.println("here is ");
+            ArrayNode ret =(ArrayNode) response.asJson();
+            System.out.println("here is ");
+            //ArrayNode ret = (ArrayNode) arr;
+//            if(ret.get("username").asText().equals("null")){
+//                return ok(
+//                        views.html.showmyconference.render(conferenceForm, null, session)
+//                );
+//            }else {
                 List<Conference> res = new ArrayList<Conference>();
-                for(JsonNode res1 : ret){
+                for (JsonNode res1 : ret) {
                     Conference savedConference = new Conference();
                     savedConference.id = Long.parseLong(res1.get("id").asText());
                     savedConference.title = res1.get("title").asText();
@@ -92,47 +98,54 @@ public class ShowConferenceController extends Controller{
                     savedConference.status = res1.get("status").asText();
                     savedConference.ifreviewer = res1.get("ifreviewer").asText();
                     savedConference.ifadmin = res1.get("ifadmin").asText();
-                    res.add(savedPaper);
+                    res.add(savedConference);
                 }
                 return ok(
-                        views.html.showmypaper.render(conferenceForm,res,session));
+                        views.html.showmyconference.render(conferenceForm, res, session));
+            //}
 
         });
 
     }
 
-    public CompletionStage<Result> searchConference(String keysearch){
+    public CompletionStage<Result> searchConference(){
         Form<Conference> conferenceForm = formFactory.form(Conference.class).bindFromRequest();
         //Paper paperInfo = paperForm.get();
-        Conference conferenceInfo = new conferenceForm.get();
+        Conference conferenceInfo = conferenceForm.get();
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
 
-        JsonNode json = Json.newObject()
-                .put("keysearch", keysearch)
-                .put("status", conferenceInfo.status);
+//        JsonNode json = Json.newObject()
+//                .put("keysearch", keysearch)
+//                .put("status", conferenceInfo.status);
 
-        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/conference/search/" + keysearch).get();
+        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/conference/search/" + username + "/"+ conferenceInfo.keysearch).get();
         return resofrest.thenApplyAsync(response -> {
             JsonNode arr = response.asJson();
             ArrayNode ret = (ArrayNode) arr;
+//            if(ret.get("username").asText().equals("null")){
+//                return ok(
+//                        views.html.showmyconference.render(conferenceForm, null, session)
+//                );
+//            }else {
 
-            List<Conference> res = new ArrayList<Conference>();
-            for(JsonNode res1 : ret){
-                Conference savedConference = new Conference();
-                savedConference.id = Long.parseLong(res1.get("id").asText());
-                savedConference.title = res1.get("title").asText();
-                savedConference.location = res1.get("location").asText();
-                savedConference.date = res1.get("date").asText();
-                savedConference.status = res1.get("status").asText();
-                savedConference.ifreviewer = res1.get("ifreviewer").asText();
-                savedConference.ifadmin = res1.get("ifadmin").asText();
+                List<Conference> res = new ArrayList<Conference>();
+                for (JsonNode res1 : ret) {
+                    Conference savedConference = new Conference();
+                    savedConference.id = Long.parseLong(res1.get("id").asText());
+                    savedConference.title = res1.get("title").asText();
+                    savedConference.location = res1.get("location").asText();
+                    savedConference.date = res1.get("date").asText();
+                    savedConference.status = res1.get("status").asText();
+                    savedConference.ifreviewer = res1.get("ifreviewer").asText();
+                    savedConference.ifadmin = res1.get("ifadmin").asText();
 //                savedConference.ifpaper = res1.get("ifpaper").asText();  //
-                res.add(savedPaper);
-            }
-            return ok(
-                    views.html.showmypaper.render(conferenceForm,res,session));
-        }
+                    res.add(savedConference);
+                }
+                return ok(
+                        views.html.showmyconference.render(conferenceForm, res, session));
+           // }
+        });
 
 
     }

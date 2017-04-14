@@ -18,6 +18,18 @@ create table computer (
   constraint pk_computer primary key (id)
 );
 
+create table conference (
+  id                            bigint auto_increment not null,
+  username                      varchar(255),
+  title                         varchar(255),
+  location                      varchar(255),
+  date                          varchar(255),
+  status                        varchar(255),
+  ifreviewer                    varchar(255),
+  ifadmin                       varchar(255),
+  constraint pk_conference primary key (id)
+);
+
 create table paper (
   id                            bigint auto_increment not null,
   username                      varchar(255),
@@ -100,18 +112,6 @@ create table user (
   constraint pk_user primary key (id)
 );
 
-create table conference (
-  id                            bigint auto_increment not null,
-  username                      varchar(255),
-  title                         varchar(255),
-  location                      varchar(255),
-  date                          varchar(255),
-  status                        varchar(255),
-  ifreviewer                    varchar(255),
-  ifadmin                       varchar(255),
-  constraint pk_conference primary key (id)
-);
-
 alter table computer add constraint fk_computer_company_id foreign key (company_id) references company (id) on delete restrict on update restrict;
 create index ix_computer_company_id on computer (company_id);
 
@@ -125,9 +125,11 @@ drop table if exists company;
 
 drop table if exists computer;
 
+drop table if exists conference;
+
 drop table if exists paper;
 
 drop table if exists profile;
 
 drop table if exists user;
-drop table if exists conference;
+

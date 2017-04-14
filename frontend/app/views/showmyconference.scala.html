@@ -20,18 +20,22 @@
 
     <h1>Show My Conference</h1>
 
+    @b3.form(routes.ShowConferenceController.searchConference()){
+        <fieldset>
+            @b3.select( conferenceForm("status"), options("All" -> "All Status", "Active" -> "Active", "Archived" -> "Archived"), '_label -> "Select" )
+            @b3.text(conferenceForm("keysearch"), '_label -> "Computer name", '_help -> "")
+        </fieldset>
+
+        <div class="actions">
+            <input type="submit" value="Show Search Contents" class="btn primary"> or
+            <a href="@routes.ShowConferenceController.searchConference()" class="btn">Search</a>
+        </div>
+    }
+
     @b3.form(routes.ShowConferenceController.showMyConference()) {
 
         <fieldset>
-            <div id="actions">
-                @b3.select( conferenceForm("status"), options("All" -> "All Status", "Active" -> "Active", "Archived" -> "Archived"), '_label -> "Select" )
 
-                <form action="@routes.ShowConferenceController.searchConference(f)" method="Post">
-                    <input type="search" id="searchbox" name="f"  placeholder="...">
-                    <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
-                </form>
-
-            </div>
 
             <table class="mypaper zebra-striped">
                 <thead>
@@ -49,14 +53,15 @@
                         <td>@conference.title</td>
                         <td>@conference.location / @conference.date</td>
                         <td>@conference.status</td>
-                        <td><a href="@routes.ShowPaperController.showMyConference()">Paper</a></td>
-                            @if(conferecne.ifreviewer == "Y") {
-                                <td><a href="@routes.ReviewerController.enterReviewPaper(conference.name)">Review</a></td>
+                        <td><a href="@routes.ShowPaperController.showMyPaper()">Paper</a></td>
+                            @if(conference.ifreviewer == "Y") {
+                                @*should revise to review page*@
+                                <td><a href="@routes.ShowPaperController.showMyPaper()">Review</a></td>
                             } else {
                                 <td>Review</td>
                             }
                         @if(conference.ifadmin == "Y") {
-                            <td><a href="@routes.PaperController.edit(paper.id)">Admin</a></td>
+                            <td><a href="@routes.ShowPaperController.showMyPaper()">Admin</a></td>
                         } else {
                             <td>Admin</td>
                         }
@@ -70,10 +75,7 @@
 
         </fieldset>
 
-        <div class="actions">
-            <input type="submit" value="Show My Papers" class="btn primary"> or
-            <a href="@routes.ShowPaperController.showMyConference()" class="btn">Cancel</a>
-        </div>
+
 
     }
 

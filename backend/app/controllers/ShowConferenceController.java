@@ -66,7 +66,7 @@ public class ShowConferenceController extends Controller{
         Conference conferenceInfo = new Conference();
 
 
-        List<Conference> res = new ArrayList<Paper>();
+        List<Conference> res = new ArrayList<Conference>();
         res = conferenceInfo.GetMyConference(username);
 
         JsonNodeFactory factory = JsonNodeFactory.instance;
@@ -74,13 +74,13 @@ public class ShowConferenceController extends Controller{
         for(int i=0; i< res.size(); i++){
             JsonNode json = Json.newObject()
                     .put("id", res.get(i).id)
-//                    .put("username", username)
+                    .put("username", username)
                     .put("title", res.get(i).title)
-                    .put("location", res.get(i).authors)
-                    .put("date", res.get(i).confirmemail)
-                    .put("status",res.get(i).contactemail)
-                    .put("ifreviewer",res.get(i).firstname1)
-                    .put("ifadmin",res.get(i).lastname1);
+                    .put("location", res.get(i).location)
+                    .put("date", res.get(i).date)
+                    .put("status",res.get(i).status)
+                    .put("ifreviewer",res.get(i).ifreviewer)
+                    .put("ifadmin",res.get(i).ifadmin);
              jsonarray.add(json);
 
         }
@@ -90,22 +90,22 @@ public class ShowConferenceController extends Controller{
         return ok(temp);
 
     }
-    public Result showMyConference(String username) {
+    public Result searchConference(String username,String keysearch) {
         Form<Conference> conferenceForm = formFactory.form(Conference.class).bindFromRequest();
         Conference conferenceInfo = new Conference();
 
 
-        List<Conference> res = new ArrayList<Paper>();
-        res = conferenceInfo.GetMyConference(username);
+        List<Conference> res = new ArrayList<Conference>();
+        res = conferenceInfo.SearchMyConference(username,keysearch);
 
         JsonNodeFactory factory = JsonNodeFactory.instance;
         ArrayNode jsonarray = new ArrayNode(factory);
         for(int i=0; i< res.size(); i++){
             JsonNode json = Json.newObject()
                     .put("id", res.get(i).id)
-//                    .put("username", username)
+                    .put("username", username)
                     .put("title", res.get(i).title)
-                    .put("location", res.get(i).authors)
+                    .put("location", res.get(i).location)
                     .put("date", res.get(i).date)
                     .put("status",res.get(i).status)
                     .put("ifreviewer",res.get(i).ifreviewer)
