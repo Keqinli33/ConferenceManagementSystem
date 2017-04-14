@@ -1,4 +1,4 @@
-@(papers: List[Paper])
+@(paperForm: Form[Paper],papers: List[Paper], confoptions:Map[String, String], confname: String)
 
 @import helper._
 
@@ -20,6 +20,16 @@
     </table>
 
     <h1>Here is the list of papers assigned to you. Use the download link to get the file, and the submit review link to enter or modify your review results.</h1>
+
+
+
+    @b3.select(
+        paperForm("conference"),
+        options(confoptions),
+        '_label -> "Select", 'value -> confname,
+        '_showConstraints -> false
+    )
+
 
     @b3.form(routes.ShowPaperController.showMyPaper()) {
 
