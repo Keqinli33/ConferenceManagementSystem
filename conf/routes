@@ -61,3 +61,5 @@ POST    /papers/:id/upload           controllers.PaperController.selectFile(id:L
 # Reviewer page
 GET    /review/conf/:id                controllers.ReviewerController.getconf(id:Long)
 GET    /review/paper/:id/:conf          controllers.ReviewerController.getpapers(id:Long, conf:String)
+
+POST    /updatereview                   controllers.ReviewerController.updateReview()

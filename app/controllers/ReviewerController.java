@@ -177,4 +177,17 @@ public class ReviewerController extends Controller{
         }
     }
 
+    public Result updateReview(){
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        Paper paper = paperForm.get();
+        Long paperid = paper.id;
+        Paper update_paper = Paper.find.byId(paperid);
+        try {
+            update_paper.review = paper.review;
+            update_paper.update();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return ok("successfully");
+    }
 }

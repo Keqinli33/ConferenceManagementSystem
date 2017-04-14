@@ -101,7 +101,7 @@ public class UserController extends Controller {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return GO_HOME;
+        return ok("successfully");
     }
 
     /**
