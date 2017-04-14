@@ -38,7 +38,7 @@
 
                 @for(conference <- conferenceInfo) {
                     <tr>
-                        <td>@conference.acronym</td>
+                        <td>@conference.name</td>
                         <td>@conference.location /  @conference.date </td>
                         @*should deal if author exist*@
                         <td>@conference.status</td>
@@ -50,12 +50,13 @@
                     }
                         @if(@conference.isReview == "Y"){
                         @*should revise, jump to review page*@
-                        <td><a href="routes.ShowPaperController.showMyPaper()">Paper</a></td>
+                        <td><a href="routes.ReviewerController.enterReviewPaper(conference.name)">Review</a></td>
                     }else{
                         <td>Review</td>
                     }
+                        @*should revise, jump to review page*@
                         @if(@conference.isAdmin == "Y"){
-                        <td><a href="routes.ShowPaperController.showMyPaper()">Paper</a></td>
+                        <td><a href="routes.ShowPaperController.showMyPaper()">Admin</a></td>
                     }else{
                         <td>Admin</td>
                     }
@@ -65,7 +66,7 @@
 
                 </tbody>
             </table>
-            
+
 
         </fieldset>
     }
