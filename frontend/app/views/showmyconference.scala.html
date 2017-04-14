@@ -1,4 +1,4 @@
-@(paperForm: Form[Paper], paperInfo: List[Paper], session: Http.Session)
+@(conferenceForm: Form[Conference], conferenceInfo: List[Conference], session: Http.Session)
 
 @import helper._
 
@@ -20,54 +20,47 @@
 
     <h1>Show My Conference</h1>
 
-    <a class="btn success" id="add" href="@routes.PaperController.create()">Add a new paper</a>
-    @b3.form(routes.ShowPaperController.showMyPaper()) {
+    @b3.form(routes.ShowConferenceController.showMyConference()) {
 
         <fieldset>
             <div id="actions">
+                @b3.select( conferenceForm("status"), options("All" -> "All Status", "Active" -> "Active", "Archived" -> "Archived"), '_label -> "Select" )
 
-                <form action="@link(0, "name")" method="GET">
-                    <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by computer name...">
+                <form action="@routes.ShowConferenceController.searchConference()" method="Post">
+                    <input type="search" id="searchbox" name="f"  placeholder="Filter by computer name...">
                     <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
                 </form>
 
-                <a class="btn success" id="add" href="@routes.HomeController.create()">Add a new computer</a>
-
             </div>
-            @b3.select( paperForm("conference"), options({"C" -> "myConference"}), '_label -> "Select" )
 
             <table class="mypaper zebra-striped">
                 <thead>
                     <tr>
-                        <th>Paper Id / Title </th>
-                        <th>Conference / Submission Deadline</th>
-                        <th>Authors / Contact email</th>
-                        <th>Topic</th>
+                        <th>Conference Acronym</th>
+                        <th>Location / Date	</th>
                         <th>Status</th>
-                        <th>Format / File Size</th>
-                        <th>Submission Date</th>
-                        <th>Action</th>
+                        <th colspan="3">Action</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                @for(paper <- paperInfo) {
+                @for(conference <- conferenceInfo) {
                     <tr>
-                        <td>@paper.id    @paper.title</td>
-                        <td>@paper.conference </td>
-                        @*should deal if author exist*@
-                        <td>@paper.authors</td>
-                        <td>@paper.topic</td>
-                        <td>@paper.status</td>
-
-                            @if(paper.ifsubmit == "Y") {
-                                <td>@paper.format @paper.papersize byte</td>
+                        <td>@conference.title</td>
+                        <td>@conference.location / @conference.date</td>
+                        <td>@conference.status</td>
+                        <td><a href="@routes.PaperController.edit(paper.id)">Paper</a></td>
+                            @if(conferecne.ifreviewer == "Y") {
+                                <td><a href="@routes.PaperController.edit(paper.id)">Review</a></td>
                             } else {
-                                <td><a class="btn success" id="upload" href="@routes.PaperController.uploadFile(paper.id)">Upload a new paper</a></td>
+                                <td>Review</td>
                             }
+                        @if(session.ifadmin == "Y") {
+                            <td><a href="@routes.PaperController.edit(paper.id)">Admin</a></td>
+                        } else {
+                            <td>Admin</td>
+                        }
 
-                        <td>@paper.date</td>
-                        <td><a href="@routes.PaperController.edit(paper.id)">Modify</a></td>
                         @*<td>Modify</td>*@
                     </tr>
                 }
