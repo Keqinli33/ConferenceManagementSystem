@@ -51,13 +51,21 @@ POST  /papers                           controllers.PaperController.save()
 #Edit paper
 GET     /papers/:id                     controllers.PaperController.edit(id:Long)
 POST    /papers/:id                     controllers.PaperController.update(id:Long)
-#show all papers of a user
-GET   /paper                            controllers.ShowPaperController.showMyPaper()
-GET   /paper/conference                  controllers.ShowPaperController.getConferencePaper(conferencename:String)
-#Upload paper
-GET    /papers/:id/upload               controllers.PaperController.uploadFile(id:Long)
-POST    /papers/:id/upload              controllers.PaperController.selectFile(id:Long)
 
+GET   /paper                      controllers.ShowPaperController.showMyPaper()
+#Upload paper
+GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
+POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
 #show all conference of a user
 GET   /conference                      controllers.ShowConferenceController.showMyConference()
 POST  /conference/search               controllers.ShowConferenceController.searchConference()
+
+# Reviewer page
+GET     /review                    controllers.ReviewerController.enterReviewConf()
+GET     /review/paper              controllers.ReviewerController.enterReviewPaper(confName:String)
+
+GET     /download                   controllers.ReviewerController.download(filename:String)
+GET     /editreview                     controllers.ReviewerController.review(review:String, paperid:Long)
+POST    /editreview                     controllers.ReviewerController.updateReview(paperid:Long)
+GET     /showreview                     controllers.ReviewerController.showreview(review:String)
+GET     /printreview                    controllers.ReviewerController.printreview(review:String)
