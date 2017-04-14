@@ -286,7 +286,8 @@ public class PaperController extends Controller {
                 .put("date", newPaper.date)
                 .put("conference", conf)
                 .put("file", newPaper.file)
-                .put("reviewerid",session.get("id"));
+                .put("reviewerid",session.get("id"))
+                .put("reviewstatus", "assigned");
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers").post(json);
         return res.thenApply(response -> {

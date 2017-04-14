@@ -186,6 +186,7 @@ public class ReviewerController extends Controller{
         Paper update_paper = Paper.find.byId(paperid);
         try {
             update_paper.review = paper.review;
+            update_paper.reviewstatus = "reviewed";
             update_paper.update();
         } catch (Exception e){
             e.printStackTrace();
