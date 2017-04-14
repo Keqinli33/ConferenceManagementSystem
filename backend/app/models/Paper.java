@@ -21,20 +21,20 @@ public class Paper extends Model {
     @Id
     public long id;
     public String username;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String title;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String contactemail;
     public String authors;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String confirmemail;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String firstname1;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String lastname1;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String email1;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String affilation1;
     public String firstname2;
     public String lastname2;
@@ -63,7 +63,7 @@ public class Paper extends Model {
     public String otherauthor;
     public String candidate;
     public String volunteer;
-//    @Constraints.Required
+    //    @Constraints.Required
     public String paperabstract;
     public String ifsubmit;
     public String format;
@@ -73,7 +73,11 @@ public class Paper extends Model {
     public String topic;
     public String status;
 
-//    @Formats.DateTime(pattern="yyyy-MM-dd")
+
+    public String reviewstatus;
+    public long reviewerid;
+    public String review;
+
     public String date;
 
     public static Find<Long,Paper> find = new Find<Long,Paper>(){};
@@ -85,4 +89,22 @@ public class Paper extends Model {
                         .findList();
         return results;
     }
+
+    public static List<Paper> ReviewPapers(Long userid){
+        List<Paper> results =
+                find.where()
+                        .eq("reviewerid",userid)
+                        .findList();
+        return results;
+    }
+
+    public static List<Paper> ConfPapers(Long reviewid, String conf){
+        List<Paper> results =
+                find.where()
+                        .eq("reviewerid",reviewid)
+                        .eq("conference",conf)
+                        .findList();
+        return results;
+    }
+
 }
