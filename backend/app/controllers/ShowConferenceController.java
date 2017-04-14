@@ -90,7 +90,7 @@ public class ShowConferenceController extends Controller{
         return ok(temp);
 
     }
-    public Result showMyConference(String username) {
+    public Result Conference(String username) {
         Form<Conference> conferenceForm = formFactory.form(Conference.class).bindFromRequest();
         Conference conferenceInfo = new Conference();
 

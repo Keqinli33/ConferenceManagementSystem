@@ -24,7 +24,7 @@
 
         <fieldset>
             <div id="actions">
-                @b3.select( conferenceForm("status"), options("All" -> "All Status", "Active" -> "Active", "Archived" -> "Archived"), '_label -> "Select" )
+                @b3.select( conferenceForm("status"), options("All" -> "All Status", "Active" -> "Active", "Archived" -> "Archived"), '_label -> "Select",'_default -> "All status" )
 
                 <form action="@routes.ShowConferenceController.searchConference()" method="Post">
                     <input type="search" id="searchbox" name="f"  placeholder="Filter by computer name...">

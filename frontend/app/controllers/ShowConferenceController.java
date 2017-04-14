@@ -67,7 +67,7 @@ public class ShowConferenceController extends Controller{
      * Handle profile deletion
      */
     public CompletionStage<Result> showMyConference() {
-        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        Form<Conference> conferenceForm = formFactory.form(Conference.class).bindFromRequest();
         //Paper paperInfo = paperForm.get();
         Conference conferenceInfo = new Conference();
         Http.Session session = Http.Context.current().session();
@@ -101,4 +101,39 @@ public class ShowConferenceController extends Controller{
 
     }
 
+
+    public CompletionStage<Result> searchConference() {
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        //Paper paperInfo = paperForm.get();
+        Conference conferenceInfo = new Conference();
+        Http.Session session = Http.Context.current().session();
+        String username = session.get("username");
+
+        JsonNode json = Json.newObject()
+                .put("username", username);
+        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/conference/" + username).get();
+//        List<Paper> restemp =new Arraylist<Paper>();
+        return resofrest.thenApplyAsync(response -> {
+            System.out.println("here is "+response);
+            JsonNode arr = response.asJson();
+            ArrayNode ret = (ArrayNode) arr;
+
+            List<Conference> res = new ArrayList<Conference>();
+            for(JsonNode res1 : ret){
+                Conference savedConference = new Conference();
+                savedConference.id = Long.parseLong(res1.get("id").asText());
+                savedConference.title = res1.get("title").asText();
+                savedConference.location = res1.get("location").asText();
+                savedConference.date = res1.get("date").asText();
+                savedConference.status = res1.get("status").asText();
+                savedConference.ifreviewer = res1.get("ifreviewer").asText();
+                savedConference.ifadmin = res1.get("ifadmin").asText();
+                res.add(savedPaper);
+            }
+            return ok(
+                    views.html.showmypaper.render(conferenceForm,res,session));
+
+        });
+
+    }
 }
