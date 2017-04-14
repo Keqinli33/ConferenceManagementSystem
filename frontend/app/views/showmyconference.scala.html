@@ -26,8 +26,8 @@
             <div id="actions">
                 @b3.select( conferenceForm("status"), options("All" -> "All Status", "Active" -> "Active", "Archived" -> "Archived"), '_label -> "Select" )
 
-                <form action="@routes.ShowConferenceController.searchConference()" method="Post">
-                    <input type="search" id="searchbox" name="f"  placeholder="Filter by computer name...">
+                <form action="@routes.ShowConferenceController.searchConference(f)" method="Post">
+                    <input type="search" id="searchbox" name="f"  placeholder="...">
                     <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
                 </form>
 
@@ -49,13 +49,13 @@
                         <td>@conference.title</td>
                         <td>@conference.location / @conference.date</td>
                         <td>@conference.status</td>
-                        <td><a href="@routes.PaperController.edit(paper.id)">Paper</a></td>
+                        <td><a href="@routes.ShowPaperController.showMyConference()">Paper</a></td>
                             @if(conferecne.ifreviewer == "Y") {
-                                <td><a href="@routes.PaperController.edit(paper.id)">Review</a></td>
+                                <td><a href="@routes.ReviewerController.enterReviewPaper(conference.name)">Review</a></td>
                             } else {
                                 <td>Review</td>
                             }
-                        @if(session.ifadmin == "Y") {
+                        @if(conference.ifadmin == "Y") {
                             <td><a href="@routes.PaperController.edit(paper.id)">Admin</a></td>
                         } else {
                             <td>Admin</td>
@@ -72,7 +72,7 @@
 
         <div class="actions">
             <input type="submit" value="Show My Papers" class="btn primary"> or
-            <a href="@routes.ShowPaperController.showMyPaper()" class="btn">Cancel</a>
+            <a href="@routes.ShowPaperController.showMyConference()" class="btn">Cancel</a>
         </div>
 
     }
