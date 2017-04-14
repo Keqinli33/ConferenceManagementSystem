@@ -56,3 +56,13 @@ GET   /paper                      controllers.ShowPaperController.showMyPaper()
 #Upload paper
 GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
 POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
+
+# Reviewer page
+GET     /review                    controllers.ReviewerController.enterReviewConf()
+GET     /review/paper              controllers.ReviewerController.enterReviewPaper(confName:String)
+
+GET     /download                   controllers.ReviewerController.download(filename:String)
+GET     /editreview                     controllers.ReviewerController.review(review:String, paperid:Long)
+POST    /editreview                     controllers.ReviewerController.updateReview(paperid:Long)
+GET     /showreview                     controllers.ReviewerController.showreview(review:String)
+GET     /printreview                    controllers.ReviewerController.printreview(review:String)
