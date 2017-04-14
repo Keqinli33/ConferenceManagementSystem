@@ -285,7 +285,8 @@ public class PaperController extends Controller {
                 .put("papersize", newPaper.papersize)
                 .put("date", newPaper.date)
                 .put("conference", conf)
-                .put("file", newPaper.file);
+                .put("file", newPaper.file)
+                .put("reviewerid",session.get("id"));
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers").post(json);
         return res.thenApply(response -> {
@@ -330,7 +331,7 @@ public class PaperController extends Controller {
 
             try {
                 File file = filePart.getFile();
-                File destination = new File("/Users/shuang/uploads", file.getName());
+                File destination = new File("/Users/shuang/uploads", String.valueOf(id));
                 FileUtils.moveFile(file, destination);
                 savedPaper.ifsubmit = "Y";
                 savedPaper.format = filePart.getContentType();

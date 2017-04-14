@@ -464,12 +464,12 @@ public class ReviewerController extends Controller{
         });
     }
 
-    public Result download(String filename){
+    public Result download(Long filename){
             System.out.println("downloading...");
             response().setContentType("application/x-download");
             String cmd = "attachment; filename="+filename;
             response().setHeader("Content-disposition",cmd);
-            String path = "/Users/sxh/Desktop/"+filename;
+            String path = "/Users/shuang/uploads"+Long.toString(filename);
             //return ok(new File("/User/huiliangling/uploads/test.txt"));
             return ok(new java.io.File(path));
 
