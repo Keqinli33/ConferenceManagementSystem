@@ -59,3 +59,4 @@ GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Lo
 POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
 #get all conferences of a user
 GET   /conference/:username                     controllers.ShowConferenceController.showMyConference(username:String)
+POST  /conference/search/:keyword                controllers.ShowConferenceController.searchConference(keyword:String)

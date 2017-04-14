@@ -107,6 +107,8 @@ create table conference (
   location                      varchar(255),
   date                          varchar(255),
   status                        varchar(255),
+  ifreviewer                    varchar(255),
+  ifadmin                       varchar(255),
   constraint pk_conference primary key (id)
 );
 
