@@ -144,8 +144,9 @@ public class ReviewerController extends Controller{
 //        System.out.println("Enter profile page user id is "+userid.toString());
 //        Profile profile = Profile.find.byId(userid);
 
+        String temp = confName.replaceAll(" ", "+");
 
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/paper/"+userid+"/"+confName).get();
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/paper/"+userid+"/"+temp).get();
         return res.thenApply(response -> {
 //            String str = response.getBody();
 //            System.out.println("there is "+str);

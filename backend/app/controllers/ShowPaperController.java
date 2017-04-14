@@ -56,28 +56,6 @@ public class ShowPaperController extends Controller{
         this.formFactory = formFactory;
     }
 
-    /**
-     * This result directly redirect to application home.
-     */
-//    public Result GO_HOME = Results.redirect(
-//            routes.HomeController.list(0, "name", "asc", "")
-//    );
-
-    /**
-     * Handle default path requests, redirect to computers list
-     */
-//    public Result index() {
-//        return GO_HOME;
-//    }
-//
-//    public Result list(int page, String sortBy, String order, String filter) {
-//        return ok(
-//                views.html.list.render(
-//                        Computer.page(page, 10, sortBy, order, filter),
-//                        sortBy, order, filter
-//                )
-//        );
-//    }
 
     /**
      * Handle profile deletion
@@ -91,10 +69,6 @@ public class ShowPaperController extends Controller{
         List<Paper> res = new ArrayList<Paper>();
         res = paperInfo.GetMyPaper(username);
 
-//        Long id = res.get(0).id;
-//        String title = res.get(0).title;
-//        String conference = res.get(0).conference;
-//
 
          String authors = "";
         for(int i =0; i <res.size(); i++){
@@ -192,21 +166,7 @@ public class ShowPaperController extends Controller{
         System.out.println(jsonarray);
         JsonNode temp = (JsonNode) jsonarray;
         return ok(temp);
-//
-//        String topic = res.get(0).topic;
-//        String status = res.get(0).status;
-//        String format = res.get(0).format;
-//        String filesize = res.get(0).papersize;
-//        Date date = res.get(0).date;
-//        String action = "Modify";
 
-
-
-//        return ok(
-//                views.html.showmypaper.render(paperForm,res, authors)
-//        );
-
-        //return GO_HOME;
     }
 
 }
