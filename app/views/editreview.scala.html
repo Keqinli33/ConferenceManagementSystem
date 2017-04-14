@@ -1,4 +1,4 @@
-@(papers: List[Paper])
+@(paperForm: Form[Paper])(review: String)(paperid:Long)
 
 @import helper._
 
@@ -19,40 +19,21 @@
     </tr>
     </table>
 
-    <h1>Here is the list of papers assigned to you. Use the download link to get the file, and the submit review link to enter or modify your review results.</h1>
-
-    @b3.form(routes.ShowPaperController.showMyPaper()) {
+    @b3.form(routes.ReviewerController.updateReview(paperid)) {
 
         <fieldset>
 
-            <table class="mypaper zebra-striped">
-                <thead>
-                    <tr>
-                        <th>paper id </th>
-                        <th>paper title</th>
-                        <th>paper authors</th>
-                        <th>action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                @for(paper <- papers) {
-                    <tr>
-                        <td>@paper.id</td>
-                        <td>@paper.title</td>
-                        <td>@paper.authors</td>
-                        <td>
-                            <a href="@routes.ReviewerController.download(paper.title)">download</a>
-                            <a href="@routes.ReviewerController.review(paper.review, paper.id)">Update review</a>
-                        </td>
-                    </tr>
-                }
-
-                </tbody>
-            </table>
+            @if(review != null) {
+                @b3.textarea( paperForm("review"), '_label -> "Review", 'rows -> 30, 'value -> review)
+            }   else{
+                @b3.textarea( paperForm("review"), '_label -> "Review", 'rows -> 30)
+            }
 
         </fieldset>
 
-
+        <div class="actions">
+            <input type="submit" value="Submit" class="btn primary"> or
+            <a class="btn success" id="register" href="@routes.ShowPaperController.showMyPaper()">Cancel</a>
+        </div>
     }
 }

@@ -206,6 +206,7 @@ public class ReviewerController extends Controller{
                 savedPaper.reviewerid = Long.parseLong(ret.get("reviewerid").asText());
                 savedPaper.review = ret.get("review").asText();
                 list.add(savedPaper);
+                System.out.println("IN WWWWWW "+ret.get("review").asText());
             }
 
 //            ObjectMapper objectMapper = new ObjectMapper();
@@ -346,6 +347,37 @@ public class ReviewerController extends Controller{
                 );
             }
         });
+    }
+
+    public Result download(String filename){
+            System.out.println("downloading...");
+            response().setContentType("application/x-download");
+            String cmd = "attachment; filename="+filename;
+            response().setHeader("Content-disposition",cmd);
+            String path = "/Users/sxh/Desktop/"+filename;
+            //return ok(new File("/User/huiliangling/uploads/test.txt"));
+            return ok(new java.io.File(path));
+
+    }
+
+    public Result review(String review, long paperid){
+        Form<Paper> paperForm = formFactory.form(Paper.class);
+        Map<String,String> anyData = new HashMap();
+        anyData.put("paperid", Long.toString(paperid));
+        anyData.put("review", review);
+        System.out.println("IN REVIEW PAGE REVIEW: "+review);
+
+        paperForm.bind(anyData);
+
+        return ok(views.html.editreview.render(paperForm, review, paperid));
+    }
+
+    public Result updateReview(Long paperid){
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        Paper new_paper = paperForm.get();
+        System.out.println("===IN REVIEW PAPER ID IS "+Long.toString(paperid) + "REVIEW IS "+new_paper.review);
+        //TODO
+        return ok("hahahaha");
     }
 
 }
