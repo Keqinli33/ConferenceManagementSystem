@@ -469,7 +469,7 @@ public class ReviewerController extends Controller{
             response().setContentType("application/x-download");
             String cmd = "attachment; filename="+filename;
             response().setHeader("Content-disposition",cmd);
-            String path = "/Users/shuang/uploads"+Long.toString(filename);
+            String path = "/Users/shuang/uploads/"+Long.toString(filename);
             //return ok(new File("/User/huiliangling/uploads/test.txt"));
             return ok(new java.io.File(path));
 
