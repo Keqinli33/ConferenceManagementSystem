@@ -239,7 +239,10 @@ public class UserController extends Controller {
             if ("successful".equals(ret.get("status").asText())) {
                 session.put("username", username);
                 session.put("email",ret.get("email").asText());
+                String privilege = ret.get("privilege").asText();
+                session.put("privilege", privilege);
                 session.put("userid", ret.get("userid").asText());
+                System.out.println("=====Login ok: privilege is"+privilege);
 
                 System.out.println("In session: "+session.get("username") + session.get("email")+session.get("userid"));
                 return GO_HOME;
@@ -264,6 +267,7 @@ public class UserController extends Controller {
             String security_question2 = new_user.security_question2;
             String security_answer1 = new_user.security_answer1;
             String security_answer2 = new_user.security_answer2;
+            String privilege = "user";
 
             JsonNode json = Json.newObject()
                     .put("username", username)
@@ -272,7 +276,8 @@ public class UserController extends Controller {
                     .put("security_question1", security_question1)
                     .put("security_question2", security_question2)
                     .put("security_answer1", security_answer1)
-                    .put("security_answer2", security_answer2);
+                    .put("security_answer2", security_answer2)
+                    .put("privilege", privilege);
             Session session = Http.Context.current().session();
             CompletionStage<WSResponse> res = ws.url("http://localhost:9000/register").post(json);
             return res.thenApplyAsync(response -> {
@@ -281,6 +286,7 @@ public class UserController extends Controller {
                     session.put("username", username);
                     session.put("email",email);
                     session.put("userid", ret.get("userid").asText());
+                    session.put("privilege", privilege);
 
                     System.out.println("In session: "+session.get("username") + session.get("email"));
                     return GO_HOME;

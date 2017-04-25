@@ -37,6 +37,8 @@ public class User extends Model {
 
     public String security_answer2;
 
+    public String privilege;
+
     public static Find<Long,User> find = new Find<Long,User>(){};
 
     private static HashMap<String, String> temporary_pwds = new HashMap<String, String>();
