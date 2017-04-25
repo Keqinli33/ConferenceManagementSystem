@@ -74,12 +74,57 @@ public class ShowPaperController extends Controller{
     /**
      * Handle profile deletion
      */
+//    public static Map<String,String> options() {
+//
+//        Http.Session session = Http.Context.current().session();
+//        String username = session.get("username");
+//
+//        CompletionStage<WSResponse> resofconf = ws.url("http://localhost:9000/conference/" + username ).get();
+//        Set<String> set = new HashSet<>();
+//
+//        resofconf.thenApplyAsync(response -> {
+//            ArrayNode ret =(ArrayNode) response.asJson();
+//            System.out.println("here is ");
+//            Set<String> confSet = new HashSet<>();
+//            for (JsonNode res1 : ret) {
+//                confSet.add(res1.get("title").asText());
+//            }
+//            set = confSet;
+//        });
+//        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+//        for(String s : set) {
+//            options.put(s, s);
+//        }
+//        return options;
+//    }
+
     public CompletionStage<Result> showMyPaper() {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
         //Paper paperInfo = paperForm.get();
         Paper paperInfo = new Paper();
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
+
+//        CompletionStage<WSResponse> resofconf = ws.url("http://localhost:9000/conference/" + username ).get();
+//        Set<String> set = new HashSet<>();
+//
+//        CompletionStage<Result> resultconf =resofconf.thenApplyAsync(response -> {
+//            ArrayNode ret =(ArrayNode) response.asJson();
+//            System.out.println("here is ");
+//            Set<String> confSet = new HashSet<>();
+//            for (JsonNode res1 : ret) {
+//                confSet.add(res1.get("title").asText());
+//            }
+//            set = confSet;
+//            return ok("OK");
+//        });
+//
+        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        String[] conferences= session.get("conferences").split("#");
+        for(String s : conferences) {
+            options.put("All My Conference","All My Conference");
+            options.put(s, s);
+        }
 
         JsonNode json = Json.newObject()
                 .put("username", username);
@@ -139,7 +184,7 @@ public class ShowPaperController extends Controller{
                     res.add(savedPaper);
                 }
                 return ok(
-                        views.html.showmypaper.render(paperForm,res,session));
+                        views.html.showmypaper.render(paperForm,res,session, options,"All My Conference"));
 
         });
 
@@ -151,6 +196,28 @@ public class ShowPaperController extends Controller{
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
 
+
+
+//        CompletionStage<WSResponse> resofconf = ws.url("http://localhost:9000/conference/" + username ).get();
+//        Set<String> set = new HashSet<>();
+//
+//        CompletionStage<Result> resultconf =resofconf.thenApplyAsync(response -> {
+//            ArrayNode ret =(ArrayNode) response.asJson();
+//            System.out.println("here is ");
+//            Set<String> confSet = new HashSet<>();
+//            for (JsonNode res1 : ret) {
+//                confSet.add(res1.get("title").asText());
+//            }
+//            set = confSet;
+//            return ok("OK");
+//        });
+
+        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        String[] conferences= session.get("conferences").split("#");
+        for(String s : conferences) {
+            options.put("All My Conference","All My Conference");
+            options.put(s, s);
+        }
         JsonNode json = Json.newObject()
                 .put("username", username);
         CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/paper/" + username).get();
@@ -211,7 +278,7 @@ public class ShowPaperController extends Controller{
                 }
             }
             return ok(
-                    views.html.showmypaper.render(paperForm,res,session));
+                    views.html.showmypaper.render(paperForm,res,session,options,conferencename));
 
         });
 

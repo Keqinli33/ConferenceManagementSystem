@@ -1,4 +1,4 @@
-@(paperForm: Form[Paper])
+@(paperForm: Form[Paper], conference: String)
 
 @import helper._
 
@@ -9,7 +9,7 @@
     <h1>Submit a paper</h1>
     <h3 style="color: blue;">Please submit your abstract using the form below. Note that all the fields are mandatory. After submission you will receive a password that will allow you to access your paper in the system, upload the file of your paper, and modify the metadata associated with this paper.</h3>
     
-    @b3.form(routes.PaperController.save()) {
+    @b3.form(routes.PaperController.save(conference)) {
 
             @b3.text(paperForm("title"), '_label -> "Title", '_help -> "")
             @b3.text(paperForm("topic"), '_label -> "Topic", '_help -> "")

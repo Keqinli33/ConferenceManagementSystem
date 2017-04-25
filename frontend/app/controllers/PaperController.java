@@ -205,12 +205,19 @@ public class PaperController extends Controller {
 //        return GO_HOME;
     }
     public Result create() {
-        Form<Paper> paperForm = formFactory.form(Paper.class);
+//        Form<Paper> paperForm = formFactory.form(Paper.class);
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        Paper newPaper = paperForm.get();
+        String conf = newPaper.conference;
+        if(conf.equals("All My Conference")){
+            return GO_HOME;
+        }else {
         return ok(
-                views.html.createPaper.render(paperForm)
+                views.html.createPaper.render(paperForm, conf)
         );
+        }
     }
-    public CompletionStage<Result> save() {
+    public CompletionStage<Result> save(String conf) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
 //        if(paperForm.hasErrors()) {
 //            return badRequest(views.html.createPaper.render(paperForm));
@@ -277,8 +284,10 @@ public class PaperController extends Controller {
                 .put("format", newPaper.format)
                 .put("papersize", newPaper.papersize)
                 .put("date", newPaper.date)
-                .put("conference", newPaper.conference)
-                .put("file", newPaper.file);
+                .put("conference", conf)
+                .put("file", newPaper.file)
+                .put("reviewerid",session.get("userid"))
+                .put("reviewstatus", "assigned");
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers").post(json);
         return res.thenApply(response -> {
@@ -310,69 +319,70 @@ public class PaperController extends Controller {
                 views.html.selectFile.render(id, paperForm)
         );
     }
-    public Result selectFile(Long id) {
+    public CompletionStage<Result> selectFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-//        if(paperForm.hasErrors()) {
-//            return badRequest(views.html.editPaper.render(id, paperForm));
-//        }
+
         Paper savedPaper = Paper.find.byId(id);
         System.out.println("begin upload file");
 //        if (savedPaper != null) {
             System.out.println("upload file");
             Http.MultipartFormData body = request().body().asMultipartFormData();
-            if(body == null)
-            {
-                return badRequest("Invalid request, required is POST with enctype=multipart/form-data.");
-            }
 
             Http.MultipartFormData.FilePart<File> filePart = body.getFile("file");
-            if(filePart == null)
-            {
-                return badRequest("Invalid request, no file has been sent.");
-            }
 
-            // getContentType can return null, so we check the other way around to prevent null exception
-//            if(!"application/pdf".equalsIgnoreCase(filePart.getContentType()))
-//            {
-//                return badRequest("Invalid request, only PDFs are allowed.");
-//            }
             try {
                 File file = filePart.getFile();
-                File destination = new File("/Users/huiliangling/uploads", file.getName());
+                File destination = new File("/Users/shuang/uploads", String.valueOf(id));
                 FileUtils.moveFile(file, destination);
                 savedPaper.ifsubmit = "Y";
                 savedPaper.format = filePart.getContentType();
                 savedPaper.papersize = String.valueOf(destination.length());
                 System.out.println("File length  " + destination.length());
-                savedPaper.update();
+                savedPaper.ifsubmit = "Y";
+                savedPaper.format = filePart.getContentType();
+                System.out.println("file size" + destination.length());
+                savedPaper.papersize = String.valueOf(destination.length());
+
+
             } catch (Exception e){
                 e.printStackTrace();
             }
-//                savedPaper.ifsubmit = "Y";
-//                savedPaper.format = filePart.getContentType();
-//                savedPaper.papersize = String.valueOf(file.length());
-//                savedPaper.update();
+
+        JsonNode json = Json.newObject()
+                .put("ifsubmit", savedPaper.ifsubmit)
+                .put("format", savedPaper.format)
+                .put("papersize", savedPaper.papersize);
+        Http.Session session = Http.Context.current().session();
 
 
-//        }
-        try {
-            Email email = new SimpleEmail();
-            email.setHostName("smtp.googlemail.com");
-            email.setSmtpPort(465);
-            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
-            email.setSSLOnConnect(true);
-            email.setFrom("socandrew2017@gmail.com");
-            email.setSubject("Paper submitted");
-            email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
-            Http.Session session = Http.Context.current().session();
-            String emailto = session.get("email");
-            email.addTo(emailto);
-            email.send();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        flash("success", "Paper File has been submitted");
-        return GO_HOME;
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/papers/"+id +"/upload").post(json);
+        return res.thenApplyAsync(response -> {
+            String ret = response.getBody();
+            System.out.println("response from update "+ret);
+            if ("update successfully".equals(ret)) {
+                try {
+                    Email email = new SimpleEmail();
+                    email.setHostName("smtp.googlemail.com");
+                    email.setSmtpPort(465);
+                    email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+                    email.setSSLOnConnect(true);
+                    email.setFrom("socandrew2017@gmail.com");
+                    email.setSubject("Paper submitted");
+                    email.setMsg("Dear Sir/Madam, your paper is successfully submitted");
+                    String emailto = session.get("email");
+                    email.addTo(emailto);
+                    email.send();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                return GO_HOME;
+            }else{
+                return GO_HOME;
+            }
+
+        });
+//        return ok(GO_HOME);
     }
 
     private static void SendEmail(String emailto, String content){

@@ -52,7 +52,7 @@ public class ShowConferenceController extends Controller{
      * This result directly redirect to application home.
      */
     public Result GO_HOME = Results.redirect(
-            routes.ShowPaperController.showMyPaper()
+            routes.ShowConferenceController.showMyConference()
     );
 
     /**
@@ -81,12 +81,13 @@ public class ShowConferenceController extends Controller{
             System.out.println("here is "+response);
             JsonNode arr = response.asJson();
             ArrayNode ret = (ArrayNode) arr;
-
-                List<Conference> res = new ArrayList<Conference>();
+            Set<String> confSet = new HashSet<>();
+            List<Conference> res = new ArrayList<Conference>();
                 for(JsonNode res1 : ret){
                     Conference savedConference = new Conference();
                     savedConference.id = Long.parseLong(res1.get("id").asText());
                     savedConference.title = res1.get("title").asText();
+                    confSet.add(res1.get("title").asText());
                     savedConference.location = res1.get("location").asText();
                     savedConference.date = res1.get("date").asText();
                     savedConference.status = res1.get("status").asText();
@@ -94,6 +95,13 @@ public class ShowConferenceController extends Controller{
                     savedConference.ifadmin = res1.get("ifadmin").asText();
                     res.add(savedConference);
                 }
+                StringBuilder sb = new StringBuilder();
+            for(String s : confSet) {
+                sb.append(s + "#");
+            }
+//            sb.setLength(sb.length() - 1);
+            session.put("conferences", sb.toString());
+            System.out.println(session.get("conferences"));
                 return ok(
                         views.html.showmyconference.render(conferenceForm,res,session));
 
@@ -117,15 +125,17 @@ public class ShowConferenceController extends Controller{
         CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/conference/" + username).get();
 //        List<Paper> restemp =new Arraylist<Paper>();
         return resofrest.thenApplyAsync(response -> {
-            System.out.println("here is "+response);
+
             JsonNode arr = response.asJson();
             ArrayNode ret = (ArrayNode) arr;
-
+            System.out.println("************* "+ret);
+            System.out.println("###### "+keyword);
             List<Conference> res = new ArrayList<Conference>();
             for(JsonNode res1 : ret){
                 Conference savedConference = new Conference();
+
                 if(searchstatus.equals("All Status")){
-                    if(res1.get("title").asText().contains(keyword))
+                    if(res1.get("title").asText().contains(keyword)){
                         savedConference.id = Long.parseLong(res1.get("id").asText());
                     savedConference.title = res1.get("title").asText();
                     savedConference.location = res1.get("location").asText();
@@ -134,9 +144,10 @@ public class ShowConferenceController extends Controller{
                     savedConference.ifreviewer = res1.get("ifreviewer").asText();
                     savedConference.ifadmin = res1.get("ifadmin").asText();
                     res.add(savedConference);
+                    }
                 }
                 else if(res1.get("status").asText().equals(searchstatus)){
-                    if(res1.get("title").asText().contains(keyword))
+                    if(res1.get("title").asText().contains(keyword)){
                 savedConference.id = Long.parseLong(res1.get("id").asText());
                 savedConference.title = res1.get("title").asText();
                 savedConference.location = res1.get("location").asText();
@@ -145,6 +156,7 @@ public class ShowConferenceController extends Controller{
                 savedConference.ifreviewer = res1.get("ifreviewer").asText();
                 savedConference.ifadmin = res1.get("ifadmin").asText();
                 res.add(savedConference);
+                    }
                 }
 
             }

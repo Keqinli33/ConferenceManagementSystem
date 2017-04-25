@@ -78,7 +78,7 @@ public class ReviewerController extends Controller{
 
 
     public Result GO_HOME = Results.redirect(
-            routes.ShowPaperController.showMyPaper()
+            routes.ShowConferenceController.showMyConference()
     );
 
 
@@ -141,6 +141,14 @@ public class ReviewerController extends Controller{
     public CompletionStage<Result> enterReviewPaper(String confName){
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
+
+        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        String[] conferences= session.get("conferences").split("#");
+        for(String s : conferences) {
+            options.put("All My Conference","All My Conference");
+            options.put(s, s);
+        }
+
 //        System.out.println("Enter profile page user id is "+userid.toString());
 //        Profile profile = Profile.find.byId(userid);
 
@@ -157,9 +165,11 @@ public class ReviewerController extends Controller{
 
             List<Paper> list = new ArrayList();
 
+            Form<Paper> paperForm = formFactory.form(Paper.class);
+
             if(ret == null){
                 return ok(
-                        views.html.reviewPaper.render(list)
+                        views.html.reviewPaper.render(paperForm, list, options, confName)
                 );
             }
 
@@ -327,8 +337,10 @@ public class ReviewerController extends Controller{
             }
 
 
+
+
             return ok(
-                    views.html.reviewPaper.render(list)
+                    views.html.reviewPaper.render(paperForm, list, options, confName)
             );
         });
 
@@ -452,12 +464,12 @@ public class ReviewerController extends Controller{
         });
     }
 
-    public Result download(String filename){
+    public Result download(Long filename){
             System.out.println("downloading...");
             response().setContentType("application/x-download");
             String cmd = "attachment; filename="+filename;
             response().setHeader("Content-disposition",cmd);
-            String path = "/Users/sxh/Desktop/"+filename;
+            String path = "/Users/shuang/uploads/"+Long.toString(filename);
             //return ok(new File("/User/huiliangling/uploads/test.txt"));
             return ok(new java.io.File(path));
 

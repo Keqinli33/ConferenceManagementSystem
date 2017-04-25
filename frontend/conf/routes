@@ -46,7 +46,7 @@ POST     /changePwd                  controllers.UserController.changepwd()
 # Submit paper
 
 GET  /papers/new                        controllers.PaperController.create()
-POST  /papers                           controllers.PaperController.save()
+POST  /papers                           controllers.PaperController.save(conf:String)
 
 #Edit paper
 GET     /papers/:id                     controllers.PaperController.edit(id:Long)
@@ -66,7 +66,7 @@ POST  /conference/search               controllers.ShowConferenceController.sear
 GET     /review                    controllers.ReviewerController.enterReviewConf()
 GET     /review/paper              controllers.ReviewerController.enterReviewPaper(confName:String)
 
-GET     /download                   controllers.ReviewerController.download(filename:String)
+GET     /download                   controllers.ReviewerController.download(filename:Long)
 GET     /editreview                     controllers.ReviewerController.review(review:String, paperid:Long)
 POST    /editreview                     controllers.ReviewerController.updateReview(paperid:Long)
 GET     /showreview                     controllers.ReviewerController.showreview(review:String)

@@ -55,7 +55,7 @@ public class UserController extends Controller {
     }
 
     public Result GO_HOME = Results.redirect(
-            routes.ShowPaperController.showMyPaper()
+            routes.ShowConferenceController.showMyConference()
     );
 
     public Result GO_LOGIN = Results.redirect(
