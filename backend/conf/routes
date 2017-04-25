@@ -66,3 +66,8 @@ GET    /review/conf/:id                controllers.ReviewerController.getconf(id
 GET    /review/paper/:id/:conf          controllers.ReviewerController.getpapers(id:Long, conf:String)
 
 POST    /updatereview                   controllers.ReviewerController.updateReview()
+
+GET      /emailTemplate/:username       controllers.EmailTemplateController.getEmailTemplate(username:String)
+POST     /emailTemplate                 controllers.EmailTemplateController.updateEmailTemplate
+
+GET        /email/:username              controllers.UserController.GetEmailByUsername(username:String)

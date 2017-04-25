@@ -71,3 +71,6 @@ GET     /editreview                     controllers.ReviewerController.review(re
 POST    /editreview                     controllers.ReviewerController.updateReview(paperid:Long)
 GET     /showreview                     controllers.ReviewerController.showreview(review:String)
 GET     /printreview                    controllers.ReviewerController.printreview(review:String)
+
+GET     /emailTemplate                  controllers.EmailTemplateController.emailTemplate()
+POST    /emailTemplate                  controllers.EmailTemplateController.updateEmailTemplate()

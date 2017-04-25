@@ -343,6 +343,19 @@ public class UserController extends Controller {
         return String.format("%032x", new BigInteger(1, md.digest()));
     }
 
+    public Result GetEmailByUsername(String username)
+    {
+        User new_user = new User();
+        String email = new_user.GetEmailByUsername(username);
+        JsonNode res_json = Json.newObject()
+                .put("username", username.toString())
+                .put("email",email.toString())
+                .put("status","successful");
+
+
+        return ok(res_json);
+    }
+
 //    /**
 //     * Send temporary password for password changing
 //     * @param email
