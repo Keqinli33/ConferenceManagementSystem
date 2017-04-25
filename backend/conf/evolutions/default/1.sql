@@ -114,6 +114,7 @@ create table user (
   security_answer1              varchar(255),
   security_question2            varchar(255),
   security_answer2              varchar(255),
+  privilege                     varchar(255),
   constraint pk_user primary key (id)
 );
 

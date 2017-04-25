@@ -213,6 +213,7 @@ public class UserController extends Controller {
 
                 Session session = Http.Context.current().session();
                 Long id = new_user.GetUserID(username);
+                String privilege = new_user.GetUserPrivilege(username);
                 session.put("username",username);
                 session.put("userid",id.toString());
                 String email = new_user.GetEmailByUsername(username);
@@ -223,7 +224,8 @@ public class UserController extends Controller {
                         .put("username", username.toString())
                         .put("userid", id.toString())
                         .put("email",email.toString())
-                        .put("status","successful");
+                        .put("status","successful")
+                        .put("privilege",privilege);
 
 
                 return ok(res_json);
@@ -271,7 +273,8 @@ public class UserController extends Controller {
             User new_user = userForm.get();
             String username = new_user.username;
             String password = new_user.password;
-            System.out.println("password"+password);
+            //String priviledge = new_user.priviledge;
+            //System.out.println("password"+password);
             String email = new_user.email;
 
             //determine if the username exist (username needs to be unique)

@@ -37,6 +37,8 @@ public class User extends Model {
 
     public String security_answer2;
 
+    public String privilege;
+
     public static Find<Long,User> find = new Find<Long,User>(){};
 
     private static HashMap<String, String> temporary_pwds = new HashMap<String, String>();
@@ -120,6 +122,14 @@ public class User extends Model {
                         .eq("username", username)
                         .findList();
         return results.get(0).id;
+    }
+
+    public static String GetUserPrivilege(String username){
+        List<User> results =
+                find.where()
+                        .eq("username", username)
+                        .findList();
+        return results.get(0).privilege;
     }
 
     public static String GetEmailByUsername(String username){
