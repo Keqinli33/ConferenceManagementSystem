@@ -154,30 +154,30 @@ public class ReviewerController extends Controller{
     }
 
 
-    /**
-     * Handle the 'new profile form' submission
-     */
-    public Result save() {
-        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
-        profileForm.get().save();
-        flash("success", "Profile " + profileForm.get().title + profileForm.get().lastname + " has been created");
-        return ok("delete successfully");
-    }
-
-    /**
-     * Handle profile deletion
-     */
-    public Result delete() {
-        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
-        Profile deletedProfile = Profile.find.byId(profileForm.get().userid);
-        if(deletedProfile != null){
-            deletedProfile.delete();
-            return ok("delete successfully");
-        }
-        else{
-            return ok("you haven't create your profile yet");
-        }
-    }
+//    /**
+//     * Handle the 'new profile form' submission
+//     */
+//    public Result save() {
+//        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+//        profileForm.get().save();
+//        flash("success", "Profile " + profileForm.get().title + profileForm.get().lastname + " has been created");
+//        return ok("delete successfully");
+//    }
+//
+//    /**
+//     * Handle profile deletion
+//     */
+//    public Result delete() {
+//        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
+//        Profile deletedProfile = Profile.find.byId(profileForm.get().userid);
+//        if(deletedProfile != null){
+//            deletedProfile.delete();
+//            return ok("delete successfully");
+//        }
+//        else{
+//            return ok("you haven't create your profile yet");
+//        }
+//    }
 
     public Result updateReview(){
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
@@ -187,6 +187,19 @@ public class ReviewerController extends Controller{
         try {
             update_paper.review = paper.review;
             update_paper.reviewstatus = "reviewed";
+            update_paper.update();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return ok("successfully");
+    }
+
+    public Result changeReviewer(Long userid, Long paperid){
+        Paper update_paper = Paper.find.byId(paperid);
+        try {
+            update_paper.review = "";
+            update_paper.reviewstatus = "assigned";
+            update_paper.reviewerid = userid;
             update_paper.update();
         } catch (Exception e){
             e.printStackTrace();

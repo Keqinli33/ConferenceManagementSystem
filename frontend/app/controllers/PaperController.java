@@ -31,8 +31,11 @@ import org.apache.commons.mail.*;
 import org.apache.commons.io.FileUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import play.libs.ws.*;
 import java.util.concurrent.CompletionStage;
+import java.util.*;
+
 
 /**
  * Created by shuang on 3/29/17.
@@ -217,6 +220,55 @@ public class PaperController extends Controller {
         );
         }
     }
+
+
+    public CompletionStage<Result> assignPaper(Long paperid, Long reviewerid) {
+
+        System.out.println(reviewerid);
+        System.out.println(paperid);
+        System.out.println("-------");
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/users").get();
+        return res.thenApply(response -> {
+
+            JsonNode ret = response.asJson();
+            ArrayNode arr = (ArrayNode)ret;
+
+            List<User> list = new ArrayList();
+
+            if(ret == null){
+                return ok(
+                        views.html.assignPaper.render(list, paperid, reviewerid)
+                );
+            }
+
+            for(int i = 0; i < arr.size(); i++){
+                JsonNode node = arr.get(i);
+                User user = new User();
+                user.username = node.get("username").asText();
+                user.id = Long.parseLong(node.get("userid").asText());
+
+                list.add(user);
+            }
+
+            return ok(
+                    views.html.assignPaper.render(list, paperid, reviewerid)
+            );
+        });
+
+    }
+
+    public CompletionStage<Result> saveReviewer(Long userid, Long paperid) {
+        JsonNode json = Json.newObject()
+                .put("id", paperid);
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/new/"+userid+"/"+paperid).post(json);
+        return res.thenApply(response -> {
+
+            return GO_HOME;
+        });
+
+    }
+
     public CompletionStage<Result> save(String conf) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
 //        if(paperForm.hasErrors()) {

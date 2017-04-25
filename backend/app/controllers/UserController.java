@@ -37,6 +37,9 @@ import java.util.Random;
 import org.apache.commons.mail.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import play.libs.Json;
 /**
  * Created by Ling on 2017/3/27.
@@ -240,6 +243,27 @@ public class UserController extends Controller {
                 .put("status","error");
         return ok(res_json);
     }
+
+    /**
+     * get all users
+     */
+    public Result getUsers(){
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode arr = new ArrayNode(factory);
+
+        for(User user : User.find.all()){
+            JsonNode json = Json.newObject()
+                    .put("username", user.username)
+                    .put("userid", user.id.toString());
+            //node.put(Integer.toString(i++), json);
+            arr.add(json);
+        }
+//        System.out.println(arr);
+        JsonNode temp = (JsonNode)arr;
+
+        return ok(temp);
+    }
+
     /**
      * Register a user
      */

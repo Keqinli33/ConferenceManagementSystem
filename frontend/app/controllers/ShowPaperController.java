@@ -181,6 +181,8 @@ public class ShowPaperController extends Controller{
                     savedPaper.topic = res1.get("topic").asText();
                 savedPaper.status = res1.get("status").asText();
                 savedPaper.date = res1.get("date").asText();
+
+                    savedPaper.reviewerid = Long.parseLong(res1.get("reviewerid").asText());
                     res.add(savedPaper);
                 }
                 return ok(
@@ -274,6 +276,8 @@ public class ShowPaperController extends Controller{
                 savedPaper.topic = res1.get("topic").asText();
                 savedPaper.status = res1.get("status").asText();
                 savedPaper.date = res1.get("date").asText();
+
+                    savedPaper.reviewerid = Long.parseLong(res1.get("reviewerid").asText());
                 res.add(savedPaper);
                 }
             }

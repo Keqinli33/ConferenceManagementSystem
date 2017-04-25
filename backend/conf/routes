@@ -44,6 +44,9 @@ POST    /login                      controllers.UserController.verifyUser()
 POST    /verifyChangePwdAuth        controllers.UserController.verifyQA()
 POST     /changePwd                  controllers.UserController.changepwd()
 
+# get users
+GET     /users                      controllers.UserController.getUsers()
+
 # Submit paper
 
 #GET  /papers/new                        controllers.PaperController.create()
@@ -66,3 +69,6 @@ GET    /review/conf/:id                controllers.ReviewerController.getconf(id
 GET    /review/paper/:id/:conf          controllers.ReviewerController.getpapers(id:Long, conf:String)
 
 POST    /updatereview                   controllers.ReviewerController.updateReview()
+
+# save new reviewer
+POST    /review/new/:userid/:paperid                     controllers.ReviewerController.changeReviewer(userid:Long, paperid:Long)
