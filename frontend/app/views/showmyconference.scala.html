@@ -21,10 +21,8 @@
 
     <h1>Show My Conference</h1>
 
-    @b3.form(routes.ShowConferenceController.searchConference()) {
-
+    @b3.inline.form(routes.ShowConferenceController.searchConference()){ implicit ifc // an inline form
             @b3.select( conferenceForm("searchstatus"), options("All Status" -> "All Status", "Active" -> "Active", "Archived" -> "Archived"), '_label -> "Select")
-            <br>
             @b3.text(conferenceForm("keyword"), '_label -> "Keyword")
         <div class="actions">
             <input type="submit" value="Search" class="btn primary">

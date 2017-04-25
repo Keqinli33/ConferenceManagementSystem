@@ -52,7 +52,7 @@ POST  /papers                           controllers.PaperController.save()
 #Edit paper
 GET     /papers/:id                     controllers.PaperController.edit(id:Long)
 POST    /papers/:id                     controllers.PaperController.update(id:Long)
-
+#get all papers of a user
 GET   /paper/:username                     controllers.ShowPaperController.showMyPaper(username:String)
 #Upload paper
 #GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
@@ -60,6 +60,7 @@ GET   /paper/:username                     controllers.ShowPaperController.showM
 #get all conferences of a user
 GET   /conference/:username                     controllers.ShowConferenceController.showMyConference(username:String)
 #POST  /conference/search                controllers.ShowConferenceController.searchConference()
+
 # Reviewer page
 GET    /review/conf/:id                controllers.ReviewerController.getconf(id:Long)
 GET    /review/paper/:id/:conf          controllers.ReviewerController.getpapers(id:Long, conf:String)
