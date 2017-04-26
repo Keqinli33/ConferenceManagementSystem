@@ -44,8 +44,9 @@ POST    /verifyChangePwdAuth        controllers.UserController.verifyQA()
 POST     /changePwd                  controllers.UserController.changepwd()
 
 # Assign paper
-GET     /paper/assign/new/:paperid/:reviewerid           controllers.PaperController.assignPaper(paperid:Long, reviewerid:Long)
+GET     /paper/assign/new/:paperid           controllers.PaperController.assignPaper(paperid:Long)
 GET     /paper/assign/save/:userid/:paperid           controllers.PaperController.saveReviewer(userid:Long, paperid:Long)
+GET     /paper/assign/delete/:userid/:paperid           controllers.PaperController.deleteReviewer(userid:Long, paperid:Long)
 
 # Submit paper
 

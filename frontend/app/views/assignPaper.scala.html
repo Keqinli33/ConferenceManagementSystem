@@ -1,4 +1,4 @@
-@(userlist: List[User], paperid: Long, reviewerid: Long)
+@(userlist: List[User], paperid: Long, revieweridlist: List[Long])
 
 @import helper._
 
@@ -36,10 +36,10 @@
                         <td>@user.id</td>
                         <td>@user.username </td>
 
-                            @if(reviewerid == user.id) {
-                                <td>This is reviewer of this paper for now</td>
+                            @if(revieweridlist.contains(user.id)) {
+                                <td><a href="@routes.PaperController.deleteReviewer(user.id, paperid)">Cancel assigning to this reviewer</a></td>
                             }   else{
-                                <td><a href="@routes.PaperController.saveReviewer(user.id, paperid)">Assign</a></td>
+                                <td><a href="@routes.PaperController.saveReviewer(user.id, paperid)">Assign to this reviewer</a></td>
                             }
 
                         @*<td>Modify</td>*@

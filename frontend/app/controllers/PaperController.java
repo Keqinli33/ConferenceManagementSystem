@@ -222,11 +222,13 @@ public class PaperController extends Controller {
     }
 
 
-    public CompletionStage<Result> assignPaper(Long paperid, Long reviewerid) {
+    public CompletionStage<CompletionStage<Result>> assignPaper(Long paperid) {
 
-        System.out.println(reviewerid);
         System.out.println(paperid);
         System.out.println("-------");
+
+        List<User> userlist = new ArrayList();
+        List<Long> revieweridlist = new ArrayList();
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/users").get();
         return res.thenApply(response -> {
@@ -234,13 +236,6 @@ public class PaperController extends Controller {
             JsonNode ret = response.asJson();
             ArrayNode arr = (ArrayNode)ret;
 
-            List<User> list = new ArrayList();
-
-            if(ret == null){
-                return ok(
-                        views.html.assignPaper.render(list, paperid, reviewerid)
-                );
-            }
 
             for(int i = 0; i < arr.size(); i++){
                 JsonNode node = arr.get(i);
@@ -248,23 +243,47 @@ public class PaperController extends Controller {
                 user.username = node.get("username").asText();
                 user.id = Long.parseLong(node.get("userid").asText());
 
-                list.add(user);
+                userlist.add(user);
             }
 
-            return ok(
-                    views.html.assignPaper.render(list, paperid, reviewerid)
-            );
+            CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/paper/reviewers/"+paperid).get();
+            return res2.thenApply(response2 -> {
+                JsonNode ret2 = response2.asJson();
+                ArrayNode arr2 = (ArrayNode)ret2;
+
+
+                for(int i = 0; i < arr.size(); i++){
+                    JsonNode node = arr.get(i);
+
+                    revieweridlist.add(Long.parseLong(node.get("reviewerid").asText()));
+                }
+
+                return ok(
+                        views.html.assignPaper.render(userlist, paperid, revieweridlist)
+                );
+            });
+
+
         });
 
     }
 
-    public CompletionStage<Result> saveReviewer(Long userid, Long paperid) {
+    public Result saveReviewer(Long userid, Long paperid) {
         JsonNode json = Json.newObject()
                 .put("id", paperid);
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/new/"+userid+"/"+paperid).post(json);
-        return res.thenApply(response -> {
+        res.thenAccept(response -> {
+            return ok("successfully");
+        });
 
-            return GO_HOME;
+    }
+
+    public Result deleteReviewer(Long userid, Long paperid) {
+        JsonNode json = Json.newObject()
+                .put("id", paperid);
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/delete/"+userid+"/"+paperid).post(json);
+        res.thenAccept(response -> {
+            return ok("successfully");
         });
 
     }

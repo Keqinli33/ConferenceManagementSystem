@@ -195,15 +195,54 @@ public class ReviewerController extends Controller{
     }
 
     public Result changeReviewer(Long userid, Long paperid){
-        Paper update_paper = Paper.find.byId(paperid);
+        Review update_paper = new Review();
         try {
-            update_paper.review = "";
+            update_paper.paperid = paperid;
             update_paper.reviewstatus = "assigned";
             update_paper.reviewerid = userid;
-            update_paper.update();
+            update_paper.save();
         } catch (Exception e){
             e.printStackTrace();
         }
         return ok("successfully");
     }
+
+    public Result deleteReviewer(Long userid, Long paperid){
+        List<Review> reviewList = Review.find.where().eq("paperid",paperid)
+                .eq("reviewerid",userid)
+                .findList();
+        try {
+            for(Review review : reviewList){
+                review.delete();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return ok("successfully");
+    }
+
+    public Result getReviewers(Long paperid){
+        List<Review> reviewList = Review.find.where()
+                .eq("paperid",paperid)
+                .eq("iscriteria","NA")
+                .findList();
+
+        int i = 0;
+        //ObjectNode node = Json.newObject();
+
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode arr = new ArrayNode(factory);
+
+        for(Review review : reviewList){
+            JsonNode json = Json.newObject()
+                    .put("reviewerid", review.reviewerid);
+
+            arr.add(json);
+        }
+//        System.out.println(arr);
+        JsonNode temp = (JsonNode)arr;
+
+        return ok(temp);
+    }
+
 }

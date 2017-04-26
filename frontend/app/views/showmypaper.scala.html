@@ -76,7 +76,7 @@
                         <td>
                             <a href="@routes.PaperController.edit(paper.id)">Modify</a>
                             @if(session.get("privilege").toString == "chair") {
-                                <a href="@routes.PaperController.assignPaper(paper.id, paper.reviewerid)">Assign</a>
+                                <a href="@routes.PaperController.assignPaper(paper.id)">Assign</a>
                             }
                         </td>
                         @*<td>Modify</td>*@
