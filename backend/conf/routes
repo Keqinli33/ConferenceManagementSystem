@@ -72,3 +72,6 @@ POST    /updatereview                   controllers.ReviewerController.updateRev
 
 # save new reviewer
 POST    /review/new/:userid/:paperid                     controllers.ReviewerController.changeReviewer(userid:Long, paperid:Long)
+
+# show author paper
+GET     /author/paper                   controllers.PaperController.showAuthorPaper()

@@ -27,9 +27,16 @@ import java.io.File;
 import org.apache.commons.mail.*;
 import org.apache.commons.io.FileUtils;
 import com.fasterxml.jackson.databind.JsonNode;
-import play.libs.Json;
+
 import play.libs.ws.*;
 import java.util.concurrent.CompletionStage;
+
+import java.util.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import play.libs.Json;
 /**
  * Created by shuang on 3/29/17.
  */
@@ -99,7 +106,11 @@ public class PaperController extends Controller {
                 .put("candidate", newPaper.candidate)
                 .put("volunteer", newPaper.volunteer)
                 .put("paperabstract", newPaper.paperabstract)
-                .put("topic", newPaper.topic);
+                .put("topic", newPaper.topic)
+                .put("reviewstatus", newPaper.reviewstatus)
+                .put("status", newPaper.status)
+                .put("reviewerid", newPaper.reviewerid)
+                .put("review", newPaper.review);
 
         return ok(json);
     }
@@ -289,5 +300,142 @@ public class PaperController extends Controller {
 //            e.printStackTrace();
 //        }
 //    }
+
+    /**
+     * Get authors and papers
+     */
+    public Result showAuthorPaper() {
+
+        List<Paper> paperList = Paper.find.all();
+
+        Map<String, String> affmap = new HashMap<String, String>();
+        affmap.put(" ", "Just for space");
+        Map<String, List<Paper>> papermap = new HashMap<String, List<Paper>>();
+
+        for(Paper paper : paperList){
+            if(!affmap.containsKey(paper.firstname1 + " " + paper.lastname1)){
+                affmap.put(paper.firstname1 + " " + paper.lastname1, paper.affilation1);
+                List<Paper> tempList = new ArrayList<Paper>();
+                tempList.add(paper);
+                papermap.put(paper.firstname1 + " " + paper.lastname1, tempList);
+            }
+            else if(!(paper.firstname1 + " " + paper.lastname1).equals(" ")){
+                List<Paper> tempList = papermap.get(paper.firstname1 + " " + paper.lastname1);
+                tempList.add(paper);
+                papermap.put(paper.firstname1 + " " + paper.lastname1, tempList);
+            }
+
+            if(!affmap.containsKey(paper.firstname2 + " " + paper.lastname2)){
+                affmap.put(paper.firstname2 + " " + paper.lastname2, paper.affilation2);
+                List<Paper> tempList = new ArrayList<Paper>();
+                tempList.add(paper);
+                papermap.put(paper.firstname2 + " " + paper.lastname2, tempList);
+            }
+            else if(!(paper.firstname2 + " " + paper.lastname2).equals(" ")){
+                List<Paper> tempList = papermap.get(paper.firstname2 + " " + paper.lastname2);
+                tempList.add(paper);
+                papermap.put(paper.firstname2 + " " + paper.lastname2, tempList);
+            }
+
+            if(!affmap.containsKey(paper.firstname3 + " " + paper.lastname3)){
+                affmap.put(paper.firstname3 + " " + paper.lastname3, paper.affilation3);
+                List<Paper> tempList = new ArrayList<Paper>();
+                tempList.add(paper);
+                papermap.put(paper.firstname3 + " " + paper.lastname3, tempList);
+            }
+            else if(!(paper.firstname3 + " " + paper.lastname3).equals(" ")){
+                List<Paper> tempList = papermap.get(paper.firstname3 + " " + paper.lastname3);
+                tempList.add(paper);
+                papermap.put(paper.firstname3 + " " + paper.lastname3, tempList);
+            }
+
+            if(!affmap.containsKey(paper.firstname4 + " " + paper.lastname4)){
+                affmap.put(paper.firstname4 + " " + paper.lastname4, paper.affilation4);
+                List<Paper> tempList = new ArrayList<Paper>();
+                tempList.add(paper);
+                papermap.put(paper.firstname4 + " " + paper.lastname4, tempList);
+            }
+            else if(!(paper.firstname4 + " " + paper.lastname4).equals(" ")){
+                List<Paper> tempList = papermap.get(paper.firstname4 + " " + paper.lastname4);
+                tempList.add(paper);
+                papermap.put(paper.firstname4 + " " + paper.lastname4, tempList);
+            }
+
+            if(!affmap.containsKey(paper.firstname5 + " " + paper.lastname5)){
+                affmap.put(paper.firstname5 + " " + paper.lastname5, paper.affilation5);
+                List<Paper> tempList = new ArrayList<Paper>();
+                tempList.add(paper);
+                papermap.put(paper.firstname5 + " " + paper.lastname5, tempList);
+            }
+            else if(!(paper.firstname5 + " " + paper.lastname5).equals(" ")){
+                List<Paper> tempList = papermap.get(paper.firstname5 + " " + paper.lastname5);
+                tempList.add(paper);
+                papermap.put(paper.firstname5 + " " + paper.lastname5, tempList);
+            }
+
+            if(!affmap.containsKey(paper.firstname6 + " " + paper.lastname6)){
+                affmap.put(paper.firstname6 + " " + paper.lastname6, paper.affilation6);
+                List<Paper> tempList = new ArrayList<Paper>();
+                tempList.add(paper);
+                papermap.put(paper.firstname6 + " " + paper.lastname6, tempList);
+            }
+            else if(!(paper.firstname6 + " " + paper.lastname6).equals(" ")){
+                List<Paper> tempList = papermap.get(paper.firstname6 + " " + paper.lastname6);
+                tempList.add(paper);
+                papermap.put(paper.firstname6 + " " + paper.lastname6, tempList);
+            }
+
+            if(!affmap.containsKey(paper.firstname7 + " " + paper.lastname7)){
+                affmap.put(paper.firstname7 + " " + paper.lastname7, paper.affilation7);
+                List<Paper> tempList = new ArrayList<Paper>();
+                tempList.add(paper);
+                papermap.put(paper.firstname7 + " " + paper.lastname7, tempList);
+            }
+            else if(!(paper.firstname7 + " " + paper.lastname7).equals(" ")){
+                List<Paper> tempList = papermap.get(paper.firstname7 + " " + paper.lastname7);
+                tempList.add(paper);
+                papermap.put(paper.firstname7 + " " + paper.lastname7, tempList);
+            }
+        }
+
+        System.out.println("this is middle----------");
+
+
+        int i = 0;
+        //ObjectNode node = Json.newObject();
+
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode arr = new ArrayNode(factory);
+
+        for(Map.Entry<String, List<Paper>> entry : papermap.entrySet()){
+            String key = entry.getKey();
+            if(key.equals("null null"))     continue;
+            System.out.println(key);
+
+            String paperstr = "";
+
+            ArrayNode temparr = new ArrayNode(factory);
+            for(Paper paper : entry.getValue()){
+                paperstr += paper.id + "#";
+//                JsonNode json = Json.newObject().put("paperid", paper.id);
+//                temparr.add(json);
+//                System.out.println(json);
+            }
+
+            JsonNode json = Json.newObject()
+                    .put("author", key)
+                    .put("affiliation", affmap.get(key))
+                    .put("papers", paperstr);
+            //node.put(Integer.toString(i++), json);
+            System.out.println("-----");
+            System.out.println(json);
+            System.out.println("-----");
+            arr.add(json);
+        }
+
+        JsonNode temp = (JsonNode)arr;
+
+        return ok(temp);
+    }
 
 }

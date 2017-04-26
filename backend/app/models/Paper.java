@@ -75,7 +75,7 @@ public class Paper extends Model {
 
 
     public String reviewstatus;
-    public long reviewerid;
+    public Long reviewerid;
     public String review;
 
     public String date;
