@@ -1,0 +1,112 @@
+@(id:Long, criteriaList: List[Criteria], criteriaForm: Form[Criteria], tempCriteria: Criteria, isModify: Boolean)
+
+@import helper._
+@import b3.vertical.fieldConstructor
+
+@main {
+  <table border=0 cellpadding=0 cellspacing=0 width="100%" style="background: #0064cd"><tr>
+    <td width="60%">
+      <div align="left"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif"><strong><em>Conference Management System</em></strong></font></div>
+    </td>
+    <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/conference'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Conferences</font></div></td>
+    <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/paper'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Paper</font></div></td>
+    <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/review'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Review</font></div></td>
+    <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/profile'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Profile</font></div></td>
+    <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/verifyChangePwdAuth'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Change Password</font></div></td>
+    <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/logout'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Logout</font></div></td>
+
+  </tr>
+  </table>
+
+  <h1>Conference Administration tasks: Criteria</h1>
+@if(isModify == true){
+  @b3.form(routes.CriteriaController.update(id)){
+    <h3>Criteria</h3>
+    @b3.text(criteriaForm("label"), '_label -> "label",'value -> tempCriteria.label)
+    @b3.text(criteriaForm("explanations"), '_label -> "explanations",'value -> tempCriteria.explanations)
+    @b3.text(criteriaForm("weight"), '_label -> "weight",'value -> tempCriteria.weight)
+
+    <div class="actions">
+      <input type="submit" value="Modify" class="btn primary"> or
+      <a href="@routes.CriteriaController.update(id)" class="btn">Modify</a>
+    </div>
+  }
+
+  @b3.form(routes.CriteriaController.retriveAllCriteria()){
+
+      <fieldset>
+        <table class="mycriteria zebra-striped">
+          <thead>
+            <tr>
+              <th>label</th>
+              <th>explanations</th>
+              <th>weight</th>
+              <th>Modify</th>
+              <th>delete</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          @for(criteria <- criteriaList) {
+            <tr>
+              <td>@criteria.label</td>
+              <td>@criteria.explanations</td>
+              <td>@criteria.weight</td>
+              <td><a href="@routes.CriteriaController.edit(criteria.id)">Modify</a></td>
+              <td><a href="@routes.CriteriaController.deleteCriteria(criteria.id)">Delete</a></td>
+            </tr>
+          }
+
+          </tbody>
+        </table>
+
+      </fieldset>
+  }
+
+
+}else{
+  @b3.form(routes.CriteriaController.createCriteria()){
+    <h3>Criteria</h3>
+    @b3.text(criteriaForm("label"), '_label -> "label",'_help -> "")
+    @b3.text(criteriaForm("explanations"), '_label -> "explanations",'_help -> "")
+    @b3.text(criteriaForm("weight"), '_label -> "weight",'_help -> "")
+
+    <div class="actions">
+      <input type="submit" value="Insert" class="btn primary"> or
+      <a href="@routes.CriteriaController.createCriteria()" class="btn">Insert</a>
+    </div>
+  }
+
+  @b3.form(routes.CriteriaController.retriveAllCriteria()){
+
+    <fieldset>
+      <table class="mycriteria zebra-striped">
+        <thead>
+          <tr>
+            <th>label</th>
+            <th>explanations</th>
+            <th>weight</th>
+            <th>Modify</th>
+            <th>delete</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        @for(criteria <- criteriaList) {
+          <tr>
+            <td>@criteria.label</td>
+            <td>@criteria.explanations</td>
+            <td>@criteria.weight</td>
+            <td><a href="@routes.CriteriaController.edit(criteria.id)">Modify</a></td>
+            <td><a href="@routes.CriteriaController.deleteCriteria(criteria.id)">Delete</a></td>
+          </tr>
+        }
+
+        </tbody>
+      </table>
+
+    </fieldset>
+  }
+}
+
+}

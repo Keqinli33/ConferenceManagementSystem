@@ -32,6 +32,14 @@ create table conference (
   constraint pk_conference primary key (id)
 );
 
+create table criteria (
+  id                            bigint auto_increment not null,
+  label                         varchar(255),
+  explanations                  varchar(255),
+  weight                        varchar(255),
+  constraint pk_criteria primary key (id)
+);
+
 create table email_template (
   id                            bigint auto_increment not null,
   pcchair_name                  varchar(255),
@@ -139,6 +147,8 @@ drop table if exists company;
 drop table if exists computer;
 
 drop table if exists conference;
+
+drop table if exists criteria;
 
 drop table if exists email_template;
 

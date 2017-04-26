@@ -76,3 +76,9 @@ GET     /emailTemplate                  controllers.EmailTemplateController.emai
 POST    /emailTemplate                  controllers.EmailTemplateController.updateEmailTemplate()
 
 GET     /admin                          controllers.AdminController.adminPage()
+
+GET    /criteria/:id                controllers.CriteriaController.edit(id:Long)
+GET    /criteria/deleting/:id          controllers.CriteriaController.deleteCriteria(id:Long)
+GET     /criterias/all                   controllers.CriteriaController.retriveAllCriteria()
+POST    /criteria/:id               controllers.CriteriaController.update(id:Long)
+POST   /criteria                      controllers.CriteriaController.createCriteria()

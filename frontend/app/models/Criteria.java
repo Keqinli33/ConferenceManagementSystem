@@ -20,7 +20,7 @@ public class Criteria extends Model {
     public String explanations;
     public String weight;
 
-    public static Finder<Long,Criteria> find = new Finder<Long,Criteria>(Criteria.class);
+    public static Find<Long,Criteria> find = new Find<Long,Criteria>(){};
 
     public static List<Criteria> GetMyCriteria(Long criteriaId){
         List<Criteria> results =

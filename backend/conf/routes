@@ -71,3 +71,19 @@ GET      /emailTemplate/:username       controllers.EmailTemplateController.getE
 POST     /emailTemplate                 controllers.EmailTemplateController.updateEmailTemplate
 
 GET        /email/:username              controllers.UserController.GetEmailByUsername(username:String)
+
+#get criteria content
+GET    /criteria/:id                  controllers.CriteriaController.edit(id:Long)
+#update criteria content
+POST   /criteria/:id                  controllers.CriteriaController.update(id:Long)
+# create a criteria
+POST   /criteria                      controllers.CriteriaController.createCriteria()
+#delete criteria
+GET    /criteria/deleting/:id            controllers.CriteriaController.deleteCriteria(id:Long)
+#retrive all criteria
+GET /criterias/all                     controllers.CriteriaController.retriveAll()
+
+
+
+
+
