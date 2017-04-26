@@ -1,0 +1,63 @@
+@()
+
+@import helper._
+
+@import b3.vertical.fieldConstructor
+<style>
+        table, th, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+</style>
+@main {
+    <table border=0 cellpadding=0 cellspacing=0 width="100%" style="background: #0064cd"><tr>
+        <td width="60%">
+            <div align="left"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif"><strong><em>Conference Management System</em></strong></font></div>
+        </td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/conference'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Conferences</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/paper'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Paper</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/review'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Review</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/profile'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Profile</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/verifyChangePwdAuth'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Change Password</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/logout'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Logout</font></div></td>
+
+    </tr>
+    </table>
+
+    <h3>administrative tasks</h3>
+    <table style="width:100%; border: 1px solid black">
+        <tr>
+            <td><a href='/conference'>Configure system</a></td>
+            <td colspan="2"><a href='/conference'>Program Committee</a></td>
+        </tr>
+        <tr>
+            <td><a href='/conference'>Research topics</a></td>
+            <td><a href='/conference'>Criteria</a></td>
+            <td><a href='/conference'>Review questions</a></td>
+        </tr>
+        <tr>
+            <td><a href='/conference'>Status code</a></td>
+            <td><a href='/conference'>Close/Open submission phase</a></td>
+            <td><a href='/conference'>Logo setting</a></td>
+        </tr>
+        <tr>
+            <td><a href='/conference'>Email template management</a></td>
+            <td><a href='/conference'>Submit a paper on behalf of author</a></td>
+            <td><a href='/conference'>Download papers submitted</a></td>
+        </tr>
+    </table>
+
+    <br>
+    <h3>PC Chair tasks</h3>
+    <table style="width:100%; border: 1px solid black">
+        <tr>
+            <td><a href='/conference'>List of submitted papers</a></td>
+            <td colspan="2"><a href='/conference'>manual assignment - check and modify</a></td>
+        </tr>
+        <tr>
+            <td><a href='/conference'>List of authors</a></td>
+            <td><a href='/conference'>Review state</a></td>
+            <td><a href='/conference'>Send reminder to reviewers</a></td>
+        </tr>
+    </table>
+}
