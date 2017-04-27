@@ -19,15 +19,10 @@
     </tr>
     </table>
 
-    <h1>Submission Phase</h1>
+    <h1>Paper Submission</h1>
     @b3.form(routes.configSysController.update()) {
 
-        @if(phase == "OPEN") {
-            <a class="btn success" id="Close" href="@routes.configSysController.close()">Close the submission phase</a>
-        } else {
-            <a class="btn success" id="Open" href="@routes.configSysController.open()">Open the submission phase</a>
-
-        }
+        The Submission is closed.
 
 
     }

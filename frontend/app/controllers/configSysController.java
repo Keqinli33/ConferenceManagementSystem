@@ -61,7 +61,9 @@ public class configSysController extends Controller {
     public configSysController(FormFactory formFactory) {
         this.formFactory = formFactory;
     }
-
+    public Result GO_HOME = Results.redirect(
+            routes.configSysController.update()
+    );
     public CompletionStage<Result> enterConfigSystem(){
         Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class);
         Session session = Http.Context.current().session();
@@ -178,4 +180,73 @@ public class configSysController extends Controller {
         });
     }
 
+    public CompletionStage<Result> update(){
+        Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class);
+        Session session = Http.Context.current().session();
+        String conf_title = session.get("conferenceinfo");
+
+        String conf_title_url = conf_title.replaceAll(" ","+");
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/confInfo/updatephase/"+conf_title_url).get();
+        return res.thenApply(response -> {
+            JsonNode ret = response.asJson();
+
+
+                ConferenceDetail oldConference = new ConferenceDetail();
+                oldConference.phase = ret.get("phase").asText();
+
+
+                System.out.println("===in get multi topic "+oldConference.canMultitopics);
+                //oldConference.title = session.get("conferenceinfo");
+                return ok(
+                        views.html.submissionphase.render(oldConference.phase)
+                );
+
+        });
+
+    }
+
+    //find original record by conference info in session
+    public CompletionStage<Result> open()throws PersistenceException {
+        Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class).bindFromRequest();
+
+
+        Session session = Http.Context.current().session();
+        String conf_title = session.get("conferenceinfo");
+
+        ConferenceDetail newProfileData = conferenceForm.get();
+
+        JsonNode json = Json.newObject()
+                .put("phase", "OPEN")
+                .put("title", conf_title);
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/editConfInfo/openphase").post(json);
+        return res.thenApply(response -> {
+            String ret = response.getBody();
+            System.out.println("here is "+ret);
+
+            return GO_HOME;
+        });
+    }
+    //find original record by conference info in session
+    public CompletionStage<Result> close()throws PersistenceException {
+        Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class).bindFromRequest();
+
+
+        Session session = Http.Context.current().session();
+        String conf_title = session.get("conferenceinfo");
+
+        ConferenceDetail newProfileData = conferenceForm.get();
+
+        JsonNode json = Json.newObject()
+                .put("phase", "CLOSE")
+                .put("title", conf_title);
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/editConfInfo/closephase").post(json);
+        return res.thenApply(response -> {
+            String ret = response.getBody();
+            System.out.println("here is "+ret);
+
+            return GO_HOME;
+        });
+    }
 }

@@ -66,7 +66,7 @@ public class TopicController extends Controller {
 
         Http.Session session = Http.Context.current().session();
         String conferenceinfo = session.get("conferenceinfo");
-
+        conferenceinfo = conferenceinfo.replaceAll(" ","+");
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/topics/"+id).get();
         res.thenAccept(response -> {
 
@@ -100,8 +100,8 @@ public class TopicController extends Controller {
         Topic newTopic = topicForm.get();
         Topic topicInfo = new Topic();
 
-        Http.Session session = Http.Context.current().session();
-        String conferenceinfo = session.get("conferenceinfo");
+//        Http.Session session = Http.Context.current().session();
+//        String conferenceinfo = session.get("conferenceinfo");
         JsonNode json = Json.newObject()
                 .put("topic", newTopic.topic);
 
@@ -133,7 +133,7 @@ public class TopicController extends Controller {
 
         Http.Session session = Http.Context.current().session();
         String conferenceinfo = session.get("conferenceinfo");
-        conferenceinfo = conferenceinfo.replaceAll("\\+"," ");
+//        conferenceinfo = conferenceinfo.replaceAll("\\+"," ");
 
         JsonNode json = Json.newObject()
                 .put("conference", conferenceinfo)
@@ -153,7 +153,7 @@ public class TopicController extends Controller {
         Topic topicInfo = new Topic();
         Http.Session session = Http.Context.current().session();
         String conferenceinfo = session.get("conferenceinfo");
-
+        conferenceinfo = conferenceinfo.replaceAll(" ","+");
         CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/topic/" + conferenceinfo).get();
 //        List<Paper> restemp =new Arraylist<Paper>();
         return resofrest.thenApplyAsync(response -> {

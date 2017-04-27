@@ -121,4 +121,82 @@ public class ConfigSysController extends Controller {
             txn.end();
         }
     }
+
+    public Result update(String conf_title_url)
+    {
+        ConferenceDetail conf = new ConferenceDetail();
+
+        String conf_title = conf_title_url.replaceAll("\\+", " ");
+
+        Long old_conf_id = conf.GetConferenceInfo(conf_title);
+
+        ConferenceDetail old_conf = ConferenceDetail.find.byId(old_conf_id);
+
+        JsonNode json;
+
+        if(old_conf_id == 0){
+            json = Json.newObject().put("return_status", "error");
+        }
+        else {
+            json = Json.newObject()
+                    .put("return_status","ok")
+                    .put("phase", old_conf.phase);
+            System.out.println("in backend multi topic: "+old_conf.canMultitopics+" NAME "+old_conf.name);
+        }
+        return ok(json);
+    }
+
+    public Result open() throws PersistenceException {
+        Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class).bindFromRequest();
+        if(conferenceForm.hasErrors()) {
+            return ok();
+        }
+
+        Transaction txn = Ebean.beginTransaction();
+        try {
+            ConferenceDetail conf = new ConferenceDetail();
+            ConferenceDetail newconference = conferenceForm.get();
+            Long old_conf_id = conf.GetConferenceInfo(newconference.title);
+
+            ConferenceDetail newconferenceData = ConferenceDetail.find.byId(old_conf_id);
+
+            if (newconferenceData != null) {
+
+                newconferenceData.phase = newconference.phase;
+
+                newconferenceData.update();
+                txn.commit();
+            }
+        } finally {
+            txn.end();
+        }
+        return ok();
+    }
+
+//    public Result close() throws PersistenceException {
+//        Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class).bindFromRequest();
+//        if(conferenceForm.hasErrors()) {
+//            return ok();
+//        }
+//
+//        Transaction txn = Ebean.beginTransaction();
+//        try {
+//            ConferenceDetail conf = new ConferenceDetail();
+//            ConferenceDetail newconference = conferenceForm.get();
+//            Long old_conf_id = conf.GetConferenceInfo(newconference.title);
+//
+//            ConferenceDetail newconferenceData = ConferenceDetail.find.byId(old_conf_id);
+//
+//            if (newconferenceData != null) {
+//                ConferenceDetail newconferenceData = conferenceForm.get();
+//
+//                newconferenceData.topic = newconferenceData.topic;
+//
+//                newconferenceData.update();
+//                txn.commit();
+//            }
+//        } finally {
+//            txn.end();
+//        }
+//    }
 }

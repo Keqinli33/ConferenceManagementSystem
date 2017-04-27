@@ -90,3 +90,7 @@ GET         /unreviewerInfo             controllers.EmailTemplateController.find
 GET         /confInfo/:conf_title        controllers.ConfigSysController.GetConfInfo(conf_title:String)
 
 POST        /editConfInfo               controllers.ConfigSysController.edit()
+
+GET     /confInfo/updatephase/:conf_title                       controllers.ConfigSysController.update(conf_title:String)
+POST     /editConfInfo/openphase                      controllers.ConfigSysController.open()
+POST     /editConfInfo/closephase                      controllers.ConfigSysController.open()

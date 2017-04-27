@@ -95,8 +95,12 @@ POST    /updatemailTemplate          controllers.EmailTemplateController.updateE
 
 POST    /emailTemplate                  controllers.EmailTemplateController.updateEmailTemplate()
 
-GET     /admin                          controllers.AdminController.adminPage()
+GET     /admin                          controllers.AdminController.adminPage(conferenceinfo:String)
 GET     /admin/downloadpapers           controllers.AdminController.download()
 
 GET     /sysconfig                      controllers.configSysController.enterConfigSystem()
 POST     /sysconfig                      controllers.configSysController.edit()
+
+GET     /sysconfig/updatephase                      controllers.configSysController.update()
+GET     /sysconfig/openphase                      controllers.configSysController.open()
+GET     /sysconfig/closephase                      controllers.configSysController.close()

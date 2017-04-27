@@ -62,7 +62,7 @@ public class AdminController extends Controller {
 
     public Result adminPage(String conferenceinfo){
         Http.Session session = Http.Context.current().session();
-        conferenceinfo = conferenceinfo.replaceAll(" ","+");
+//        conferenceinfo = conferenceinfo.replaceAll(" ","+");
         session.put("conferenceinfo", conferenceinfo);
         return ok(views.html.admin.render());
     }
@@ -71,7 +71,7 @@ public class AdminController extends Controller {
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
         String conferenceinfo = session.get("conferenceinfo");
-        conferenceinfo = conferenceinfo.replaceAll("\\+"," ");
+//        conferenceinfo = conferenceinfo.replaceAll("\\+"," ");
         final String conferenceinfo1 = conferenceinfo;
         CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/paper/" + username).get();
         List<Long> res = new ArrayList<>();
