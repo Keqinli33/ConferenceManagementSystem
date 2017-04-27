@@ -104,3 +104,11 @@ POST     /sysconfig                      controllers.configSysController.edit()
 GET     /sysconfig/updatephase                      controllers.configSysController.update()
 GET     /sysconfig/openphase                      controllers.configSysController.open()
 GET     /sysconfig/closephase                      controllers.configSysController.close()
+
+GET     /pcmember                       controllers.PCmemberController.enterPCmember()
+POST    /pcmember                       controllers.PCmemberController.addmember()
+
+GET     /singlepcmember/:email                 controllers.PCmemberController.GetPCmember(email:String)
+POST    /modifypcmember                     controllers.PCmemberController.ModifyPCmember()
+
+GET     /deletepcmember/:email                 controllers.PCmemberController.deletePCmember(email:String)
