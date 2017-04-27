@@ -61,6 +61,9 @@ public class PCmemberController extends Controller {
         Form<PCmember> memberForm = formFactory.form(PCmember.class);
         Session session = Http.Context.current().session();
 
+        //TODO JUST FOR TEST REMOVE IT LATER
+        //session.put("conferenceinfo","IEEE 2017 ICWS Area 1");
+
         String conf_title = session.get("conferenceinfo");
 
         String conf_title_url = conf_title.replace(" ","%20");
