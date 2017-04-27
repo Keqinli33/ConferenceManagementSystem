@@ -73,6 +73,12 @@ GET     /showreview                     controllers.ReviewerController.showrevie
 GET     /printreview                    controllers.ReviewerController.printreview(review:String)
 
 GET     /emailTemplate                  controllers.EmailTemplateController.emailTemplate()
+GET     /typeemailTemplate/:email_type    controllers.EmailTemplateController.TypeEmailTemplate(email_type:String)
+GET     /modifymailTemplate/:email_type           controllers.EmailTemplateController.GetModifyEmailTemplate(email_type:String)
+POST    /updatemailTemplate          controllers.EmailTemplateController.updateEmailTemplate()
 POST    /emailTemplate                  controllers.EmailTemplateController.updateEmailTemplate()
 
 GET     /admin                          controllers.AdminController.adminPage()
+
+GET     /sysconfig                      controllers.configSysController.enterConfigSystem()
+POST     /sysconfig                      controllers.configSysController.edit()
