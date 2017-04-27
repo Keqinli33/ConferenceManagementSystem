@@ -29,6 +29,12 @@ create table conference (
   ifreviewer                    varchar(255),
   ifadmin                       varchar(255),
   keyword                       varchar(255),
+  constraint pk_conference primary key (id)
+);
+
+create table conference_detail (
+  id                            bigint auto_increment not null,
+  title                         varchar(255),
   name                          varchar(255),
   url                           varchar(255),
   conference_email              varchar(255),
@@ -50,7 +56,8 @@ create table conference (
   is_mail_abstract              varchar(255),
   is_mail_upload                varchar(255),
   is_mail_review_submission     varchar(255),
-  constraint pk_conference primary key (id)
+  phase                         varchar(255),
+  constraint pk_conference_detail primary key (id)
 );
 
 create table email_template (
@@ -162,6 +169,8 @@ drop table if exists company;
 drop table if exists computer;
 
 drop table if exists conference;
+
+drop table if exists conference_detail;
 
 drop table if exists email_template;
 

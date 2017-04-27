@@ -27,17 +27,17 @@ public class ConfigSysController extends Controller {
 
     public Result GetConfInfo(String conf_title_url)
     {
-        Conference conf = new Conference();
+        ConferenceDetail conf = new ConferenceDetail();
 
         String conf_title = conf_title_url.replace("%20", " ");
 
         Long old_conf_id = conf.GetConferenceInfo(conf_title);
 
-        Conference old_conf = Conference.find.byId(old_conf_id);
+        ConferenceDetail old_conf = ConferenceDetail.find.byId(old_conf_id);
 
         JsonNode json;
 
-        if(old_conf_id == -1){
+        if(old_conf_id == 0){
             json = Json.newObject().put("return_status", "error");
         }
         else {
@@ -71,46 +71,51 @@ public class ConfigSysController extends Controller {
     }
 
     public Result edit() throws PersistenceException {
-        Form<Conference> conferenceForm = formFactory.form(Conference.class).bindFromRequest();
+        Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class).bindFromRequest();
         if(conferenceForm.hasErrors()) {
             return ok();
         }
 
         Transaction txn = Ebean.beginTransaction();
         try {
-            Conference newconferenceData = conferenceForm.get();
+            ConferenceDetail newconferenceData = conferenceForm.get();
             //Conference savedconference = Conference.find.byId(newconferenceData.userid);
 
-            if (newconferenceData.ifInfoExist(newconferenceData.keyword)) {
+            if (newconferenceData.ifInfoExist(newconferenceData.title)) {
                 String new_title = newconferenceData.updateInfo(newconferenceData);
                 //flash("success", "conference " + userid + " has been updated");
                 txn.commit();
-                return ok(new_title);
+                return ok();
             }
             else{
-//                Conference newconference = new Conference();
-//                newconference.title = newconferenceData.title;
-//                newconference.research = newconferenceData.research;
-//                newconference.firstname = newconferenceData.firstname;
-//                newconference.lastname = newconferenceData.lastname;
-//                newconference.position = newconferenceData.position;
-//                newconference.affiliation = newconferenceData.affiliation;
-//                newconference.email = newconferenceData.email;
-//                newconference.phone = newconferenceData.phone;
-//                newconference.fax = newconferenceData.fax;
-//                newconference.address = newconferenceData.address;
-//                newconference.city = newconferenceData.city;
-//                newconference.country = newconferenceData.country;
-//                newconference.region = newconferenceData.region;
-//                newconference.zipcode = newconferenceData.zipcode;
-//                newconference.comment = newconferenceData.comment;
-//
-//                newconference.userid = newconferenceData.userid;
-//
-//                newconference.insert();
+                ConferenceDetail new_Conference = new ConferenceDetail();
+                new_Conference.title = newconferenceData.title;
+                new_Conference.name = newconferenceData.name;
+                new_Conference.url = newconferenceData.url;
+                new_Conference.conference_email = newconferenceData.conference_email;
+                new_Conference.chair_email = newconferenceData.chair_email;
+                new_Conference.tag_title = newconferenceData.tag_title;
+                new_Conference.config_content = newconferenceData.config_content;
+                new_Conference.canPDF = newconferenceData.canPDF;
+                new_Conference.canPostscript = newconferenceData.canPostscript;
+                new_Conference.canWord = newconferenceData.canWord;
+                new_Conference.canZip = newconferenceData.canZip;
+                new_Conference.canMultitopics = newconferenceData.canMultitopics;
+                new_Conference.isOpenAbstract = newconferenceData.isOpenAbstract;
+                new_Conference.isOpenPaper = newconferenceData.isOpenPaper;
+                new_Conference.isOpenCamera = newconferenceData.isOpenCamera;
+                new_Conference.isBlindReview = newconferenceData.isBlindReview;
+                new_Conference.discussMode = newconferenceData.discussMode;
+                new_Conference.ballotMode = newconferenceData.ballotMode;
+                new_Conference.reviewer_number = newconferenceData.reviewer_number;
+                new_Conference.isMailAbstract = newconferenceData.isMailAbstract;
+                new_Conference.isMailUpload = newconferenceData.isMailUpload;
+                new_Conference.isMailReviewSubmission = newconferenceData.isMailReviewSubmission;
+
+                new_Conference.save();
                 //flash("success", "conference " + userid + " has been inserted");
                 txn.commit();
-                return ok("666notexist");
+                return ok();
             }
         } finally {
             txn.end();

@@ -1,4 +1,4 @@
-@(configSysForm: Form[Conference], configSysObject: Conference, message: Integer)
+@(configSysForm: Form[ConferenceDetail], configSysObject: ConferenceDetail, message: Integer)
 
 @import helper._
 
@@ -18,28 +18,14 @@
 
   </tr>
   </table>
-  <h1>Edit profile</h1>
-
-  @{
-    if(message == -1) {
-        <div>Error!</div>
-    } else if(message == 0){
-        <div>update successfully</div>
-
-    } else if(message == 1){
-        <div>conference not exist</div>
-
-    }
-  }
+  <h1>Configure System</h1>
 
   @b3.form(routes.configSysController.edit()) {
 
+    <div class="center-block">
     <fieldset>
-      @if(configSysObject != null && configSysObject.title != null) {
-        @b3.text(configSysForm("title"), '_label -> "Conference acronym", 'value -> configSysObject.title)
-      }   else{
-        @b3.text(configSysForm("title"), '_label -> "Conference acronym")
-      }
+        <label for="textarea">Title</label>
+        <input name="title" value="@configSysObject.title" readonly>
 
       @if(configSysObject != null && configSysObject.name != null) {
         @b3.text(configSysForm("name"), '_label -> "Conference name", 'value -> configSysObject.name)
@@ -78,31 +64,31 @@
       }
 
       <div class="form-group" id="">
-        <label class="control-label col-md-2">Checkboxes</label>
+        <label class="control-label col-md-2">Submit Type</label>
         <div class="col-md-10">
           <div class="multi-checkbox-list">
             <div class="checkbox">
               <label for="PDF">
                 <input type="checkbox" id="canPDF" name="canPDF" value="@configSysObject.canPDF">
-                Foo
+                PDF
               </label>
             </div>
             <div class="checkbox">
               <label for="Postscript">
                 <input type="checkbox" id="canPostscript" name="canPostscript" value="@configSysObject.canPostscript">
-                Bar
+                Postscript
               </label>
             </div>
             <div class="checkbox">
               <label for="Word">
                 <input type="checkbox" id="canWord" name="canWord" value="@configSysObject.canWord">
-                Beer
+                Word
               </label>
             </div>
             <div class="checkbox">
               <label for="Zip">
                 <input type="checkbox" id="canZip" name="canZip" value="@configSysObject.canZip">
-                Beer
+                Zip
               </label>
             </div>
           </div>
@@ -158,7 +144,7 @@
       <a href="@routes.ShowPaperController.showMyPaper()" class="btn">Cancel</a>
     </div>
 
-
+    </div>
 
   }
 

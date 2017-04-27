@@ -63,11 +63,11 @@ public class configSysController extends Controller {
     }
 
     public CompletionStage<Result> enterConfigSystem(){
-        Form<Conference> conferenceForm = formFactory.form(Conference.class);
+        Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class);
         Session session = Http.Context.current().session();
 
         //TODO REMOVE IT
-        session.put("conferenceinfo","IEEE 2017 ICWS Area 1");
+        //session.put("conferenceinfo","IEEE 2017 ICWS Area 1");
 
 
         String conf_title = session.get("conferenceinfo");
@@ -78,11 +78,13 @@ public class configSysController extends Controller {
             JsonNode ret = response.asJson();
 
             if(ret.get("return_status").asText().equals("error")){
+                ConferenceDetail null_conf = new ConferenceDetail();
+                null_conf.title = session.get("conferenceinfo");
                 return ok(
-                        views.html.configSys.render(conferenceForm, null, 0)
+                        views.html.configSys.render(conferenceForm, null_conf, 0)
                 );
             }else {
-                Conference oldConference = new Conference();
+                ConferenceDetail oldConference = new ConferenceDetail();
                 oldConference.title = ret.get("title").asText();
                 oldConference.name = ret.get("name").asText();
                 oldConference.url = ret.get("url").asText();
@@ -107,6 +109,7 @@ public class configSysController extends Controller {
                 oldConference.isMailReviewSubmission = ret.get("isMailReviewSubmission").asText();
 
                 System.out.println("===in get multi topic "+oldConference.canMultitopics);
+                //oldConference.title = session.get("conferenceinfo");
                 return ok(
                         views.html.configSys.render(conferenceForm, oldConference, 0)
                 );
@@ -117,16 +120,15 @@ public class configSysController extends Controller {
 
     //find original record by conference info in session
     public CompletionStage<Result> edit()throws PersistenceException {
-        Form<Conference> conferenceForm = formFactory.form(Conference.class).bindFromRequest();
+        Form<ConferenceDetail> conferenceForm = formFactory.form(ConferenceDetail.class).bindFromRequest();
 
 
         Session session = Http.Context.current().session();
         String conf_title = session.get("conferenceinfo");
 
-        Conference newProfileData = conferenceForm.get();
+        ConferenceDetail newProfileData = conferenceForm.get();
 
         JsonNode json = Json.newObject()
-                .put("keyword",conf_title)
                 .put("title", newProfileData.title)
                 .put("name", newProfileData.name)
                 .put("url",newProfileData.url)
@@ -159,20 +161,20 @@ public class configSysController extends Controller {
                         views.html.configSys.render(conferenceForm, null, -1)
                 );
             }
-            else if ("666notexist".equals(ret)) {
-                return ok(
-                        views.html.configSys.render(conferenceForm, newProfileData, 1)
-                );
-            }
-            else{
+//            else if ("666notexist".equals(ret)) {
+//                return ok(
+//                        views.html.configSys.render(conferenceForm, newProfileData, 1)
+//                );
+//            }
+//            else{
                // Session session = Http.Context.current().session();
-                String origin_conf = session.get("conferenceinfo");
-                if(!origin_conf.equals(ret))
-                    session.put("conferenceinfo", ret);
+//                String origin_conf = session.get("conferenceinfo");
+//                if(!origin_conf.equals(ret))
+//                    session.put("conferenceinfo", ret);
                 return ok(
                         views.html.configSys.render(conferenceForm, newProfileData, 0)
                 );
-            }
+            //}
         });
     }
 
