@@ -1,0 +1,66 @@
+@(id:long,topicForm: Form[Topic], topicInfo: List[Topic],topic:Topic)
+
+@import helper._
+
+@import b3.vertical.fieldConstructor
+
+@main {
+    <table border=0 cellpadding=0 cellspacing=0 width="100%" style="background: #0064cd"><tr>
+        <td width="60%">
+            <div align="left"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif"><strong><em>Conference Management System</em></strong></font></div>
+        </td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/conference'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Conferences</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/paper'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Paper</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/review'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Review</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/profile'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Profile</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/verifyChangePwdAuth'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Change Password</font></div></td>
+        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/logout'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Logout</font></div></td>
+
+    </tr>
+    </table>
+
+    <h1>Research Topic</h1>
+    @b3.form(routes.TopicController.update(id)) {
+
+
+        @b3.text(topicForm("topic"), '_label -> "label", '_help -> "",'value ->topic.topic)
+
+        <div class="actions">
+            <input type="submit" value="Insert" class="btn primary">
+        </div>
+
+    }
+
+    @b3.form(routes.TopicController.showMyPaper()) {
+
+        <fieldset>
+
+
+
+            <table class="mypaper zebra-striped">
+                <thead>
+                    <tr>
+                        <th>label</th>
+                        <th>modify</th>
+                        <th>delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                @for(topic <- topicInfo) {
+                    <tr>
+                        <td>@topic.topic</td>
+                        <td><a href="@routes.TopicController.edit(topic.id)">modify</a></td>
+                        <td><a href="@routes.TopicController.delete(topic.id)">delete</a></td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+
+        </fieldset>
+
+
+    }
+
+}
