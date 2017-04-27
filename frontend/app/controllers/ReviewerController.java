@@ -62,6 +62,9 @@ public class ReviewerController extends Controller{
 
     private FormFactory formFactory;
 
+    public static Long pid;
+    public static List<Long> ridlist;
+
     @Inject
     public ReviewerController(FormFactory formFactory) {
         this.formFactory = formFactory;
@@ -505,5 +508,109 @@ public class ReviewerController extends Controller{
     public Result printreview(String review){
         return ok(views.html.printreview.render(review));
     }
+
+    public CompletionStage<Result> enterAssignPaper(Long paperid) {
+        pid = paperid;
+
+        List<Long> userlist = new ArrayList();
+        List<Long> revieweridlist = new ArrayList();
+        Map<Long, String> emailmap = new HashMap();
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/users").get();
+        res.thenAccept(response -> {
+
+            JsonNode ret = response.asJson();
+            ArrayNode arr = (ArrayNode) ret;
+
+
+            for (int i = 0; i < arr.size(); i++) {
+                JsonNode node = arr.get(i);
+//                User user = new User();
+//                user.username = node.get("username").asText();
+                Long id = Long.parseLong(node.get("userid").asText());
+
+                userlist.add(id);
+                emailmap.put(id, node.get("username").asText());
+            }
+        });
+
+
+        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/paper/reviewers/"+paperid).get();
+        return res2.thenApply(response2 -> {
+            JsonNode ret2 = response2.asJson();
+            ArrayNode arr2 = (ArrayNode)ret2;
+
+
+            for(int i = 0; i < arr2.size(); i++){
+                JsonNode node = arr2.get(i);
+
+                revieweridlist.add(Long.parseLong(node.get("reviewerid").asText()));
+            }
+
+            ridlist = revieweridlist;
+
+            return ok(
+                    views.html.assignPaper.render(userlist, revieweridlist, emailmap)
+            );
+        });
+
+    }
+
+    public Result updateReviewers(){
+
+        DynamicForm requestData = formFactory.form().bindFromRequest();
+        System.out.println(requestData.data());
+
+//        for(String criteria:requestData.data().keySet()){
+//            JsonNode json = Json.newObject()
+//                    .put("paperid", pid)
+//                    .put("reviewerid", userid)
+//                    .put("iscriteria", "Y")
+//                    .put("label", criteria)
+//                    .put("review_content", requestData.get(criteria));
+//            arr.add(json);
+//        };
+//        System.out.println(arr);
+//        JsonNode temp = (JsonNode)arr;
+//        JsonNode resJson = Json.newObject()
+//                .put("result",temp);
+//        System.out.println(temp);
+//        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(resJson);
+//        return res.thenApply(response -> {
+//            return GO_HOME;
+//        });
+
+        for(String userstr:requestData.data().keySet()){
+            Long uid = Long.parseLong(userstr);
+            if(ridlist.contains(uid)){
+                if(requestData.get(userstr).equals("NO")){
+                    JsonNode json = Json.newObject()
+                            .put("paperid", pid)
+                            .put("reviewerid", uid);
+
+                    CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/delete").post(json);
+                    res.thenAccept(response -> {
+
+                    });
+                }
+            }
+            else{
+                if(requestData.get(userstr).equals("YES")){
+                    JsonNode json = Json.newObject()
+                            .put("paperid", pid)
+                            .put("reviewerid", uid)
+                            .put("iscriteria", "NA")
+                            .put("reviewstatus", "assigned");
+                    CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/new").post(json);
+                    res.thenAccept(response -> {
+
+                    });
+                }
+            }
+        };
+        return GO_HOME;
+
+    }
+
 
 }

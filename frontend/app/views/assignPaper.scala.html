@@ -1,4 +1,4 @@
-@(userlist: List[User], paperid: Long, revieweridlist: List[Long])
+@(userlist: List[Long], revieweridlist: List[Long], userMap: Map[Long, String])
 
 @import helper._
 
@@ -21,34 +21,30 @@
 
     <h1>Assign Reviewer To This Paper</h1>
 
-            <table class="mypaper zebra-striped">
-                <thead>
-                    <tr>
-                        <th>Reviewer Id</th>
-                        <th>Reviewer Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
+    @b3.form(routes.ReviewerController.updateReviewers()) {
 
-                @for(user <- userlist) {
-                    <tr>
-                        <td>@user.id</td>
-                        <td>@user.username </td>
+        <fieldset>
 
-                            @if(revieweridlist.contains(user.id)) {
-                                <td><a href="@routes.PaperController.deleteReviewer(user.id, paperid)">Cancel assigning to this reviewer</a></td>
-                            }   else{
-                                <td><a href="@routes.PaperController.saveReviewer(user.id, paperid)">Assign to this reviewer</a></td>
-                            }
+        @for(user <- userlist){
+            <h3>@userMap.get(user):</h3>>
+            @if(revieweridlist.contains(user)) {
+                <select name="@user">
+                    <option value="YES" selected="selected">Choose as a reviewer</option>
+                    <option value="NO">Don't Choose as a reviewer</option>
+                </select>
+            }   else {
+                <select name="@user">
+                    <option value="YES">Choose as a reviewer</option>
+                    <option value="NO"  selected="selected">Don't Choose as a reviewer</option>
+                </select>
+            }
+                <br>
+            }
 
-                        @*<td>Modify</td>*@
-                    </tr>
-                }
+        </fieldset>
 
-                </tbody>
-            </table>
-
-
-
+        <div class="actions">
+            <input type="submit" value="Submit" class="btn primary">
+        </div>
+    }
 }

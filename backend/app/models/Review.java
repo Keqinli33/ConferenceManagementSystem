@@ -24,7 +24,7 @@ public class Review extends Model {
     public Long reviewerid;
     public String iscriteria;
     public String label;
-    public String review;
+    public String review_content;
     public String reviewstatus;
 
     public static Find<Long,Review> find = new Find<Long,Review>(){};

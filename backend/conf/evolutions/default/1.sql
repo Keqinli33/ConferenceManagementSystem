@@ -111,7 +111,7 @@ create table review (
   reviewerid                    bigint,
   iscriteria                    varchar(255),
   label                         varchar(255),
-  review                        varchar(255),
+  review_content                varchar(255),
   reviewstatus                  varchar(255),
   constraint pk_review primary key (id)
 );

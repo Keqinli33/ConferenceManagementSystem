@@ -71,8 +71,8 @@ GET    /review/paper/:id/:conf          controllers.ReviewerController.getpapers
 POST    /updatereview                   controllers.ReviewerController.updateReview()
 
 # save new reviewer
-POST    /review/new/:userid/:paperid                     controllers.ReviewerController.changeReviewer(userid:Long, paperid:Long)
-POST    /review/delete/:userid/:paperid                     controllers.ReviewerController.deleteReviewer(userid:Long, paperid:Long)
+POST    /review/new                    controllers.ReviewerController.changeReviewer()
+POST    /review/delete                     controllers.ReviewerController.deleteReviewer()
 
 # show author paper
 GET     /author/paper                   controllers.PaperController.showAuthorPaper()

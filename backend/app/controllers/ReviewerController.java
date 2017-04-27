@@ -194,22 +194,22 @@ public class ReviewerController extends Controller{
         return ok("successfully");
     }
 
-    public Result changeReviewer(Long userid, Long paperid){
-        Review update_paper = new Review();
+    public Result changeReviewer(){
+        Form<Review> reviewForm = formFactory.form(Review.class).bindFromRequest();
+        Review update_paper = reviewForm.get();
         try {
-            update_paper.paperid = paperid;
-            update_paper.reviewstatus = "assigned";
-            update_paper.reviewerid = userid;
-            update_paper.save();
+            update_paper.insert();
         } catch (Exception e){
             e.printStackTrace();
         }
         return ok("successfully");
     }
 
-    public Result deleteReviewer(Long userid, Long paperid){
-        List<Review> reviewList = Review.find.where().eq("paperid",paperid)
-                .eq("reviewerid",userid)
+    public Result deleteReviewer(){
+        Form<Review> reviewForm = formFactory.form(Review.class).bindFromRequest();
+        Review delete_review = reviewForm.get();
+        List<Review> reviewList = Review.find.where().eq("paperid",delete_review.paperid)
+                .eq("reviewerid",delete_review.reviewerid)
                 .findList();
         try {
             for(Review review : reviewList){
