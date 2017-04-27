@@ -38,7 +38,6 @@ import java.util.concurrent.CompletionStage;
  * Created by shuang on 3/29/17.
  */
 public class TopicController extends Controller {
-    @Inject WSClient ws;
     private FormFactory formFactory;
 
     @Inject
@@ -47,9 +46,7 @@ public class TopicController extends Controller {
     }
 
 
-    public Result GO_HOME = Results.redirect(
-            routes.TopicController.showMyTopic()
-    );
+
     /**
      * Handle default path requests, redirect to computers list
      */
@@ -57,134 +54,82 @@ public class TopicController extends Controller {
         return GO_HOME;
     }
 
-    public CompletionStage<Result> edit(Long id) {
+    public Result edit(Long id) {
 
         Form<Topic> topicForm = formFactory.form(Topic.class);
-        Topic topicInfo = new Topic();
+        Topic newTopic = Topic.find.byId(id);
 
-        Http.Session session = Http.Context.current().session();
-        String conferenceinfo = session.get("conferenceinfo");
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/topics/"+id).get();
-        res.thenAccept(response -> {
-
-            JsonNode ret = response.asJson();
-            System.out.println("response from edit" + ret);
-            Topic savedTopic = new Topic();
-            savedTopic.topic = ret.get("topic").asText();
-            savedTopic.id = Long.parseLong(ret.get("id").asText());
-
-        });
-
-        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/topic/" + conferenceinfo).get();
-//        List<Paper> restemp =new Arraylist<Paper>();
-        return resofrest.thenApplyAsync(response -> {
-            System.out.println("here is "+response);
-            JsonNode arr = response.asJson();
-            ArrayNode ret = (ArrayNode) arr;
-            List<Topic> res = new ArrayList<Topic>();
-            for(JsonNode res1 : ret){
-                Topic savedTopic = new Topic();
-                savedTopic.id = Long.parseLong(res1.get("id").asText());
-                savedTopic.topic = res1.get("topic").asText();
-                res.add(savedTopic);
-            }
-            return ok(views.html.edittopic.render(id,topicForm,res,savedTopic));
-        });
-    }
-    public CompletionStage<Result> update(Long id) throws PersistenceException {
-        Form<Topic> topicForm = formFactory.form(Topic.class).bindFromRequest();
-
-        Paper newTopic = topicForm.get();
-        Topic topicInfo = new Topic();
-
-        Http.Session session = Http.Context.current().session();
-        String conferenceinfo = session.get("conferenceinfo");
         JsonNode json = Json.newObject()
-                .put("topic", newTopic.topic);
+                .put("topic", newTopic.topic)
+                .put("id", newTopic.id);
 
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/topics/"+id).post(json);
-        return res.thenApply(response -> {
-            return GO_HOME;
-        });
-
+        return ok(json);
     }
-
-    public CompletionStage<Result> delete(Long id) throws PersistenceException {
+    public Result update(Long id) throws PersistenceException {
         Form<Topic> topicForm = formFactory.form(Topic.class).bindFromRequest();
 
-        Paper newTopic = topicForm.get();
-        Topic topicInfo = new Topic();
+        Transaction txn = Ebean.beginTransaction();
+        try {
+            Topic savedTopic = Topic.find.byId(id);
+            if (savedTopic != null) {
+                Topic newTopicData = topicForm.get();
 
+                savedTopic.title = newTopicData.topic;
 
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/topics/delete/"+id).post();
-        return res.thenApply(response -> {
-            return GO_HOME;
-        });
+                savedTopic.update();
+                flash("success", "Topic " + paperForm.get().title + " has been updated");
+                txn.commit();
+            }
+        } finally {
+            txn.end();
+        }
 
+        return ok("update successfully");
     }
 
-    public CompletionStage<Result> save() {
+    public Result save() {
         Form<Topic> topicForm = formFactory.form(Topic.class).bindFromRequest();
-
 
         Topic newTopic = topicForm.get();
 
-        Http.Session session = Http.Context.current().session();
-        String conferenceinfo = session.get("conferenceinfo");
+        topicForm.get().save();
 
-        JsonNode json = Json.newObject()
-                .put("conference", conferenceinfo)
-                .put("topic", newTopic.topic);
 
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/topics/new").post(json);
-        res.thenAccept(response -> {
+        return ok("save successfully");
+    }
 
-        });
+    public Result delete(Long id) {
 
-        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/topic/" + conferenceinfo).get();
-//        List<Paper> restemp =new Arraylist<Paper>();
-        return resofrest.thenApplyAsync(response -> {
-            System.out.println("here is "+response);
-            JsonNode arr = response.asJson();
-            ArrayNode ret = (ArrayNode) arr;
-            List<Topic> res = new ArrayList<Topic>();
-            for(JsonNode res1 : ret){
-                Topic savedTopic = new Topic();
-                savedTopic.id = Long.parseLong(res1.get("id").asText());
-                savedTopic.topic = res1.get("topic").asText();
-                res.add(savedTopic);
-            }
-            return ok(
-                    views.html.topic.render(topicForm,res));
+        Topic temp = Topic.find.byId(id);
 
-        });
+        temp.delete();
+        return ok("delete successfully");
+
 
     }
 
-    public CompletionStage<Result> showMyTopic() {
+    public Result showMyTopic(String conference) {
         Form<Topic> topicForm = formFactory.form(Topic.class).bindFromRequest();
         Topic topicInfo = new Topic();
-        Http.Session session = Http.Context.current().session();
-        String conferenceinfo = session.get("conferenceinfo");
 
-        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/topic/" + conferenceinfo).get();
-//        List<Paper> restemp =new Arraylist<Paper>();
-        return resofrest.thenApplyAsync(response -> {
-            System.out.println("here is "+response);
-            JsonNode arr = response.asJson();
-            ArrayNode ret = (ArrayNode) arr;
-            List<Topic> res = new ArrayList<Topic>();
-            for(JsonNode res1 : ret){
-                    Topic savedTopic = new Topic();
-                    savedTopic.id = Long.parseLong(res1.get("id").asText());
-                    savedTopic.topic = res1.get("topic").asText();
-                    res.add(savedTopic);
-            }
-            return ok(
-                    views.html.topic.render(topicForm,res));
 
-        });
+        List<Topic> res = new ArrayList<Topic>();
+        res = topicInfo.GetMyTopic(conference);
 
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode jsonarray = new ArrayNode(factory);
+        for(int i=0; i< res.size(); i++){
+            JsonNode json = Json.newObject()
+                    .put("id", res.get(i).id)
+                    .put("title", res.get(i).title);
+
+            jsonarray.add(json);
+
+        }
+        //jsonarray.add({"status": "successful"});
+        System.out.println(jsonarray);
+        JsonNode temp = (JsonNode) jsonarray;
+        return ok(temp);
     }
 
 }

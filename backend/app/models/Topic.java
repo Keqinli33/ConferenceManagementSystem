@@ -26,5 +26,11 @@ public class Topic extends Model {
 
     public static Find<Long,Topic> find = new Find<Long,Topic>(){};
 
-
+    public static List<Topic> GetMyTopic(String conference){
+        List<Topic> results =
+                find.where()
+                        .eq("conference",conference)
+                        .findList();
+        return results;
+    }
 }

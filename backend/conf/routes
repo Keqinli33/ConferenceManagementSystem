@@ -54,6 +54,19 @@ GET     /papers/:id                     controllers.PaperController.edit(id:Long
 POST    /papers/:id                     controllers.PaperController.update(id:Long)
 #get all papers of a user
 GET   /paper/:username                     controllers.ShowPaperController.showMyPaper(username:String)
+
+
+# Submit topic
+
+POST  /topics/new                           controllers.TopicController.save()
+
+#Edit topic
+GET     /topics/:id                     controllers.TopicController.edit(id:Long)
+POST    /topics/:id                     controllers.TopicController.update(id:Long)
+POST    /topics/delete/:id                     controllers.TopicController.delete(id:Long)
+
+#show all topics of a user
+GET   /topic/:conference                  controllers.TopicController.showMyTopic(conference:String)
 #Upload paper
 #GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
 #POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
