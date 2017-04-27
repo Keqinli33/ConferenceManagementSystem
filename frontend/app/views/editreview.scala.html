@@ -1,4 +1,4 @@
-@(paperForm: Form[Paper])(review: String)(paperid:Long)
+@(cris:List[String], map:Map[String, String])
 
 @import helper._
 
@@ -19,21 +19,112 @@
     </tr>
     </table>
 
-    @b3.form(routes.ReviewerController.updateReview(paperid)) {
+    @b3.form(routes.ReviewerController.updateReview()) {
 
         <fieldset>
 
-            @if(review != null) {
-                @b3.textarea( paperForm("review"), '_label -> "Review", 'rows -> 30, 'value -> review)
-            }   else{
-                @b3.textarea( paperForm("review"), '_label -> "Review", 'rows -> 30)
+        @for(cri <- cris){
+            @cri:
+            @{
+                if(!map.containsKey(cri)){
+
+                        <select name="@cri">
+                        <option value="strongaccept">Strong Accept</option>
+                        <option value="accept">Accept</option>
+                        <option value="weakaccept">Weak Accept</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="weakreject">Weak Reject</option>
+                        <option value="reject">Reject</option>
+                        <option value="strongreject">Strong Reject</option>
+                        </select>
+                }
+                else if(map.get(cri).equals("strongaccept")){
+
+                        <select name="@cri">
+                        <option value="strongaccept" selected="selected">Strong Accept</option>
+                        <option value="accept">Accept</option>
+                        <option value="weakaccept">Weak Accept</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="weakreject">Weak Reject</option>
+                        <option value="reject">Reject</option>
+                        <option value="strongreject">Strong Reject</option>
+                        </select>
+                }
+                else if(map.get(cri).equals("weakaccept")){
+                        <select name="@cri">
+                        <option value="strongaccept">Strong Accept</option>
+                        <option value="accept">Accept</option>
+                        <option value="weakaccept"  selected="selected">Weak Accept</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="weakreject">Weak Reject</option>
+                        <option value="reject">Reject</option>
+                        <option value="strongreject">Strong Reject</option>
+                        </select>
+                } else if(map.get(cri).equals("accept")){
+
+                        <select name="@cri">
+                        <option value="strongaccept">Strong Accept</option>
+                        <option value="accept" selected="selected">Accept</option>
+                        <option value="weakaccept">Weak Accept</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="weakreject">Weak Reject</option>
+                        <option value="reject">Reject</option>
+                        <option value="strongreject">Strong Reject</option>
+                        </select>
+                } else if(map.get(cri).equals("neutral")){
+
+                        <select name="@cri">
+                        <option value="strongaccept">Strong Accept</option>
+                        <option value="accept">Accept</option>
+                        <option value="weakaccept">Weak Accept</option>
+                        <option value="neutral" selected="selected">Neutral</option>
+                        <option value="weakreject">Weak Reject</option>
+                        <option value="reject">Reject</option>
+                        <option value="strongreject">Strong Reject</option>
+                        </select>
+                } else if(map.get(cri).equals("weakreject")){
+
+                        <select name="@cri">
+                        <option value="strongaccept">Strong Accept</option>
+                        <option value="accept">Accept</option>
+                        <option value="weakaccept">Weak Accept</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="weakreject" selected="selected">Weak Reject</option>
+                        <option value="reject">Reject</option>
+                        <option value="strongreject">Strong Reject</option>
+                        </select>
+                } else if(map.get(cri).equals("reject")){
+
+                        <select name="@cri">
+                        <option value="strongaccept">Strong Accept</option>
+                        <option value="accept">Accept</option>
+                        <option value="weakaccept">Weak Accept</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="weakreject">Weak Reject</option>
+                        <option value="reject" selected="selected">Reject</option>
+                        <option value="strongreject">Strong Reject</option>
+                        </select>
+                } else if(map.get(cri).equals("strongreject")){
+
+                        <select name="@cri">
+                        <option value="strongaccept">Strong Accept</option>
+                        <option value="accept">Accept</option>
+                        <option value="weakaccept">Weak Accept</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="weakreject">Weak Reject</option>
+                        <option value="reject">Reject</option>
+                        <option value="strongreject"  selected="selected">Strong Reject</option>
+                        </select>
+                }
             }
+
+            <br>
+        }
 
         </fieldset>
 
         <div class="actions">
-            <input type="submit" value="Submit" class="btn primary"> or
-            <a class="btn success" id="register" href="@routes.ShowPaperController.showMyPaper()">Cancel</a>
+            <input type="submit" value="Submit" class="btn primary">
         </div>
     }
 }

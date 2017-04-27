@@ -1,9 +1,14 @@
-@(paperForm: Form[Paper],papers: List[Paper], confoptions:Map[String, String], confname: String)
+@()
 
 @import helper._
 
 @import b3.vertical.fieldConstructor
-
+<style>
+        table, th, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+</style>
 @main {
     <table border=0 cellpadding=0 cellspacing=0 width="100%" style="background: #0064cd"><tr>
         <td width="60%">
@@ -19,51 +24,40 @@
     </tr>
     </table>
 
-    <h1>Here is the list of papers assigned to you. Use the download link to get the file, and the submit review link to enter or modify your review results.</h1>
+    <h3>administrative tasks</h3>
+    <table style="width:100%; border: 1px solid black">
+        <tr>
+            <td><a href='/conference'>Configure system</a></td>
+            <td colspan="2"><a href='/conference'>Program Committee</a></td>
+        </tr>
+        <tr>
+            <td><a href='/conference'>Research topics</a></td>
+            <td><a href='/criterias/all'>Criteria</a></td>
+            <td><a href='/conference'>Review questions</a></td>
+        </tr>
+        <tr>
+            <td><a href='/conference'>Status code</a></td>
+            <td><a href='/conference'>Close/Open submission phase</a></td>
+            <td><a href='/conference'>Logo setting</a></td>
+        </tr>
+        <tr>
+            <td><a href='/conference'>Email template management</a></td>
+            <td><a href='/conference'>Submit a paper on behalf of author</a></td>
+            <td><a href='/conference'>Download papers submitted</a></td>
+        </tr>
+    </table>
 
-
-
-    @b3.select(
-        paperForm("conference"),
-        options(confoptions),
-        '_label -> "Select", 'value -> confname,
-        '_showConstraints -> false
-    )
-
-
-    @b3.form(routes.ShowPaperController.showMyPaper()) {
-
-        <fieldset>
-
-            <table class="mypaper zebra-striped">
-                <thead>
-                    <tr>
-                        <th>paper id </th>
-                        <th>paper title</th>
-                        <th>paper authors</th>
-                        <th colspan="4">action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                @for(paper <- papers) {
-                    <tr>
-                        <td>@paper.id</td>
-                        <td>@paper.title</td>
-                        <td>@paper.authors</td>
-                        <td><a href="@routes.ReviewerController.download(paper.id)">Download</a></td>
-                        <td><a href="@routes.ReviewerController.review(paper.id)">Update review</a></td>
-                        <td><a href="@routes.ReviewerController.showreview(paper.id)">See review</a></td>
-                        <td><a href="@routes.ReviewerController.printreview(paper.review)">Print review</a></td>
-
-                    </tr>
-                }
-
-                </tbody>
-            </table>
-
-        </fieldset>
-
-
-    }
+    <br>
+    <h3>PC Chair tasks</h3>
+    <table style="width:100%; border: 1px solid black">
+        <tr>
+            <td><a href='/conference'>List of submitted papers</a></td>
+            <td colspan="2"><a href='/conference'>manual assignment - check and modify</a></td>
+        </tr>
+        <tr>
+            <td><a href='/conference'>List of authors</a></td>
+            <td><a href='/conference'>Review state</a></td>
+            <td><a href='/conference'>Send reminder to reviewers</a></td>
+        </tr>
+    </table>
 }

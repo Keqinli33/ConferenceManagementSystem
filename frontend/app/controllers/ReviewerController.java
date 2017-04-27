@@ -52,6 +52,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
 import com.fasterxml.jackson.core.type.TypeReference;
 /**
@@ -406,65 +410,6 @@ public class ReviewerController extends Controller{
         });
     }
 
-    /**
-     * Handle the 'new profile form' submission
-     */
-    public Result save() {
-        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
-        profileForm.get().save();
-        flash("success", "Profile " + profileForm.get().title + profileForm.get().lastname + " has been created");
-        return GO_HOME;
-    }
-
-    /**
-     * Handle profile deletion
-     */
-    public CompletionStage<Result> delete() {
-        Session session = Http.Context.current().session();
-        Long userid = Long.parseLong(session.get("userid"));
-
-        Form<Profile> profileForm = formFactory.form(Profile.class).bindFromRequest();
-        Profile newProfileData = profileForm.get();
-
-        JsonNode json = Json.newObject()
-                .put("title", newProfileData.title)
-                .put("research", newProfileData.research)
-                .put("firstname",newProfileData.firstname)
-                .put("lastname", newProfileData.lastname)
-                .put("position", newProfileData.position)
-                .put("affiliation", newProfileData.affiliation)
-                .put("email", newProfileData.email)
-                .put("phone", newProfileData.phone)
-                .put("fax", newProfileData.fax)
-                .put("address",newProfileData.address)
-                .put("city", newProfileData.city)
-                .put("country", newProfileData.country)
-                .put("region", newProfileData.region)
-                .put("zipcode", newProfileData.zipcode)
-                .put("comment", newProfileData.comment)
-                .put("userid", userid);
-
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/profile/delete").post(json);
-        return res.thenApply(response -> {
-            String ret = response.getBody();
-            if ("delete successfully".equals(ret)) {
-                return ok(
-                        views.html.profile.render(profileForm, null, 3)
-                );
-            }
-            else if ("you haven't create your profile yet".equals(ret)) {
-                return ok(
-                        views.html.profile.render(profileForm, null, 4)
-                );
-            }
-            else{
-                return ok(
-                        views.html.profile.render(profileForm, null, -1)
-                );
-            }
-        });
-    }
-
     public Result download(Long filename){
             System.out.println("downloading...");
             response().setContentType("application/x-download");
@@ -476,33 +421,140 @@ public class ReviewerController extends Controller{
 
     }
 
-    public Result review(String review, long paperid){
-        Form<Paper> paperForm = formFactory.form(Paper.class);
-        Map<String,String> anyData = new HashMap();
-        anyData.put("paperid", Long.toString(paperid));
-        anyData.put("review", review);
-        System.out.println("IN REVIEW PAGE REVIEW: "+review);
+    public CompletionStage<Result> review(Long paperid){
+        pid = paperid;
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
 
-        paperForm.bind(anyData);
+        Form<FrontReview> reviewForm = formFactory.form(FrontReview.class);
+        List<String> crlist = new ArrayList();
 
-        return ok(views.html.editreview.render(paperForm, review, paperid));
+        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all").get();
+        res2.thenAccept(response -> {
+            JsonNode ret2 = response.asJson();
+            ArrayNode arr2 = (ArrayNode) ret2;
+
+            for (int j = 0; j < arr2.size(); j++) {
+                JsonNode res1 = arr2.get(j);
+                crlist.add(res1.get("label").asText());
+            }
+
+        });
+
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/showreview/"+paperid+"/"+userid).get();
+//        List<Review> list = new ArrayList();
+        Map<String, String> map = new HashMap();
+        return res.thenApply(response -> {
+
+            JsonNode ret = response.asJson();
+            ArrayNode arr = (ArrayNode)ret;
+
+            for(int i = 0; i < arr.size(); i++){
+                JsonNode node = arr.get(i);
+                map.put(node.get("label").asText(), node.get("review_content").asText());
+//                Review review = new Review();
+//                review.id = Long.parseLong(node.get("id").asText());
+//                review.paperid = Long.parseLong(node.get("paperid").asText());
+//                review.reviewerid = Long.parseLong(node.get("reviewerid").asText());
+//                review.iscriteria = node.get("iscriteria").asText();
+//                review.label = node.get("label").asText();
+//                review.review_content = node.get("review_content").asText();
+//                list.add(review);
+//                crlist.remove(review.label);
+            }
+            System.out.println(map.get("quality"));
+
+//            for(String criteria: crlist){
+//                Review review = new Review();
+//                review.id = (Long)(long)0;
+//                review.iscriteria = "Y";
+//                review.label = criteria;
+//                review.review_content = "";
+//                list.add(review);
+//            }
+
+            return ok(
+                    views.html.editreview.render(crlist, map)
+            );
+        });
+
+
     }
 
-    public Result updateReview(Long paperid){
-        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        Paper new_paper = paperForm.get();
-        System.out.println("===IN REVIEW PAPER ID IS "+Long.toString(paperid) + "REVIEW IS "+new_paper.review);
+    public Result updateReview(){
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
 
-        JsonNode json = Json.newObject()
-                .put("id", Long.toString(paperid))
-                .put("review", new_paper.review);
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(json);
+        DynamicForm requestData = formFactory.form().bindFromRequest();
 
+
+//        for(String criteria:requestData.data().keySet()){
+//            JsonNode json = Json.newObject()
+//                    .put("paperid", pid)
+//                    .put("reviewerid", userid)
+//                    .put("iscriteria", "Y")
+//                    .put("label", criteria)
+//                    .put("review_content", requestData.get(criteria));
+//            arr.add(json);
+//        };
+//        System.out.println(arr);
+//        JsonNode temp = (JsonNode)arr;
+//        JsonNode resJson = Json.newObject()
+//                .put("result",temp);
+//        System.out.println(temp);
+//        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(resJson);
+//        return res.thenApply(response -> {
+//            return GO_HOME;
+//        });
+
+        for(String criteria:requestData.data().keySet()){
+            JsonNode json = Json.newObject()
+                    .put("paperid", pid)
+                    .put("reviewerid", userid)
+                    .put("iscriteria", "Y")
+                    .put("label", criteria)
+                    .put("review_content", requestData.get(criteria));
+            CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(json);
+            res.thenAccept(response -> {
+
+            });
+        };
         return GO_HOME;
+
     }
 
-    public Result showreview(String review){
-        return ok(views.html.showreview.render(review));
+    public CompletionStage<Result> showreview(Long paperid){
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/showreview/"+paperid+"/"+userid).get();
+        return res.thenApply(response -> {
+
+            JsonNode ret = response.asJson();
+            ArrayNode arr = (ArrayNode)ret;
+
+            List<Review> list = new ArrayList();
+
+            for(int i = 0; i < arr.size(); i++){
+                JsonNode node = arr.get(i);
+                Review review = new Review();
+                review.id = Long.parseLong(node.get("id").asText());
+                review.paperid = Long.parseLong(node.get("paperid").asText());
+                review.reviewerid = Long.parseLong(node.get("reviewerid").asText());
+                review.iscriteria = node.get("iscriteria").asText();
+                review.label = node.get("label").asText();
+                review.review_content = node.get("review_content").asText();
+                System.out.println(node.get("review_content").asText());
+                list.add(review);
+            }
+
+
+            return ok(
+                    views.html.showreview.render(list)
+            );
+        });
+
     }
 
     public Result printreview(String review){
