@@ -13,7 +13,11 @@ public class EmailTemplate extends Model {
     @Id
     public Long id;
 
-    public String pcchair_name;
+    public String chair_name;
+
+    public String email_type;
+
+    public String subject;
 
     public String template;
 }

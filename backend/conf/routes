@@ -80,7 +80,13 @@ GET    /review/paper/:id/:conf          controllers.ReviewerController.getpapers
 
 POST    /updatereview                   controllers.ReviewerController.updateReview()
 
-GET      /emailTemplate/:username       controllers.EmailTemplateController.getEmailTemplate(username:String)
-POST     /emailTemplate                 controllers.EmailTemplateController.updateEmailTemplate
+GET      /emailTemplate/:email_type/:username       controllers.EmailTemplateController.getEmailTemplate(email_type:String, username:String)
+POST     /emailTemplate                 controllers.EmailTemplateController.updateEmailTemplate()
 
 GET        /email/:username              controllers.UserController.GetEmailByUsername(username:String)
+
+GET         /unreviewerInfo             controllers.EmailTemplateController.findReviewer()
+
+GET         /confInfo/:conf_title        controllers.ConfigSysController.GetConfInfo(conf_title:String)
+
+POST        /editConfInfo               controllers.ConfigSysController.edit()

@@ -32,6 +32,32 @@ public class Conference extends Model {
     public String ifadmin;
     public String keyword;
 
+    //conference details - configure system
+//    public String name;
+//    public String url;
+//    public String conference_email;
+//    public String chair_email;
+//    public String tag_title;
+//    public String config_content;
+//    public boolean canPDF;
+//    public boolean canPostscript;
+//    public boolean canWord;
+//    public boolean canZip;
+//    public String canMultitopics;
+//    public String isOpenAbstract;
+//    public String isOpenPaper;
+//    public String isOpenCamera;
+//    public String isBlindReview;
+//    public String discussMode;
+//    public String ballotMode;
+//    public String reviewer_number;
+//    public String isMailAbstract;
+//    public String isMailUpload;
+//    public String isMailReviewSubmission;
+//
+//    //user details
+
+
     public static Find<Long,Conference> find = new Find<Long,Conference>(){};
 
     public static List<Conference> GetMyConference(String username){
