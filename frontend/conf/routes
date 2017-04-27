@@ -92,3 +92,4 @@ GET     /emailTemplate                  controllers.EmailTemplateController.emai
 POST    /emailTemplate                  controllers.EmailTemplateController.updateEmailTemplate()
 
 GET     /admin                          controllers.AdminController.adminPage(conferenceinfo:String)
+GET     /admin/downloadpapers           controllers.AdminController.download()

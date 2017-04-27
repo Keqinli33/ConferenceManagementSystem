@@ -172,4 +172,27 @@ public class PaperController extends Controller {
         return ok("save successfully");
     }
 
+    public Result selectFile(Long id) throws PersistenceException {
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+
+        Transaction txn = Ebean.beginTransaction();
+        try {
+            Paper savedPaper = Paper.find.byId(id);
+            if (savedPaper != null) {
+                Paper newPaperData = paperForm.get();
+
+
+                savedPaper.ifsubmit = newPaperData.ifsubmit;
+                savedPaper.format = newPaperData.format;
+                savedPaper.papersize = newPaperData.papersize;
+
+                savedPaper.update();
+                txn.commit();
+            }
+        } finally {
+            txn.end();
+        }
+
+        return ok("update successfully");
+    }
 }

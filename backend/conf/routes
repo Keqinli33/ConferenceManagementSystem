@@ -69,7 +69,7 @@ GET    /topics/delete/:id                     controllers.TopicController.delete
 GET   /topic/:conference                  controllers.TopicController.showMyTopic(conference:String)
 #Upload paper
 #GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
-#POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
+POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
 #get all conferences of a user
 GET   /conference/:username                     controllers.ShowConferenceController.showMyConference(username:String)
 #POST  /conference/search                controllers.ShowConferenceController.searchConference()

@@ -322,7 +322,7 @@ public class PaperController extends Controller {
     public CompletionStage<Result> selectFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
 
-        Paper savedPaper = Paper.find.byId(id);
+        Paper savedPaper = new Paper();
         System.out.println("begin upload file");
 //        if (savedPaper != null) {
             System.out.println("upload file");
