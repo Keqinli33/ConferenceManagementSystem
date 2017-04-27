@@ -75,4 +75,4 @@ GET     /printreview                    controllers.ReviewerController.printrevi
 GET     /emailTemplate                  controllers.EmailTemplateController.emailTemplate()
 POST    /emailTemplate                  controllers.EmailTemplateController.updateEmailTemplate()
 
-GET     /admin                          controllers.AdminController.adminPage()
+GET     /admin                          controllers.AdminController.adminPage(conferenceinfo:String)

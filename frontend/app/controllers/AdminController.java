@@ -59,7 +59,10 @@ public class AdminController extends Controller {
             routes.ShowConferenceController.showMyConference()
     );
 
-    public Result adminPage(){
-            return ok(views.html.admin.render());
+    public Result adminPage(String conferenceinfo){
+        Http.Session session = Http.Context.current().session();
+        session.put("conferenceinfo", conferenceinfo);
+        return ok(views.html.admin.render());
     }
+
 }
