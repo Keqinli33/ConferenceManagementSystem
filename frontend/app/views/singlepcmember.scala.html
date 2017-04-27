@@ -1,14 +1,9 @@
-@()
+@(pcmemberForm: Form[PCmember], member: PCmember, message: Integer)
 
 @import helper._
 
 @import b3.vertical.fieldConstructor
-<style>
-        table, th, td {
-            border: 1px solid black;
-            text-align: center;
-        }
-</style>
+
 @main {
     <table border=0 cellpadding=0 cellspacing=0 width="100%" style="background: #0064cd"><tr>
         <td width="60%">
@@ -23,41 +18,26 @@
 
     </tr>
     </table>
+    <h1>Configure System</h1>
 
-    <h3>administrative tasks</h3>
-    <table style="width:100%; border: 1px solid black">
-        <tr>
-            <td><a href='/sysconfig'>Configure system</a></td>
-            <td colspan="2"><a href='/pcmember'>Program Committee</a></td>
-        </tr>
-        <tr>
-            <td><a href="@routes.TopicController.showMyTopic()">Research topic</a></td>
-            <td><a href='/conference'>Criteria</a></td>
-            <td><a href='/conference'>Review questions</a></td>
-        </tr>
-        <tr>
-            <td><a href='/conference'>Status code</a></td>
-            <td><a href="@routes.configSysController.update()">Close/Open submission phase</a></td>
-            <td><a href='/conference'>Logo setting</a></td>
-        </tr>
-        <tr>
-            <td><a href='/emailTemplate'>Email template management</a></td>
-            <td><a href='/conference'>Submit a paper on behalf of author</a></td>
-            <td><a href="@routes.AdminController.download()">Download papers submitted</a></td>
-        </tr>
-    </table>
+    @b3.form(routes.PCmemberController.ModifyPCmember()) {
+        <fieldset>
+            <label for="textarea">Email</label>
+            <input name="email" value="@member.email" readonly>
+            @b3.text(pcmemberForm("lastname"), '_label -> "Last Name", 'value -> member.lastname)
+            @b3.text(pcmemberForm("firstname"), '_label -> "First Name", 'value -> member.firstname)
+            @b3.text(pcmemberForm("affiliation"), '_label -> "Affiliation", 'value -> member.affiliation)
+            @b3.tel(pcmemberForm("phone"), '_label -> "Phone", 'value -> member.phone)
+            @b3.textarea(pcmemberForm("address"), '_label -> "Address", 'value -> member.address)
 
-    <br>
-    <h3>PC Chair tasks</h3>
-    <table style="width:100%; border: 1px solid black">
-        <tr>
-            <td><a href='/conference'>List of submitted papers</a></td>
-            <td colspan="2"><a href='/conference'>manual assignment - check and modify</a></td>
-        </tr>
-        <tr>
-            <td><a href='/conference'>List of authors</a></td>
-            <td><a href='/conference'>Review state</a></td>
-            <td><a href='/conference'>Send reminder to reviewers</a></td>
-        </tr>
-    </table>
+            @b3.radio( pcmemberForm("ifChair"), options = Seq("Y"->"YES","N"->"NO"),'_label -> "Is chair?", 'value -> member.ifChair)
+            @b3.radio( pcmemberForm("ifReviewer"), options = Seq("Y"->"YES","N"->"NO"),'_label -> "Is Reviewer?", 'value -> member.ifReviewer )
+
+        </fieldset>
+
+        <div class="actions">
+            <input type="submit" value="submit" class="btn primary">
+            <a href="@routes.ShowPaperController.showMyPaper()" class="btn">Cancel</a>
+        </div>
+    }
 }

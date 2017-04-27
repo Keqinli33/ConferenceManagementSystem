@@ -48,9 +48,11 @@ public class EmailTemplateController extends Controller {
 
         Session session = Http.Context.current().session();
         String chair_name = session.get("username");
+        String conf = session.get("conferenceinfo");
+        String conf_url = conf.replace(" ","%20");
 
         //get old emailTemplate
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/emailTemplate/"+email_type+"/"+chair_name).get();
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/emailTemplate/"+email_type+"/"+chair_name+"/"+conf_url).get();
         return res.thenApplyAsync(response -> {
             JsonNode ret = response.asJson();
             if ("successful".equals(ret.get("status").asText())) {
@@ -71,9 +73,11 @@ public class EmailTemplateController extends Controller {
 
         Session session = Http.Context.current().session();
         String chair_name = session.get("username");
+        String conf = session.get("conferenceinfo");
+        String conf_url = conf.replace(" ","%20");
 
         //get old emailTemplate
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/emailTemplate/"+email_type+"/"+chair_name).get();
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/emailTemplate/"+email_type+"/"+chair_name+"/"+conf_url).get();
         return res.thenApplyAsync(response -> {
             JsonNode ret = response.asJson();
             if ("successful".equals(ret.get("status").asText())) {
@@ -109,6 +113,7 @@ public class EmailTemplateController extends Controller {
     {
         Session session = Http.Context.current().session();
         String pcchair_name = session.get("username");
+        String conf = session.get("conferenceinfo");
         Form<EmailTemplate> EmailTemplateForm = formFactory.form(EmailTemplate.class).bindFromRequest();
         EmailTemplate new_emailtemplate = EmailTemplateForm.get();
         new_emailtemplate.chair_name = pcchair_name;
@@ -117,6 +122,7 @@ public class EmailTemplateController extends Controller {
         JsonNode json = Json.newObject()
                 .put("chair_name", pcchair_name)
                 .put("email_type", new_emailtemplate.email_type)
+                .put("conference",conf)
                 .put("subject", new_emailtemplate.subject)
                 .put("template", ConvertedToRaw(new_emailtemplate.template));
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/emailTemplate").post(json);
