@@ -180,17 +180,77 @@ public class ReviewerController extends Controller{
     }
 
     public Result updateReview(){
-        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
-        Paper paper = paperForm.get();
-        Long paperid = paper.id;
-        Paper update_paper = Paper.find.byId(paperid);
-        try {
-            update_paper.review = paper.review;
-            update_paper.reviewstatus = "reviewed";
-            update_paper.update();
-        } catch (Exception e){
-            e.printStackTrace();
+//        DynamicForm requestData = formFactory.form().bindFromRequest();
+//
+//        JsonNodeFactory factory = JsonNodeFactory.instance;
+//        ArrayNode arr2 = new ArrayNode(factory);
+//
+//        for (int j = 0; j < arr2.size(); j++) {
+//            JsonNode res = arr2.get(j);
+//            System.out.println(res);
+//        }
+        Form<Review> reviewForm = formFactory.form(Review.class).bindFromRequest();
+        Review review = reviewForm.get();
+        List<Review> reviewList = Review.find.where().eq("paperid", review.paperid).eq("reviewerid", review.reviewerid).eq("label", review.label).eq("iscriteria", review.iscriteria).findList();
+        if(reviewList.size() == 0){
+            Review newreview = new Review();
+            newreview.paperid = review.paperid;
+            newreview.reviewerid = review.reviewerid;
+            newreview.label = review.label;
+            newreview.review_content = review.review_content;
+            newreview.reviewstatus = "reviewed";
+            newreview.iscriteria = review.iscriteria;
+            newreview.insert();
         }
+        else {
+            for (Review newreview : reviewList) {
+                System.out.println(newreview.review_content);
+                newreview.review_content = review.review_content;
+                newreview.update();
+            }
+        }
+
+//        Paper paper = paperForm.get();
+//        Long paperid = paper.id;
+//        Paper update_paper = Paper.find.byId(paperid);
+//        try {
+//            update_paper.review = paper.review;
+//            update_paper.reviewstatus = "reviewed";
+//            update_paper.update();
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
         return ok("successfully");
     }
+
+    public Result getreview(Long paperid, Long reviewerid) {
+        List<Review> reviewList = Review.find.where().eq("paperid", paperid).eq("reviewerid", reviewerid).findList();
+
+        int i = 0;
+        //ObjectNode node = Json.newObject();
+
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode arr = new ArrayNode(factory);
+
+        for(Review reviews : reviewList){
+            if(!reviews.iscriteria.equals("NA")) {
+                JsonNode json = Json.newObject()
+                        .put("id", reviews.id)
+                        .put("paperid", reviews.paperid)
+                        .put("reviewerid", reviews.reviewerid)
+                        .put("iscriteria", reviews.iscriteria)
+                        .put("label", reviews.label)
+                        .put("review_content", reviews.review_content);
+                //System.out.println(review.review);
+                System.out.println(reviews.reviewstatus);
+                //node.put(Integer.toString(i++), json);
+                arr.add(json);
+            }
+        }
+//        System.out.println(arr);
+        JsonNode temp = (JsonNode)arr;
+
+        return ok(temp);
+    }
+
 }

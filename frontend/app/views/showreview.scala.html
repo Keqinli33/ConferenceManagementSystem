@@ -1,27 +1,44 @@
-@(review: String)
+@(reviewlist: List[Review])
 
-@import helper._
+    @import helper._
 
-@import b3.vertical.fieldConstructor
+    @import b3.vertical.fieldConstructor
 
-@main {
-    <table border=0 cellpadding=0 cellspacing=0 width="100%" style="background: #0064cd"><tr>
-        <td width="60%">
-            <div align="left"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif"><strong><em>Conference Management System</em></strong></font></div>
-        </td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/conference'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Conferences</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/paper'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Paper</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/review'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Review</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/profile'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Profile</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/verifyChangePwdAuth'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Change Password</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/logout'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Logout</font></div></td>
+    @main {
+        <table border=0 cellpadding=0 cellspacing=0 width="100%" style="background: #0064cd"><tr>
+            <td width="60%">
+                <div align="left"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif"><strong><em>Conference Management System</em></strong></font></div>
+            </td>
+            <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/conference'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Conferences</font></div></td>
+            <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/paper'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Paper</font></div></td>
+            <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/review'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Review</font></div></td>
+            <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/profile'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Profile</font></div></td>
+            <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/verifyChangePwdAuth'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Change Password</font></div></td>
+            <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/logout'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Logout</font></div></td>
 
-    </tr>
-    </table>
+        </tr>
+        </table>
 
-    <h6>@review</h6>
+        <h1>Show my review</h1>
 
-        <div class="actions">
-            <a class="btn success" id="register" href="@routes.ShowPaperController.showMyPaper()">Cancel</a>
-        </div>
-}
+
+                <table class="mypaper zebra-striped">
+                    <thead>
+                        <tr>
+                            @for(review <- reviewlist){
+                                <th>@review.label</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                        @for(review <- reviewlist){
+                            <th>@review.review_content</th>
+                        }
+                        </tr>
+
+                    </tbody>
+                </table>
+
+    }

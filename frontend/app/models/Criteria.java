@@ -20,6 +20,8 @@ public class Criteria extends Model {
     public String explanations;
     public String weight;
 
+    public static List<String> criteria_options = Arrays.asList("Strongly Accept", "Accept", "Weak Accept", "Neutral", "Strongly Reject", "Reject", "Weak Reject");
+
     public static Find<Long,Criteria> find = new Find<Long,Criteria>(){};
 
     public static List<Criteria> GetMyCriteria(Long criteriaId){

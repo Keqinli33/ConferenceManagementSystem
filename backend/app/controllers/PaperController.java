@@ -104,6 +104,7 @@ public class PaperController extends Controller {
         return ok(json);
     }
     public Result update(Long id) throws PersistenceException {
+        System.out.println("this is beginning");
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
 //        if(paperForm.hasErrors()) {
 //            return badRequest(views.html.editPaper.render(id, paperForm));
@@ -161,6 +162,8 @@ public class PaperController extends Controller {
                 
 
                 savedPaper.update();
+
+
                 flash("success", "Paper " + paperForm.get().title + " has been updated");
                 txn.commit();
             }
@@ -191,7 +194,17 @@ public class PaperController extends Controller {
 //        newPaper.username= session.get("username");
 //        newPaper.ifsubmit = "N";
 //        newPaper.date = new Date();
-        paperForm.get().save();
+        newPaper.save();
+
+        if(Review.find.where().eq("paperid", newPaper.id).findList().size() == 0) {
+            System.out.println("I am here");
+            Review review = new Review();
+            review.paperid = newPaper.id;
+            review.reviewerid = newPaper.reviewerid;
+            review.reviewstatus = "assigned";
+            review.iscriteria = "NA";
+            review.insert();
+        }
 //        String email = session.get("email");
         //SendEmail(email, "Dear Sir/Madam, your paper is successfully submitted");
 

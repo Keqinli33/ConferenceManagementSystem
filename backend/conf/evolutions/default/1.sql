@@ -120,6 +120,17 @@ create table profile (
   constraint pk_profile primary key (userid)
 );
 
+create table review (
+  id                            bigint auto_increment not null,
+  paperid                       bigint,
+  reviewerid                    bigint,
+  iscriteria                    varchar(255),
+  label                         varchar(255),
+  review_content                varchar(255),
+  reviewstatus                  varchar(255),
+  constraint pk_review primary key (id)
+);
+
 create table user (
   id                            bigint auto_increment not null,
   username                      varchar(255),
@@ -155,6 +166,8 @@ drop table if exists email_template;
 drop table if exists paper;
 
 drop table if exists profile;
+
+drop table if exists review;
 
 drop table if exists user;
 

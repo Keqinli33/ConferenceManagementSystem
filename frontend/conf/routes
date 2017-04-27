@@ -67,9 +67,9 @@ GET     /review                    controllers.ReviewerController.enterReviewCon
 GET     /review/paper              controllers.ReviewerController.enterReviewPaper(confName:String)
 
 GET     /download                   controllers.ReviewerController.download(filename:Long)
-GET     /editreview                     controllers.ReviewerController.review(review:String, paperid:Long)
-POST    /editreview                     controllers.ReviewerController.updateReview(paperid:Long)
-GET     /showreview                     controllers.ReviewerController.showreview(review:String)
+GET     /editreview/:paperid                     controllers.ReviewerController.review(paperid:Long)
+POST    /editreview                     controllers.ReviewerController.updateReview()
+GET     /showreview/:paperid                     controllers.ReviewerController.showreview(paperid:Long)
 GET     /printreview                    controllers.ReviewerController.printreview(review:String)
 
 GET     /emailTemplate                  controllers.EmailTemplateController.emailTemplate()
