@@ -33,7 +33,7 @@ public class ReviewQuestion extends Model {
     public String listOfChoice7;
     public String position7;
 
-    public static Finder<Long,ReviewQuestion> find = new Finder<Long,ReviewQuestion>(ReviewQuestion.class);
+    public static Find<Long,ReviewQuestion> find = new Find<Long,ReviewQuestion>(){};
 
     public static List<ReviewQuestion> GetMyQuestion(Long questionId){
         List<ReviewQuestion> results =

@@ -83,6 +83,17 @@ GET    /criteria/deleting/:id            controllers.CriteriaController.deleteCr
 #retrive all criteria
 GET /criterias/all                     controllers.CriteriaController.retriveAll()
 
+#get reviewquestion content
+GET    /reviewquestion/:id                  controllers.ReviewQuestionController.edit(id:Long)
+#update reviewquestion content
+POST   /reviewquestion/:id                  controllers.ReviewQuestionController.update(id:Long)
+# create a reviewquestion
+POST   /reviewquestion                      controllers.ReviewQuestionController.createQuestion()
+#delete reviewquestion
+GET    /reviewquestion/deleting/:id            controllers.ReviewQuestionController.deleteQuestion(id:Long)
+#retrive all reviewquestion
+GET /reviewquestions/all                     controllers.ReviewQuestionController.retriveAll()
+
 
 
 
