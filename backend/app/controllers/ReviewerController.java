@@ -242,7 +242,7 @@ public class ReviewerController extends Controller{
                         .put("label", reviews.label)
                         .put("review_content", reviews.review_content);
                 //System.out.println(review.review);
-                System.out.println(reviews.reviewstatus);
+                System.out.println(reviews.review_content);
                 //node.put(Integer.toString(i++), json);
                 arr.add(json);
             }

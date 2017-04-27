@@ -428,8 +428,7 @@ public class ReviewerController extends Controller{
         List<String> crlist = new ArrayList();
 
         CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all").get();
-        return res2.thenApply(response -> {
-            System.out.println("first part");
+        res2.thenAccept(response -> {
             JsonNode ret2 = response.asJson();
             ArrayNode arr2 = (ArrayNode) ret2;
 
@@ -438,25 +437,20 @@ public class ReviewerController extends Controller{
                 crlist.add(res1.get("label").asText());
             }
 
-            return ok(
-                    views.html.editreview.render(crlist)
-            );
-
         });
 
 
-//        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/showreview/"+paperid+"/"+userid).get();
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/showreview/"+paperid+"/"+userid).get();
 //        List<Review> list = new ArrayList();
-//        return res.thenApply(response -> {
-//            System.out.println("second part");
-//
-//            JsonNode ret = response.asJson();
-//            ArrayNode arr = (ArrayNode)ret;
-//
-//
-//
-//            for(int i = 0; i < arr.size(); i++){
-//                JsonNode node = arr.get(i);
+        Map<String, String> map = new HashMap();
+        return res.thenApply(response -> {
+
+            JsonNode ret = response.asJson();
+            ArrayNode arr = (ArrayNode)ret;
+
+            for(int i = 0; i < arr.size(); i++){
+                JsonNode node = arr.get(i);
+                map.put(node.get("label").asText(), node.get("review_content").asText());
 //                Review review = new Review();
 //                review.id = Long.parseLong(node.get("id").asText());
 //                review.paperid = Long.parseLong(node.get("paperid").asText());
@@ -466,8 +460,9 @@ public class ReviewerController extends Controller{
 //                review.review_content = node.get("review_content").asText();
 //                list.add(review);
 //                crlist.remove(review.label);
-//            }
-//
+            }
+            System.out.println(map.get("quality"));
+
 //            for(String criteria: crlist){
 //                Review review = new Review();
 //                review.id = (Long)(long)0;
@@ -476,9 +471,11 @@ public class ReviewerController extends Controller{
 //                review.review_content = "";
 //                list.add(review);
 //            }
-//
-//            return GO_HOME;
-//        });
+
+            return ok(
+                    views.html.editreview.render(crlist, map)
+            );
+        });
 
 
     }
