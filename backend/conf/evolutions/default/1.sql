@@ -63,10 +63,25 @@ create table conference_detail (
 create table email_template (
   id                            bigint auto_increment not null,
   chair_name                    varchar(255),
+  conference                    varchar(255),
   email_type                    varchar(255),
   subject                       varchar(255),
   template                      varchar(10000),
   constraint pk_email_template primary key (id)
+);
+
+create table pcmember (
+  id                            bigint auto_increment not null,
+  email                         varchar(255),
+  conference                    varchar(255),
+  firstname                     varchar(255),
+  lastname                      varchar(255),
+  affiliation                   varchar(255),
+  phone                         varchar(255),
+  address                       varchar(255),
+  if_chair                      varchar(255),
+  if_reviewer                   varchar(255),
+  constraint pk_pcmember primary key (id)
 );
 
 create table paper (
@@ -173,6 +188,8 @@ drop table if exists conference;
 drop table if exists conference_detail;
 
 drop table if exists email_template;
+
+drop table if exists pcmember;
 
 drop table if exists paper;
 

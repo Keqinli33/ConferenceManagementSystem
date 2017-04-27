@@ -139,4 +139,15 @@ public class User extends Model {
                         .findList();
         return results.get(0).email;
     }
+
+    public static String GetUsernameByEmail(String email){
+        List<User> results =
+                find.where()
+                        .eq("email", email)
+                        .findList();
+        if(results.size()==0)
+            return "error";
+        else
+            return results.get(0).username;
+    }
 }

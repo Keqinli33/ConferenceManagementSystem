@@ -18,6 +18,8 @@ public class EmailTemplate extends Model {
 
     public String chair_name;
 
+    public String conference;
+
     public String email_type;
 
     public String subject;
@@ -63,33 +65,41 @@ public class EmailTemplate extends Model {
 
     public static final String REMINDER_EmailType = "REVIEWER_REMINDER";
 
-    public static String getEmailTemplateByType(String email_type, String chair_name)
+    public static String getEmailTemplateByType(String email_type, String chair_name, String conf)
     {
         List<EmailTemplate> results =
                 find.where()
-                        .and(Expr.eq("chair_name", chair_name), Expr.eq("email_type", email_type))
+                        .conjunction()
+                        .eq("chair_name", chair_name)
+                        .eq("email_type", email_type)
+                        .eq("conference",conf)
+                        .endJunction()
                         .findList();
         if(results.size()==0)return "";
         else
         return results.get(0).template;
     }
 
-    public static String getEmailSubjectByType(String email_type, String chair_name)
+    public static String getEmailSubjectByType(String email_type, String chair_name, String conf)
     {
         List<EmailTemplate> results =
                 find.where()
-                        .and(Expr.eq("chair_name", chair_name), Expr.eq("email_type", email_type))
+                        .conjunction()
+                        .eq("chair_name", chair_name)
+                        .eq("email_type", email_type)
+                        .eq("conference",conf)
+                        .endJunction()
                         .findList();
         if(results.size()==0)return "";
         else
             return results.get(0).subject;
     }
 
-    public static boolean IfUserExist(String chair_name)
+    public static boolean IfExist(String chair_name, String conf)
     {
         List<EmailTemplate> results =
                 find.where()
-                        .eq("chair_name", chair_name)
+                        .and(Expr.eq("chair_name", chair_name), Expr.eq("conference", conf))
                         .findList();
         if(results.size() == 0)
             return false;
@@ -101,7 +111,11 @@ public class EmailTemplate extends Model {
     {
         List<EmailTemplate> results =
                 find.where()
-                        .and(Expr.eq("chair_name", new_template.chair_name), Expr.eq("email_type", new_template.email_type))
+                        .conjunction()
+                        .eq("chair_name", new_template.chair_name)
+                        .eq("email_type", new_template.email_type)
+                        .eq("conference",new_template.conference)
+                        .endJunction()
                         .findList();
         Long id =  results.get(0).id;
         EmailTemplate new_email = EmailTemplate.find.byId(id);
@@ -110,11 +124,12 @@ public class EmailTemplate extends Model {
         new_email.update();
     }
 
-    public static void createChairTemplate(String chair_name)
+    public static void createChairTemplate(String chair_name, String conf)
     {
         EmailTemplate new_one = new EmailTemplate();
 
         new_one.chair_name = chair_name;
+        new_one.conference = conf;
 
         //create accepted paper email template
         System.out.println("3=====start inserting ac template");
@@ -127,6 +142,7 @@ public class EmailTemplate extends Model {
         //create reject paper email template
         EmailTemplate new_one2 = new EmailTemplate();
         new_one2.chair_name = chair_name;
+        new_one2.conference = conf;
         new_one2.email_type = REJ_EmailType;
         new_one2.subject = REJ_Subject;
         new_one2.template = REJ_Template;
@@ -135,6 +151,7 @@ public class EmailTemplate extends Model {
         //create move paper email template
         EmailTemplate new_one3 = new EmailTemplate();
         new_one3.chair_name = chair_name;
+        new_one3.conference = conf;
         new_one3.email_type = MOV_EmailType;
         new_one3.subject = MOV_Subject;
         new_one3.template = MOV_Template;
@@ -143,6 +160,7 @@ public class EmailTemplate extends Model {
         //create instruction email template
         EmailTemplate new_one4 = new EmailTemplate();
         new_one4.chair_name = chair_name;
+        new_one4.conference = conf;
         new_one4.email_type = INSTRUCTION_EmailType;
         new_one4.subject = INSTRUCTION_Subject;
         new_one4.template = INSTRUCTION_Template;
@@ -151,6 +169,7 @@ public class EmailTemplate extends Model {
         //create invitation email template
         EmailTemplate new_one5 = new EmailTemplate();
         new_one5.chair_name = chair_name;
+        new_one5.conference = conf;
         new_one5.email_type = INVITATION_EmailType;
         new_one5.subject = INVITATION_Subject;
         new_one5.template = INVITATION_Template;
@@ -159,6 +178,7 @@ public class EmailTemplate extends Model {
         //create reminder template
         EmailTemplate new_one6 = new EmailTemplate();
         new_one6.chair_name = chair_name;
+        new_one6.conference = conf;
         new_one6.email_type = REMINDER_EmailType;
         new_one6.subject = REMINDER_Subject;
         new_one6.template = REMINDER_Template;

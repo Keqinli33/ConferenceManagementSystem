@@ -42,19 +42,20 @@ public class EmailTemplateController extends Controller {
         this.formFactory = formFactory;
     }
 
-    public Result getEmailTemplate(String email_type, String chair_name){
+    public Result getEmailTemplate(String email_type, String chair_name, String conf_url){
         System.out.println("In get email template ");
         Form<EmailTemplate> EmailTemplateForm = formFactory.form(EmailTemplate.class);
+        String conf = conf_url.replace("%20"," ");
         //find if chair member's email template is created,if not, create it
         EmailTemplate tmp = new EmailTemplate();
-        if(!tmp.IfUserExist(chair_name))
+        if(!tmp.IfExist(chair_name, conf))
         {
             System.out.println("===2In get email template create template");
-            tmp.createChairTemplate(chair_name);
+            tmp.createChairTemplate(chair_name, conf);
         }
 
-        String newEmailTemplateData = EmailTemplate.getEmailTemplateByType(email_type, chair_name);
-        String newEmailSubjectData = EmailTemplate.getEmailSubjectByType(email_type, chair_name);
+        String newEmailTemplateData = EmailTemplate.getEmailTemplateByType(email_type, chair_name, conf);
+        String newEmailSubjectData = EmailTemplate.getEmailSubjectByType(email_type, chair_name, conf);
 
         JsonNode json;
 
@@ -64,6 +65,7 @@ public class EmailTemplateController extends Controller {
         else {
             json = Json.newObject()
                     .put("chair_name", chair_name)
+                    .put("conference", conf)
                     .put("email_type", email_type)
                     .put("template",newEmailTemplateData)
                     .put("subject",newEmailSubjectData)
@@ -80,14 +82,14 @@ public class EmailTemplateController extends Controller {
 
         Transaction txn = Ebean.beginTransaction();
         try {
-            if(new_EmailTemplate.IfUserExist(new_EmailTemplate.chair_name)) {
+            if(new_EmailTemplate.IfExist(new_EmailTemplate.chair_name, new_EmailTemplate.conference)) {
                 System.out.println("ready to update pcchair name "+new_EmailTemplate.chair_name+" template" + new_EmailTemplate.template);
                 new_EmailTemplate.updateEmailTemplate(new_EmailTemplate);
                 txn.commit();
             }
             else {
                 System.out.println("ready to save pcchair name "+new_EmailTemplate.chair_name+" template" + new_EmailTemplate.template);
-                new_EmailTemplate.createChairTemplate(new_EmailTemplate.chair_name);
+                new_EmailTemplate.createChairTemplate(new_EmailTemplate.chair_name, new_EmailTemplate.conference);
                 txn.commit();
             }
         } catch (Exception e){

@@ -82,3 +82,11 @@ GET     /admin                          controllers.AdminController.adminPage()
 
 GET     /sysconfig                      controllers.configSysController.enterConfigSystem()
 POST     /sysconfig                      controllers.configSysController.edit()
+
+GET     /pcmember                       controllers.PCmemberController.enterPCmember()
+POST    /pcmember                       controllers.PCmemberController.addmember()
+
+GET     /singlepcmember/:email                 controllers.PCmemberController.GetPCmember(email:String)
+POST    /modifypcmember                     controllers.PCmemberController.ModifyPCmember()
+
+GET     /deletepcmember/:email                 controllers.PCmemberController.deletePCmember(email:String)
