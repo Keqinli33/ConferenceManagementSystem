@@ -42,4 +42,6 @@ public class Conference extends Model {
                         .findList();
         return results;
     }
+
+
 }

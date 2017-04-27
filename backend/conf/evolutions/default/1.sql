@@ -112,6 +112,13 @@ create table profile (
   constraint pk_profile primary key (userid)
 );
 
+create table topic (
+  id                            bigint auto_increment not null,
+  conference                    varchar(255),
+  topic                         varchar(255),
+  constraint pk_topic primary key (id)
+);
+
 create table user (
   id                            bigint auto_increment not null,
   username                      varchar(255),
@@ -145,6 +152,8 @@ drop table if exists email_template;
 drop table if exists paper;
 
 drop table if exists profile;
+
+drop table if exists topic;
 
 drop table if exists user;
 

@@ -62,10 +62,10 @@ POST  /topics/new                           controllers.TopicController.save()
 #Edit topic
 GET     /topics/:id                     controllers.TopicController.edit(id:Long)
 POST    /topics/:id                     controllers.TopicController.update(id:Long)
-POST    /topics/delete/:id                     controllers.TopicController.delete(id:Long)
+GET    /topics/delete/:id                     controllers.TopicController.delete(id:Long)
 
 #show all topics of a user
-GET   /topic/:conference                  controllers.TopicController.showMyTopic()
+GET   /topic/conference                  controllers.TopicController.showMyTopic()
 
 
 

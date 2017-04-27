@@ -1,4 +1,4 @@
-@(topicForm: Form[Topic], topicInfo: List[Topic])
+@(phase: String)
 
 @import helper._
 
@@ -19,48 +19,17 @@
     </tr>
     </table>
 
-    <h1>Research Topic</h1>
-    @b3.form(routes.TopicController.save()) {
+    <h1>Submission Phase</h1>
+    @b3.form(routes.ShowConferenceController.edit()) {
 
-
-        @b3.text(topicForm("topic"), '_label -> "label", '_help -> "")
-
-        <div class="actions">
-            <input type="submit" value="Insert" class="btn primary">
-        </div>
-
-    }
-
-    @b3.form(routes.TopicController.showMyTopic()) {
-
-        <fieldset>
-
-
-
-            <table class="mypaper zebra-striped">
-                <thead>
-                    <tr>
-                        <th>label</th>
-                        <th>modify</th>
-                        <th>delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                @for(topic <- topicInfo) {
-                    <tr>
-                        <td>@topic.topic</td>
-                        <td><a href="@routes.TopicController.edit(topic.id)">modify</a></td>
-                        <td><a href="@routes.TopicController.delete(topic.id)">delete</a></td>
-                    </tr>
-                }
-
-                </tbody>
-            </table>
-
-        </fieldset>
+        @if(phase == "Open") {
+            <a class="btn success" id="Open" href="@routes.ShowConferenceController.open()">Open the submission phase</a>
+        } else {
+            <a class="btn success" id="Close" href="@routes.ShowConferenceController.close()">Close the submission phase</a>
+        }
 
 
     }
+
 
 }
