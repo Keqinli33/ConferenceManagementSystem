@@ -445,14 +445,16 @@ public class PaperController extends Controller {
         return res.thenApply(response -> {
             String ret = response.getBody();
             System.out.println("here is "+ret);
-            if ("save successfully".equals(ret)) {
+//            if ("save successfully".equals(ret)) {
                 session.put("Submitted","ok");
                 session.put("paperid",Long.toString(paperForm.get().id));
 
-                return GO_HOME;
-            }else{
-                return GO_HOME;
-            }
+                return ok(
+                        views.html.paperSubmitted.render(ret)
+                );
+//            }else{
+//                return GO_HOME;
+//            }
 
         });
 //        String email = session.get("email");

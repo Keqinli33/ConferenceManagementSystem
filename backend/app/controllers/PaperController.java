@@ -195,7 +195,7 @@ public class PaperController extends Controller {
         paperForm.get().save();
 
 
-        return ok("save successfully");
+        return ok(String.valueOf(newPaper.id));
     }
 
 

@@ -90,15 +90,5 @@
 
     }
 
-    @if(session.containsKey("Submitted") && session.get("Submitted").toString == "ok"){
-        <script>
-            var str = "Thank you. Your paper abstract has been submitted successfully. Please keep your paper id:"+paper.id;
-            alert(str);
-        </script>
-        @{
-            session.remove("Submitted")
-            session.remove("paperid")
-        }
 
-    }
 }
