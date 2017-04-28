@@ -57,9 +57,22 @@ GET     /papers/:id                     controllers.PaperController.edit(id:Long
 POST    /papers/:id                     controllers.PaperController.update(id:Long)
 #get all papers of a user
 GET   /paper/:username                     controllers.ShowPaperController.showMyPaper(username:String)
+
+
+# Submit topic
+
+POST  /topics/new                           controllers.TopicController.save()
+
+#Edit topic
+GET     /topics/:id                     controllers.TopicController.edit(id:Long)
+POST    /topics/:id                     controllers.TopicController.update(id:Long)
+GET    /topics/delete/:id                     controllers.TopicController.delete(id:Long)
+
+#show all topics of a user
+GET   /topic/:conference                  controllers.TopicController.showMyTopic(conference:String)
 #Upload paper
 #GET    /papers/:id/upload           controllers.PaperController.uploadFile(id:Long)
-#POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
+POST    /papers/:id/upload           controllers.PaperController.selectFile(id:Long)
 #get all conferences of a user
 GET   /conference/:username                     controllers.ShowConferenceController.showMyConference(username:String)
 #POST  /conference/search                controllers.ShowConferenceController.searchConference()
@@ -71,8 +84,25 @@ GET     /showreview/:paperid/:reviewerid    controllers.ReviewerController.getre
 
 POST    /updatereview                   controllers.ReviewerController.updateReview()
 
-GET      /emailTemplate/:username       controllers.EmailTemplateController.getEmailTemplate(username:String)
-POST     /emailTemplate                 controllers.EmailTemplateController.updateEmailTemplate
+GET      /emailTemplate/:email_type/:username/:conf       controllers.EmailTemplateController.getEmailTemplate(email_type:String, username:String, conf:String)
+POST     /emailTemplate                 controllers.EmailTemplateController.updateEmailTemplate()
+
+GET        /email/:username              controllers.UserController.GetEmailByUsername(username:String)
+
+GET         /unreviewerInfo             controllers.EmailTemplateController.findReviewer()
+
+GET         /confInfo/:conf_title        controllers.ConfigSysController.GetConfInfo(conf_title:String)
+
+POST        /editConfInfo               controllers.ConfigSysController.edit()
+
+GET     /confInfo/updatephase/:conf_title                       controllers.ConfigSysController.update(conf_title:String)
+POST     /editConfInfo/openphase                      controllers.ConfigSysController.open()
+POST     /editConfInfo/closephase                      controllers.ConfigSysController.open()
+
+GET         /pcmember/:conf             controllers.PCmemberController.GetAllPCmember(conf:String)
+POST        /editpcmember               controllers.PCmemberController.EditPCmember()
+
+GET         /singlepcmember/:email      controllers.PCmemberController.GetPCmember(email:String)
 
 GET        /email/:username              controllers.UserController.GetEmailByUsername(username:String)
 
@@ -96,3 +126,5 @@ POST    /review/delete                     controllers.ReviewerController.delete
 # show author paper
 GET     /author/paper                   controllers.PaperController.showAuthorPaper()
 GET     /paper/reviewers/:paperid            controllers.ReviewerController.getReviewers(paperid:Long)
+
+GET         /deletepcmember/:email      controllers.PCmemberController.deletePCmember(email:String)

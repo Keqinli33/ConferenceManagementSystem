@@ -32,6 +32,34 @@ create table conference (
   constraint pk_conference primary key (id)
 );
 
+create table conference_detail (
+  id                            bigint auto_increment not null,
+  title                         varchar(255),
+  name                          varchar(255),
+  url                           varchar(255),
+  conference_email              varchar(255),
+  chair_email                   varchar(255),
+  tag_title                     varchar(255),
+  config_content                varchar(255),
+  can_pdf                       tinyint(1) default 0,
+  can_postscript                tinyint(1) default 0,
+  can_word                      tinyint(1) default 0,
+  can_zip                       tinyint(1) default 0,
+  can_multitopics               varchar(255),
+  is_open_abstract              varchar(255),
+  is_open_paper                 varchar(255),
+  is_open_camera                varchar(255),
+  is_blind_review               varchar(255),
+  discuss_mode                  varchar(255),
+  ballot_mode                   varchar(255),
+  reviewer_number               varchar(255),
+  is_mail_abstract              varchar(255),
+  is_mail_upload                varchar(255),
+  is_mail_review_submission     varchar(255),
+  phase                         varchar(255),
+  constraint pk_conference_detail primary key (id)
+);
+
 create table criteria (
   id                            bigint auto_increment not null,
   label                         varchar(255),
@@ -42,9 +70,26 @@ create table criteria (
 
 create table email_template (
   id                            bigint auto_increment not null,
-  pcchair_name                  varchar(255),
-  template                      varchar(255),
+  chair_name                    varchar(255),
+  conference                    varchar(255),
+  email_type                    varchar(255),
+  subject                       varchar(255),
+  template                      varchar(10000),
   constraint pk_email_template primary key (id)
+);
+
+create table pcmember (
+  id                            bigint auto_increment not null,
+  email                         varchar(255),
+  conference                    varchar(255),
+  firstname                     varchar(255),
+  lastname                      varchar(255),
+  affiliation                   varchar(255),
+  phone                         varchar(255),
+  address                       varchar(255),
+  if_chair                      varchar(255),
+  if_reviewer                   varchar(255),
+  constraint pk_pcmember primary key (id)
 );
 
 create table paper (
@@ -131,6 +176,13 @@ create table review (
   constraint pk_review primary key (id)
 );
 
+create table topic (
+  id                            bigint auto_increment not null,
+  conference                    varchar(255),
+  topic                         varchar(255),
+  constraint pk_topic primary key (id)
+);
+
 create table user (
   id                            bigint auto_increment not null,
   username                      varchar(255),
@@ -159,15 +211,21 @@ drop table if exists computer;
 
 drop table if exists conference;
 
+drop table if exists conference_detail;
+
 drop table if exists criteria;
 
 drop table if exists email_template;
+
+drop table if exists pcmember;
 
 drop table if exists paper;
 
 drop table if exists profile;
 
 drop table if exists review;
+
+drop table if exists topic;
 
 drop table if exists user;
 

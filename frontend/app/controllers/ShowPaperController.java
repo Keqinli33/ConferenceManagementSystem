@@ -198,22 +198,6 @@ public class ShowPaperController extends Controller{
         Http.Session session = Http.Context.current().session();
         String username = session.get("username");
 
-
-
-//        CompletionStage<WSResponse> resofconf = ws.url("http://localhost:9000/conference/" + username ).get();
-//        Set<String> set = new HashSet<>();
-//
-//        CompletionStage<Result> resultconf =resofconf.thenApplyAsync(response -> {
-//            ArrayNode ret =(ArrayNode) response.asJson();
-//            System.out.println("here is ");
-//            Set<String> confSet = new HashSet<>();
-//            for (JsonNode res1 : ret) {
-//                confSet.add(res1.get("title").asText());
-//            }
-//            set = confSet;
-//            return ok("OK");
-//        });
-
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
         String[] conferences= session.get("conferences").split("#");
         for(String s : conferences) {

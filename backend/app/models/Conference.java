@@ -19,10 +19,10 @@ import com.avaje.ebean.Model;
 public class Conference extends Model {
     private static final long serialVersionUID = 1L;
     @Id
-    public long id;
+    public Long id;
     public String username;
 //    @Constraints.Required
-    public String title;
+    public String title;//conference acronym
 //    @Constraints.Required
     public String location;
     public String date;
@@ -41,5 +41,22 @@ public class Conference extends Model {
                         .eq("username",username)
                         .findList();
         return results;
+    }
+
+    public static void updateIfReviewer(String username, String conf, String ifreviewer)
+    {
+        List<Conference> results =
+                find.where()
+                        .and(Expr.eq("username", username), Expr.eq("title", conf))
+                        .findList();
+        if(results.size()>0) {
+            Long new_id = results.get(0).id;
+
+            Conference new_conf = Conference.find.byId(new_id);
+
+            new_conf.ifreviewer = ifreviewer;
+
+            new_conf.update();
+        }
     }
 }

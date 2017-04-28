@@ -22,6 +22,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.file.FileDataBodyPart;
 import javax.ws.rs.core.MediaType;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
@@ -208,14 +209,31 @@ public class PaperController extends Controller {
 
 //        return GO_HOME;
     }
-    public Result create() {
+    public Result create() throws InterruptedException{
 //        Form<Paper> paperForm = formFactory.form(Paper.class);
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
         Paper newPaper = paperForm.get();
         String conf = newPaper.conference;
         if(conf.equals("All My Conference")){
             return GO_HOME;
-        }else {
+        }
+        String conf_title_url = conf.replaceAll(" ","+");
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/confInfo/updatephase/"+conf_title_url).get();
+        ConferenceDetail oldConference = new ConferenceDetail();
+
+        res.thenAccept(response -> {
+            JsonNode ret = response.asJson();
+            oldConference.phase = ret.get("phase").asText();
+            System.out.println("===in get multi topic "+oldConference.canMultitopics);
+            //oldConference.title = session.get("conferenceinfo");
+
+        });
+
+        TimeUnit.SECONDS.sleep(1);
+
+        if(oldConference.phase.equals("CLOSE")){
+            return ok(views.html.submissionclose.render(oldConference.phase));
+        }else{
         return ok(
                 views.html.createPaper.render(paperForm, conf)
         );
@@ -442,7 +460,7 @@ public class PaperController extends Controller {
     public CompletionStage<Result> selectFile(Long id) {
         Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
 
-        Paper savedPaper = Paper.find.byId(id);
+        Paper savedPaper = new Paper();
         System.out.println("begin upload file");
 //        if (savedPaper != null) {
             System.out.println("upload file");
