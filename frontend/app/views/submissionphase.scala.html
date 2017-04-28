@@ -23,8 +23,10 @@
     @b3.form(routes.configSysController.update()) {
 
         @if(phase == "OPEN") {
+            The submission phase is open. Click to close the submission phase.
             <a class="btn success" id="Close" href="@routes.configSysController.close()">Close the submission phase</a>
         } else {
+            The submission phase is closed. Click to open the submission phase.
             <a class="btn success" id="Open" href="@routes.configSysController.open()">Open the submission phase</a>
 
         }

@@ -103,11 +103,8 @@ POST     /editConfInfo/closephase                      controllers.ConfigSysCont
 GET         /pcmember/:conf             controllers.PCmemberController.GetAllPCmember(conf:String)
 POST        /editpcmember               controllers.PCmemberController.EditPCmember()
 
-GET         /singlepcmember/:email      controllers.PCmemberController.GetPCmember(email:String)
+GET         /singlepcmember/:email/:conf      controllers.PCmemberController.GetPCmember(email:String, conf:String)
 
-GET        /email/:username              controllers.UserController.GetEmailByUsername(username:String)
-
-GET         /deletepcmember/:email      controllers.PCmemberController.deletePCmember(email:String)
 
 
 #get criteria content
@@ -142,4 +139,9 @@ POST    /review/delete                     controllers.ReviewerController.delete
 GET     /author/paper                   controllers.PaperController.showAuthorPaper()
 GET     /paper/reviewers/:paperid            controllers.ReviewerController.getReviewers(paperid:Long)
 
-GET         /deletepcmember/:email      controllers.PCmemberController.deletePCmember(email:String)
+
+GET         /deletepcmember/:email/:conf      controllers.PCmemberController.deletePCmember(email:String, conf:String)
+
+GET         /role/:conf/:username                       controllers.AdminController.getRole(conf:String, username:String)
+
+POST        /addpcmember                controllers.PCmemberController.addPCmember()

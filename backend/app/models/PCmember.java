@@ -54,11 +54,11 @@ public class PCmember extends Model {
         return results;
     }
 
-    public static boolean IfEXIST(String email)
+    public static boolean IfEXIST(String email, String conf)
     {
         List<PCmember> results =
                 find.where()
-                        .eq("email",email)
+                        .and(Expr.eq("email", email), Expr.eq("conference", conf))
                         .findList();
         if(results.size()>0)
             return true;
@@ -70,7 +70,7 @@ public class PCmember extends Model {
     {
         List<PCmember> results =
                 find.where()
-                        .eq("email",new_member.email)
+                        .and(Expr.eq("email", new_member.email), Expr.eq("conference", new_member.conference))
                         .findList();
         Long id = results.get(0).id;
         PCmember member = PCmember.find.byId(id);
@@ -104,11 +104,11 @@ public class PCmember extends Model {
         member.save();
     }
 
-    public static Long GetmemberID(String email)
+    public static Long GetmemberID(String email, String conf)
     {
         List<PCmember> results =
                 find.where()
-                        .eq("email",email)
+                        .and(Expr.eq("email", email), Expr.eq("conference", conf))
                         .findList();
         return results.get(0).id;
     }

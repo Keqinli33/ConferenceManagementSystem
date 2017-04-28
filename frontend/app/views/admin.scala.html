@@ -1,4 +1,4 @@
-@()
+@(conferencetitle:String)(role:Integer)
 
 @import helper._
 
@@ -24,6 +24,7 @@
     </tr>
     </table>
 
+    @if(role==2 || role==3) {
     <h3>administrative tasks</h3>
     <table style="width:100%; border: 1px solid black">
         <tr>
@@ -47,7 +48,9 @@
             <td><a href="@routes.AdminController.download()">Download papers submitted</a></td>
         </tr>
     </table>
-
+    }
+    <br>
+    @if(role==1||role==3) {
     <br>
     <h3>PC Chair tasks</h3>
     <table style="width:100%; border: 1px solid black">
@@ -61,4 +64,5 @@
             <td><a href='/conference'>Send reminder to reviewers</a></td>
         </tr>
     </table>
+    }
 }

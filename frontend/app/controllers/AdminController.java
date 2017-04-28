@@ -60,11 +60,20 @@ public class AdminController extends Controller {
             routes.ShowConferenceController.showMyConference()
     );
 
-    public Result adminPage(String conferenceinfo){
+    public CompletionStage<Result> adminPage(String conferenceinfo){
         Http.Session session = Http.Context.current().session();
 //        conferenceinfo = conferenceinfo.replaceAll(" ","+");
         session.put("conferenceinfo", conferenceinfo);
-        return ok(views.html.admin.render());
+
+        String conf_url = conferenceinfo.replace(" ","%20");
+        String username = session.get("username");
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/role/"+conf_url+"/"+username).get();
+        return res.thenApply(response -> {
+            String ret = response.getBody();
+            int role = Integer.parseInt(ret);
+            System.out.println("===admin page role is "+role);
+            return ok(views.html.admin.render(conferenceinfo, role));
+        });
     }
 
     public Result download()throws FileNotFoundException, IOException,InterruptedException{
@@ -75,6 +84,8 @@ public class AdminController extends Controller {
         final String conferenceinfo1 = conferenceinfo;
         CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/paper/" + username).get();
         List<Long> res = new ArrayList<>();
+        List<String> ifsubmitlist = new ArrayList<>();
+
         resofrest.thenAccept(response -> {
             System.out.println("here is "+response);
             JsonNode arr = response.asJson();
@@ -84,6 +95,7 @@ public class AdminController extends Controller {
                 if(res1.get("conference").asText().equals(conferenceinfo1)){
                     savedPaper.id = Long.parseLong(res1.get("id").asText());
                     res.add(savedPaper.id);
+                    ifsubmitlist.add(res1.get("ifsubmit").asText());
                 }
             }
             System.out.println("complete");
@@ -91,14 +103,17 @@ public class AdminController extends Controller {
         });
 
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(1);
 
             FileOutputStream fos = new FileOutputStream("/Users/shuang/uploads/"+conferenceinfo+".zip");
             ZipOutputStream zos = new ZipOutputStream(fos);
 
             for(int i =0; i<res.size(); i++){
-                String path = "/Users/shuang/uploads/"+Long.toString(res.get(i));
-                addToZipFile(path, zos);
+                if(ifsubmitlist.get(i).equals("Y")){
+                    String path = "/Users/shuang/uploads/"+Long.toString(res.get(i));
+                    addToZipFile(path, zos);
+                }
+
             }
             zos.close();
             fos.close();
