@@ -60,7 +60,7 @@ POST    /papers/:id                     controllers.PaperController.update(id:Lo
 #show all papers of a user
 GET   /paper                            controllers.ShowPaperController.showMyPaper()
 GET   /paper/conference                  controllers.ShowPaperController.getConferencePaper(conferencename:String)
-#GET   /paper/conference/assign                  controllers.ShowPaperController.getConferencePaperToAssign()
+GET   /paper/conference/assign                  controllers.ShowPaperController.getConferencePaperToAssign()
 
 
 # Submit topic
