@@ -125,6 +125,18 @@ GET    /reviewquestion/deleting/:id            controllers.ReviewQuestionControl
 #retrive all reviewquestion
 GET /reviewquestions/all/:conferenceinfo                      controllers.ReviewQuestionController.retriveAll(conferenceinfo:String)
 
+#for now, no conferenceinfo indicated, need refactor later
+#get reviewquestion content
+GET    /statuscode/:id                  controllers.StatusCodeController.edit(id:Long)
+#update reviewquestion content
+POST   /statuscode/:id                  controllers.StatusCodeController.update(id:Long)
+# create a reviewquestion
+POST   /statuscode                      controllers.StatusCodeController.createStatusCode()
+#delete reviewquestion
+GET    /statuscode/deleting/:id            controllers.StatusCodeController.deleteStatusCode(id:Long)
+#retrive all reviewquestion
+GET /statuscodes/all                      controllers.StatusCodeController.retriveAll()
+
 
 
 

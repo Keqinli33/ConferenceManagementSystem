@@ -124,3 +124,9 @@ GET    /reviewquestion/deleting/:id          controllers.ReviewQuestionControlle
 GET     /reviewquestions/all                   controllers.ReviewQuestionController.retriveAll()
 POST    /reviewquestion/:id               controllers.ReviewQuestionController.update(id:Long)
 POST   /reviewquestion                    controllers.ReviewQuestionController.createQuestion()
+
+GET    /statuscode/:id                controllers.StatusCodeController.edit(id:Long)
+GET    /statuscode/deleting/:id          controllers.StatusCodeController.deleteStatusCode(id:Long)
+GET     /statuscodes/all                   controllers.StatusCodeController.retriveAllStatusCode()
+POST    /statuscode/:id               controllers.StatusCodeController.update(id:Long)
+POST   /statuscode                    controllers.StatusCodeController.createStatusCode()
