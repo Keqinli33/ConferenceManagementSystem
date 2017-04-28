@@ -58,6 +58,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.concurrent.TimeUnit;
 /**
  * Created by sxh on 17/3/26.
  */
@@ -604,7 +605,7 @@ public class ReviewerController extends Controller{
         return ok(views.html.printreview.render(review));
     }
 
-    public CompletionStage<Result> enterAssignPaper(Long paperid) {
+    public CompletionStage<Result> enterAssignPaper(Long paperid) throws InterruptedException{
         pid = paperid;
 
         List<Long> userlist = new ArrayList();
@@ -621,6 +622,7 @@ public class ReviewerController extends Controller{
             ArrayNode arr = (ArrayNode) ret;
 
 
+
             for (int i = 0; i < arr.size(); i++) {
                 JsonNode node = arr.get(i);
 //                User user = new User();
@@ -631,6 +633,8 @@ public class ReviewerController extends Controller{
                 emailmap.put(id, node.get("username").asText());
             }
         });
+
+        TimeUnit.SECONDS.sleep(1);
 
 
         CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/paper/reviewers/"+paperid).get();
@@ -643,9 +647,11 @@ public class ReviewerController extends Controller{
                 JsonNode node = arr2.get(i);
 
                 revieweridlist.add(Long.parseLong(node.get("reviewerid").asText()));
+                System.out.println(Long.parseLong(node.get("reviewerid").asText()));
             }
 
             ridlist = revieweridlist;
+
 
             return ok(
                     views.html.assignPaper.render(userlist, revieweridlist, emailmap)

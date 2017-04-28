@@ -200,6 +200,15 @@ create table review_question (
   constraint pk_review_question primary key (id)
 );
 
+create table status_code (
+  id                            bigint auto_increment not null,
+  label                         varchar(255),
+  mailtemplate                  varchar(255),
+  camerareadyrequired           varchar(255),
+  conferenceinfo                varchar(255),
+  constraint pk_status_code primary key (id)
+);
+
 create table topic (
   id                            bigint auto_increment not null,
   conference                    varchar(255),
@@ -250,6 +259,8 @@ drop table if exists profile;
 drop table if exists review;
 
 drop table if exists review_question;
+
+drop table if exists status_code;
 
 drop table if exists topic;
 

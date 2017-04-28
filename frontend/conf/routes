@@ -129,7 +129,7 @@ POST    /pcmember                       controllers.PCmemberController.addmember
 GET     /singlepcmember/:email                 controllers.PCmemberController.GetPCmember(email:String)
 POST    /modifypcmember                     controllers.PCmemberController.ModifyPCmember()
 
-GET     /deletepcmember/:email                 controllers.PCmemberController.deletePCmember(email:String)
+
 GET     /deletepcmember/:email                 controllers.PCmemberController.deletePCmember(email:String)
 
 GET    /criteria/:id                controllers.CriteriaController.edit(id:Long)
@@ -143,3 +143,9 @@ GET    /reviewquestion/deleting/:id          controllers.ReviewQuestionControlle
 GET     /reviewquestions/all                   controllers.ReviewQuestionController.retriveAll()
 POST    /reviewquestion/:id               controllers.ReviewQuestionController.update(id:Long)
 POST   /reviewquestion                    controllers.ReviewQuestionController.createQuestion()
+
+GET    /statuscode/:id                controllers.StatusCodeController.edit(id:Long)
+GET    /statuscode/deleting/:id          controllers.StatusCodeController.deleteStatusCode(id:Long)
+GET     /statuscodes/all                   controllers.StatusCodeController.retriveAllStatusCode()
+POST    /statuscode/:id               controllers.StatusCodeController.update(id:Long)
+POST   /statuscode                    controllers.StatusCodeController.createStatusCode()

@@ -23,6 +23,7 @@
         @b3.form(routes.ReviewQuestionController.update(id)){
             <h3>ReviewQuestion</h3>
             @b3.text(questionForm("question"), '_label -> "question",'value -> tempQuestion.question)
+            <p>Public</p>
             @b3.select(questionForm("isPublic"), options("Yes" -> "Yes", "No" -> "No"), 'value -> tempQuestion.isPublic )
             <fieldset>
             <table class="myquestion zebra-striped">
@@ -67,8 +68,7 @@
 
 
             <div class="actions">
-                <input type="submit" value="Modify" class="btn primary"> or
-                <a href="@routes.ReviewQuestionController.update(id)" class="btn">Modify</a>
+                <input type="submit" value="Modify" class="btn primary">
             </div>
         }
 
@@ -106,6 +106,7 @@
         @b3.form(routes.ReviewQuestionController.createQuestion()){
             <h3>ReviewQuestion</h3>
             @b3.text(questionForm("question"), '_label -> "question",'_help -> "")
+            <p>Public</p>
             @b3.select(questionForm("isPublic"), options("Yes" -> "Yes", "No" -> "No"), '_label -> "" )
             <fieldset>
             <table class="myquestion zebra-striped">
@@ -149,8 +150,7 @@
             </fieldset>
 
             <div class="actions">
-                <input type="submit" value="Insert" class="btn primary"> or
-                <a href="@routes.ReviewQuestionController.createQuestion()" class="btn">Insert</a>
+                <input type="submit" value="Insert" class="btn primary">
             </div>
         }
 

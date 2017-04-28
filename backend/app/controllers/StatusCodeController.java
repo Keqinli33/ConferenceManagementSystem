@@ -41,42 +41,42 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 
-public class CriteriaController extends Controller {
+public class StatusCodeController extends Controller {
     private FormFactory formFactory;
 
     @Inject
-    public CriteriaController(FormFactory formFactory) {
+    public StatusCodeController(FormFactory formFactory) {
         this.formFactory = formFactory;
     }
 
     public Result edit(Long id) {
-        Form<Criteria> criteriaForm = formFactory.form(Criteria.class);
-        Criteria newCriteria = Criteria.find.byId(id);
+        Form<StatusCode> statusForm = formFactory.form(StatusCode.class);
+        StatusCode newStatusCode = StatusCode.find.byId(id);
 
         JsonNode json = Json.newObject()
-                .put("label", newCriteria.label)
-                .put("explanations", newCriteria.explanations)
-                .put("weight", newCriteria.weight);
+                .put("label", newStatusCode.label)
+                .put("mailtemplate", newStatusCode.mailtemplate)
+                .put("camerareadyrequired", newStatusCode.camerareadyrequired);
 
 
         return ok(json);
     }
 
     public Result update(Long id) throws PersistenceException {
-        Form<Criteria> criteriaForm = formFactory.form(Criteria.class).bindFromRequest();
+        Form<StatusCode> statusForm = formFactory.form(StatusCode.class).bindFromRequest();
 
         Transaction txn = Ebean.beginTransaction();
         try {
-            Criteria oldCriteria = Criteria.find.byId(id);
-            if (oldCriteria != null) {
-                Criteria newCriteria = criteriaForm.get();
+            StatusCode oldStatusCode = StatusCode.find.byId(id);
+            if (oldStatusCode != null) {
+                StatusCode newStatusCode = statusForm.get();
 
-            oldCriteria.label = newCriteria.label;
-            oldCriteria.explanations = newCriteria.explanations;
-            oldCriteria.weight = newCriteria.weight;
+                oldStatusCode.label = newStatusCode.label;
+                oldStatusCode.mailtemplate = newStatusCode.mailtemplate;
+                oldStatusCode.camerareadyrequired = newStatusCode.camerareadyrequired;
 
-            oldCriteria.update();
-                flash("success", "Criteria " + criteriaForm.get().label + " has been updated");
+                oldStatusCode.update();
+                flash("success", "StatusCode " + statusForm.get().label + " has been updated");
                 txn.commit();
             }
         } finally {
@@ -86,18 +86,18 @@ public class CriteriaController extends Controller {
         return ok("update successfully");
     }
 
-    public Result createCriteria() {
-        Form<Criteria> criteriaForm = formFactory.form(Criteria.class).bindFromRequest();
-        Criteria newCriteria = criteriaForm.get();
-        criteriaForm.get().save();
-        return ok("create a criteria successfully");
+    public Result createStatusCode() {
+        Form<StatusCode> statusForm = formFactory.form(StatusCode.class).bindFromRequest();
+        StatusCode newStatusCode = statusForm.get();
+        statusForm.get().save();
+        return ok("create a statuscode successfully");
     }
 
-    public Result deleteCriteria(Long id) {
-        //Form<Criteria> criteriaForm = formFactory.form(Criteria.class).bindFromRequest();
-        //Criteria newCriteria = criteriaForm.get();
-        //criteriaForm.get().save();
-        Criteria temp = Criteria.find.byId(id);
+    public Result deleteStatusCode(Long id) {
+        //Form<StatusCode> statusForm = formFactory.form(StatusCode.class).bindFromRequest();
+        //StatusCode newStatusCode = statusForm.get();
+        //statusForm.get().save();
+        StatusCode temp = StatusCode.find.byId(id);
         if(temp == null) {
             return ok("Not found");
         } else {
@@ -107,19 +107,20 @@ public class CriteriaController extends Controller {
 
     }
 
-    public Result retriveAll(String name){
-        String conferenceinfo = name.replaceAll("\\+", " ");
-        Form<Criteria> criteriaForm = formFactory.form(Criteria.class);
+    public Result retriveAll(String conferenceinfo){
+        Form<StatusCode> statusForm = formFactory.form(StatusCode.class);
         String confname = conferenceinfo.replaceAll("\\+", " ");
-        List<Criteria> temp = Criteria.GetMyConferenceCriteria(confname);
+        System.out.println("=====me"+confname);
+        List<StatusCode> temp = StatusCode.GetMyConferenceStatusCode(confname);
+        //List<StatusCode> temp = StatusCode.find.all();
         JsonNodeFactory factory = JsonNodeFactory.instance;
         ArrayNode jsonarray = new ArrayNode(factory);
         for(int i=0; i< temp.size(); i++){
             JsonNode json = Json.newObject()
                     .put("id", temp.get(i).id)
                     .put("label", temp.get(i).label)
-                    .put("explanations", temp.get(i).explanations)
-                    .put("weight", temp.get(i).weight);
+                    .put("mailtemplate", temp.get(i).mailtemplate)
+                    .put("camerareadyrequired", temp.get(i).camerareadyrequired);
 
             jsonarray.add(json);
         }

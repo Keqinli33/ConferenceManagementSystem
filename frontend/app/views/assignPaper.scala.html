@@ -26,13 +26,13 @@
         <fieldset>
 
         @for(user <- userlist){
-            <h3>@userMap.get(user):</h3>>
+            <h3>@userMap.get(user):</h3>
             @if(revieweridlist.contains(user)) {
                 <select name="@user">
                     <option value="YES" selected="selected">Choose as a reviewer</option>
                     <option value="NO">Don't Choose as a reviewer</option>
                 </select>
-            }   else {
+            }else {
                 <select name="@user">
                     <option value="YES">Choose as a reviewer</option>
                     <option value="NO"  selected="selected">Don't Choose as a reviewer</option>
