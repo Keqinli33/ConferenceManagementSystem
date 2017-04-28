@@ -65,6 +65,7 @@ public class PCmemberController extends Controller {
         //session.put("conferenceinfo","IEEE 2017 ICWS Area 1");
 
         String conf_title = session.get("conferenceinfo");
+        System.out.println("in pc member conf"+conf_title);
 
         String conf_title_url = conf_title.replace(" ","%20");
         CompletionStage<WSResponse> resp = ws.url("http://localhost:9000/pcmember/"+conf_title_url).get();

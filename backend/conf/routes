@@ -94,6 +94,7 @@ POST        /editConfInfo               controllers.ConfigSysController.edit()
 GET     /confInfo/updatephase/:conf_title                       controllers.ConfigSysController.update(conf_title:String)
 POST     /editConfInfo/openphase                      controllers.ConfigSysController.open()
 POST     /editConfInfo/closephase                      controllers.ConfigSysController.open()
+
 GET         /pcmember/:conf             controllers.PCmemberController.GetAllPCmember(conf:String)
 POST        /editpcmember               controllers.PCmemberController.EditPCmember()
 
