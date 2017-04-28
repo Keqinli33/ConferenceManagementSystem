@@ -19,6 +19,7 @@ public class Criteria extends Model {
     public String label;
     public String explanations;
     public String weight;
+    public String conferenceinfo;
 
     public static List<String> criteria_options = Arrays.asList("Strongly Accept", "Accept", "Weak Accept", "Neutral", "Strongly Reject", "Reject", "Weak Reject");
 
@@ -28,6 +29,14 @@ public class Criteria extends Model {
         List<Criteria> results =
                 find.where()
                         .eq("id",criteriaId)
+                        .findList();
+        return results;
+    }
+
+    public static List<Criteria> GetMyConferenceCriteria(String conferenceinfo){
+        List<Criteria> results =
+                find.where()
+                        .eq("conferenceinfo",conferenceinfo)
                         .findList();
         return results;
     }

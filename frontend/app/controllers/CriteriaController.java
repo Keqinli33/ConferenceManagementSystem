@@ -64,7 +64,8 @@ public class CriteriaController extends Controller{
     private Criteria editCriteria = new Criteria();
     public CompletionStage<Result> edit(Long id) {
         Form<Criteria> criteriaForm = formFactory.form(Criteria.class);
-
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
         List<Criteria> restemp = new ArrayList<Criteria>();
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/criteria/"+id).get();
@@ -75,7 +76,7 @@ public class CriteriaController extends Controller{
             editCriteria.weight = ret.get("weight").asText();
         });
 
-        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all").get();
+        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all/"+conferenceinfo).get();
         return res2.thenApply(response2 -> {
             JsonNode arr = response2.asJson();
             ArrayNode ret2 = (ArrayNode) arr;
@@ -124,10 +125,13 @@ public class CriteriaController extends Controller{
     public CompletionStage<Result> createCriteria(){
         Form<Criteria> criteriaForm = formFactory.form(Criteria.class).bindFromRequest();
         Criteria newCriteria = criteriaForm.get();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
         JsonNode json = Json.newObject()
                 .put("label", newCriteria.label)
                 .put("explanations", newCriteria.explanations)
-                .put("weight", newCriteria.weight);
+                .put("weight", newCriteria.weight)
+                .put("conferenceinfo", conferenceinfo);
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/criteria").post(json);
         return res.thenApplyAsync(response -> {
@@ -159,8 +163,10 @@ public class CriteriaController extends Controller{
 
     public CompletionStage<Result> retriveAllCriteria(){
         Form<Criteria> criteriaForm = formFactory.form(Criteria.class);
-
-        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/criterias/all").get();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
+        String tempstr = conferenceinfo.replaceAll(" ", "+");
+        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/criterias/all/"+tempstr).get();
         List<Criteria> res = new ArrayList<Criteria>();
         return resws.thenApply(response -> {
             JsonNode arr = response.asJson();

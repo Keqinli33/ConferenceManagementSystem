@@ -425,11 +425,13 @@ public class ReviewerController extends Controller{
         pid = paperid;
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
+        String conferenceinfo = session.get("conferenceinfo");
+        String tempstr = conferenceinfo.replaceAll(" ", "+");
 
         Form<FrontReview> reviewForm = formFactory.form(FrontReview.class);
         List<String> crlist = new ArrayList();
 
-        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all").get();
+        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all/"+tempstr).get();
         res2.thenAccept(response -> {
             JsonNode ret2 = response.asJson();
             ArrayNode arr2 = (ArrayNode) ret2;
@@ -437,6 +439,8 @@ public class ReviewerController extends Controller{
             for (int j = 0; j < arr2.size(); j++) {
                 JsonNode res1 = arr2.get(j);
                 crlist.add(res1.get("label").asText());
+                System.out.println("-sdffd----");
+                System.out.println(res1.get("label").asText());
             }
 
         });

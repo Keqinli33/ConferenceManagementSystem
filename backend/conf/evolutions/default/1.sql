@@ -65,6 +65,7 @@ create table criteria (
   label                         varchar(255),
   explanations                  varchar(255),
   weight                        varchar(255),
+  conferenceinfo                varchar(255),
   constraint pk_criteria primary key (id)
 );
 
@@ -176,6 +177,28 @@ create table review (
   constraint pk_review primary key (id)
 );
 
+create table review_question (
+  id                            bigint auto_increment not null,
+  question                      varchar(255),
+  is_public                     varchar(255),
+  conferenceinfo                varchar(255),
+  list_of_choice1               varchar(255),
+  position1                     varchar(255),
+  list_of_choice2               varchar(255),
+  position2                     varchar(255),
+  list_of_choice3               varchar(255),
+  position3                     varchar(255),
+  list_of_choice4               varchar(255),
+  position4                     varchar(255),
+  list_of_choice5               varchar(255),
+  position5                     varchar(255),
+  list_of_choice6               varchar(255),
+  position6                     varchar(255),
+  list_of_choice7               varchar(255),
+  position7                     varchar(255),
+  constraint pk_review_question primary key (id)
+);
+
 create table topic (
   id                            bigint auto_increment not null,
   conference                    varchar(255),
@@ -224,6 +247,8 @@ drop table if exists paper;
 drop table if exists profile;
 
 drop table if exists review;
+
+drop table if exists review_question;
 
 drop table if exists topic;
 

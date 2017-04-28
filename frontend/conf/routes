@@ -107,7 +107,6 @@ POST    /updatemailTemplate          controllers.EmailTemplateController.updateE
 
 POST    /emailTemplate                  controllers.EmailTemplateController.updateEmailTemplate()
 
-
 GET    /criteria/:id                controllers.CriteriaController.edit(id:Long)
 GET    /criteria/deleting/:id          controllers.CriteriaController.deleteCriteria(id:Long)
 GET     /criterias/all                   controllers.CriteriaController.retriveAllCriteria()
@@ -131,3 +130,16 @@ GET     /singlepcmember/:email                 controllers.PCmemberController.Ge
 POST    /modifypcmember                     controllers.PCmemberController.ModifyPCmember()
 
 GET     /deletepcmember/:email                 controllers.PCmemberController.deletePCmember(email:String)
+GET     /deletepcmember/:email                 controllers.PCmemberController.deletePCmember(email:String)
+
+GET    /criteria/:id                controllers.CriteriaController.edit(id:Long)
+GET    /criteria/deleting/:id          controllers.CriteriaController.deleteCriteria(id:Long)
+GET     /criterias/all                   controllers.CriteriaController.retriveAllCriteria()
+POST    /criteria/:id               controllers.CriteriaController.update(id:Long)
+POST   /criteria                      controllers.CriteriaController.createCriteria()
+
+GET    /reviewquestion/:id                controllers.ReviewQuestionController.edit(id:Long)
+GET    /reviewquestion/deleting/:id          controllers.ReviewQuestionController.deleteQuestion(id:Long)
+GET     /reviewquestions/all                   controllers.ReviewQuestionController.retriveAll()
+POST    /reviewquestion/:id               controllers.ReviewQuestionController.update(id:Long)
+POST   /reviewquestion                    controllers.ReviewQuestionController.createQuestion()
