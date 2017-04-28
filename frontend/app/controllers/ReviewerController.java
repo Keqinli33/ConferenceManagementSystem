@@ -59,6 +59,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit;
 /**
  * Created by sxh on 17/3/26.
  */
@@ -423,7 +424,7 @@ public class ReviewerController extends Controller{
 
     }
 
-    public CompletionStage<Result> review(Long paperid){
+    public CompletionStage<Result> review(Long paperid) throws InterruptedException{
         pid = paperid;
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
@@ -506,6 +507,8 @@ public class ReviewerController extends Controller{
             }
 
         });
+
+        TimeUnit.SECONDS.sleep(1);
 
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/showreview/"+paperid+"/"+userid).get();
