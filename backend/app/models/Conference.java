@@ -30,6 +30,7 @@ public class Conference extends Model {
     public String searchstatus;
     public String ifreviewer;
     public String ifadmin;
+    public String ifchair;
     public String keyword;
 
 
@@ -43,7 +44,7 @@ public class Conference extends Model {
         return results;
     }
 
-    public static void updateIfReviewer(String username, String conf, String ifreviewer)
+    public static void updateIfReviewer(String username, String conf, String ifreviewer, String ifchair)
     {
         List<Conference> results =
                 find.where()
@@ -54,9 +55,34 @@ public class Conference extends Model {
 
             Conference new_conf = Conference.find.byId(new_id);
 
+            System.out.println("3=====add member before update if reviewer"+new_conf.ifreviewer+" if chair "+new_conf.ifchair);
             new_conf.ifreviewer = ifreviewer;
+            new_conf.ifchair = ifchair;
+            System.out.println("4=====add member after update if reviewer"+new_conf.ifreviewer+" if chair "+new_conf.ifchair);
 
             new_conf.update();
         }
+    }
+
+    /* Get the privilege of the user of certain conference
+     * @return: (ifadmin,ifchair)->(1/0,1/0)
+     * (isadmin,notchair)->(1,0), (isadmin,ischair)->(1,1), (notadmin, notchair)->(0,0), (notadmin, ischair)->(0,1)
+     */
+    public static int getrole(String username, String conf)
+    {
+        List<Conference> results =
+                find.where()
+                        .and(Expr.eq("username", username), Expr.eq("title", conf))
+                        .findList();
+        int admin_score = 2;
+        int chair_score = 1;
+        int score = 0;
+        if(results.size()>0) {
+            if ("Y".equals(results.get(0).ifadmin))
+                score += admin_score;
+            if ("Y".equals(results.get(0).ifchair))
+                score += chair_score;
+        }
+        return score;
     }
 }

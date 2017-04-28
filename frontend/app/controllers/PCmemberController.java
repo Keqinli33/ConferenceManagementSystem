@@ -103,12 +103,13 @@ public class PCmemberController extends Controller {
                 .put("ifChair",new_member.ifChair)
                 .put("ifReviewer",new_member.ifReviewer)
                 .put("conference",conf_title);
+        System.out.println("1====fronend get add pc member email "+new_member.email+" is chair "+new_member.ifChair+" is reviewer "+new_member.ifReviewer+" conference "+conf_title);
 
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/editpcmember").post(json);
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/addpcmember").post(json);
 
         return res.thenApply(response -> {
             String ret = response.getBody();
-            System.out.println("addmember is " + ret);
+            System.out.println("addmember result is " + ret);
             return redirect("/pcmember");
         });
     }
@@ -118,7 +119,8 @@ public class PCmemberController extends Controller {
         Session session = Http.Context.current().session();
 
         String conf_title = session.get("conferenceinfo");
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/singlepcmember/"+email).get();
+        String conf_url = conf_title.replace(" ","%20");
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/singlepcmember/"+email+"/"+conf_url).get();
 
         return res.thenApply(response -> {
             JsonNode res1 = response.asJson();
@@ -167,8 +169,11 @@ public class PCmemberController extends Controller {
 
     public CompletionStage<Result> deletePCmember(String email){
         Form<PCmember> memberForm = formFactory.form(PCmember.class);
+        Session session = Http.Context.current().session();
+        String conf_title = session.get("conferenceinfo");
 
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/deletepcmember/"+email).get();
+        String conf_url = conf_title.replace(" ","%20");
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/deletepcmember/"+email+"/"+conf_url).get();
 
         return res.thenApply(response -> {
             return redirect("/pcmember");

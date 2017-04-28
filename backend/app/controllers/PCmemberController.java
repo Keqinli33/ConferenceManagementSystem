@@ -66,7 +66,7 @@ public class PCmemberController extends Controller {
 
         PCmember new_member = PCmemberForm.get();
 
-        if(new_member.IfEXIST(new_member.email)){
+        if(new_member.IfEXIST(new_member.email, new_member.conference)){
             new_member.updatemember(new_member);
 
             //get corresponding username of this email
@@ -76,30 +76,49 @@ public class PCmemberController extends Controller {
             if(!"error".equals(username))
             {
                 Conference tmp_conf = new Conference();
-                tmp_conf.updateIfReviewer(username, new_member.conference, new_member.ifReviewer);
-            }
-
-        }else{
-            new_member.createmember(new_member);
-
-            //get corresponding username of this email
-            User tmp = new User();
-            String username = tmp.GetUsernameByEmail(new_member.email);
-            //update ifreview in conference
-            if(!"error".equals(username))
-            {
-                Conference tmp_conf = new Conference();
-                tmp_conf.updateIfReviewer(username, new_member.conference, new_member.ifReviewer);
+                tmp_conf.updateIfReviewer(username, new_member.conference, new_member.ifReviewer, new_member.ifChair);
             }
 
         }
         return ok();
     }
 
-    public Result GetPCmember(String email) {
+    public Result addPCmember()
+    {
+        Form<PCmember> PCmemberForm = formFactory.form(PCmember.class).bindFromRequest();
+        if(PCmemberForm.hasErrors()) {
+            return ok("error");
+        }
+
+        PCmember new_member = PCmemberForm.get();
+
+
+        if(new_member.IfEXIST(new_member.email, new_member.conference)){
+            System.out.println("try to add new pc member but already exist!");
+            return ok("chairexist");
+        }else {
+            new_member.createmember(new_member);
+            System.out.println("2====backend get add pc member email "+new_member.email+" is chair "+new_member.ifChair+" is reviewer "+new_member.ifReviewer+" conference "+new_member.conference);
+
+            //get corresponding username of this email
+            User tmp = new User();
+            String username = tmp.GetUsernameByEmail(new_member.email);
+            System.out.println("3====backend username "+username);
+            //update ifreview in conference
+            if (!"error".equals(username)) {
+                Conference tmp_conf = new Conference();
+                tmp_conf.updateIfReviewer(username, new_member.conference, new_member.ifReviewer, new_member.ifChair);
+            }
+        }
+        return ok("ok");
+    }
+
+    public Result GetPCmember(String email,String conf_url) {
         PCmember member = new PCmember();
 
-        Long ID = member.GetmemberID(email);
+        String conf = conf_url.replace("%20"," ");
+
+        Long ID = member.GetmemberID(email, conf);
 
         PCmember old_member = PCmember.find.byId(ID);
 
@@ -116,10 +135,11 @@ public class PCmemberController extends Controller {
         return ok(json);
     }
 
-    public Result deletePCmember(String email){
+    public Result deletePCmember(String email, String conf_url){
         PCmember member = new PCmember();
+        String conf = conf_url.replace("%20"," ");
 
-        Long ID = member.GetmemberID(email);
+        Long ID = member.GetmemberID(email, conf);
 
         PCmember.find.ref(ID).delete();
 

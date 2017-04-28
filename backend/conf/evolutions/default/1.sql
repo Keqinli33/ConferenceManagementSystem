@@ -28,6 +28,7 @@ create table conference (
   searchstatus                  varchar(255),
   ifreviewer                    varchar(255),
   ifadmin                       varchar(255),
+  ifchair                       varchar(255),
   keyword                       varchar(255),
   constraint pk_conference primary key (id)
 );
