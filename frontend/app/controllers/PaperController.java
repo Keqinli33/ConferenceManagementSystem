@@ -229,13 +229,27 @@ public class PaperController extends Controller {
 
         });
 
+        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+
+        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/topic/" + conf_title_url).get();
+//        List<Paper> restemp =new Arraylist<Paper>();
+        resofrest.thenAccept(response -> {
+            System.out.println("here is "+response);
+            JsonNode arr = response.asJson();
+            ArrayNode ret = (ArrayNode) arr;
+            for(JsonNode res1 : ret){
+
+                options.put(res1.get("topic").asText(),res1.get("topic").asText());
+            }
+        });
+
         TimeUnit.SECONDS.sleep(1);
 
         if(oldConference.phase.equals("CLOSE")){
             return ok(views.html.submissionclose.render(oldConference.phase));
         }else{
         return ok(
-                views.html.createPaper.render(paperForm, conf)
+                views.html.createPaper.render(paperForm, conf,options)
         );
         }
     }

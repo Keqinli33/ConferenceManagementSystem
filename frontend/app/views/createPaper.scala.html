@@ -1,4 +1,4 @@
-@(paperForm: Form[Paper], conference: String)
+@(paperForm: Form[Paper], conference: String, topicoptions:Map[String, String])
 
 @import helper._
 
@@ -12,7 +12,13 @@
     @b3.form(routes.PaperController.save(conference)) {
 
             @b3.text(paperForm("title"), '_label -> "Title", '_help -> "")
-            @b3.text(paperForm("topic"), '_label -> "Topic", '_help -> "")
+
+        @b3.select(
+            paperForm("topic"),
+            options(topicoptions),
+            '_label -> "Select", 'value -> "",
+            '_showConstraints -> false
+        )
             @b3.email(paperForm("contactemail"), '_label -> "Email of Contact Author", 'placeholder -> "example@mail.com")
        <br><br><br><br> @b3.email(paperForm("confirmemail"), '_label -> "Confirm Email", '_help -> "")
 
