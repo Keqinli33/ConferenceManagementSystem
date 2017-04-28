@@ -39,7 +39,7 @@ public class ReviewerController extends Controller{
      */
     public Result getconf(Long id) {
 
-        List<Paper> paperList = Paper.ReviewPapers(id);
+        List<Paper> paperList = Paper.find.all();
 
 
         Map<String, Integer> reviewcount = new HashMap<String, Integer>();
@@ -48,17 +48,17 @@ public class ReviewerController extends Controller{
         for(Paper paper : paperList){
             System.out.println(paper.reviewstatus);
             String conf = paper.conference;
-            if(paper.reviewstatus.equals("assigned")){
-                System.out.println("I am here");
-                leftcount.put(conf, leftcount.getOrDefault(conf, 0) + 1);
-                if(!reviewcount.containsKey(conf)){
-                    reviewcount.put(conf, 0);
-                }
-            }
-            else if(paper.reviewstatus.equals("reviewed")){
+            if(Review.find.where().eq("paperid", paper.id).eq("reviewerid",id).eq("reviewstatus", "reviewed").findList().size() > 0){
                 reviewcount.put(conf, reviewcount.getOrDefault(conf, 0) + 1);
                 if(!leftcount.containsKey(conf)){
                     leftcount.put(conf, 0);
+                }
+
+            }
+            else if(Review.find.where().eq("paperid", paper.id).eq("reviewerid",id).eq("reviewstatus", "assigned").findList().size() > 0){
+                leftcount.put(conf, leftcount.getOrDefault(conf, 0) + 1);
+                if(!reviewcount.containsKey(conf)){
+                    reviewcount.put(conf, 0);
                 }
             }
         }
