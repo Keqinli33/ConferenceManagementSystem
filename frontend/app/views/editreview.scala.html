@@ -1,5 +1,4 @@
-@import java.util
-@(cris:List[String], map:Map[String, String], options_sum:List[LinkedHashMap[String, String]], qlist:List[String], try_options:List[List[String]])
+@(cris:List[String], map:Map[String, String], qlist:List[String], try_options:List[List[String]])
 
 @import helper._
 
@@ -121,8 +120,18 @@
                 }
             }   else{
                 <select name="@qlist(index)">
-                @for(j <- 0 until try_options(index-cris.size).size){
-                    <option value=@try_options(index-cris.size)(j)>@try_options(index-cris.size)(j)</option>
+                @if(!map.containsKey(qlist(index))) {
+                    @for(j <- 0 until try_options(index - cris.size).size) {
+                        <option value=@try_options(index - cris.size)(j)>@try_options(index - cris.size)(j)</option>
+                    }
+                } else{
+                    @for(j <- 0 until try_options(index - cris.size).size) {
+                        @if(map.get(qlist(index)).equals(try_options(index - cris.size)(j))) {
+                            <option selected="selected" value=@try_options(index - cris.size)(j)>@try_options(index - cris.size)(j)</option>
+                        }   else{
+                            <option value=@try_options(index - cris.size)(j)>@try_options(index - cris.size)(j)</option>
+                        }
+                    }
                 }
                 </select>
             }

@@ -500,7 +500,6 @@ public class ReviewerController extends Controller{
                         oneoptions.put(s,s);
                         try_oneoptions.add(s);
                     }
-                    options.add(oneoptions);
                     try_options.add(try_oneoptions);
                 }
             }
@@ -509,39 +508,20 @@ public class ReviewerController extends Controller{
 
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/showreview/"+paperid+"/"+userid).get();
-//        List<Review> list = new ArrayList();
         Map<String, String> map = new HashMap();
         return res.thenApply(response -> {
 
             JsonNode ret = response.asJson();
             ArrayNode arr = (ArrayNode)ret;
 
-            for(int i = 0; i < arr.size(); i++){
+            for(int i = 0; i < arr.size(); i++) {
                 JsonNode node = arr.get(i);
                 map.put(node.get("label").asText(), node.get("review_content").asText());
-//                Review review = new Review();
-//                review.id = Long.parseLong(node.get("id").asText());
-//                review.paperid = Long.parseLong(node.get("paperid").asText());
-//                review.reviewerid = Long.parseLong(node.get("reviewerid").asText());
-//                review.iscriteria = node.get("iscriteria").asText();
-//                review.label = node.get("label").asText();
-//                review.review_content = node.get("review_content").asText();
-//                list.add(review);
-//                crlist.remove(review.label);
             }
-            System.out.println(map.get("quality"));
 
-//            for(String criteria: crlist){
-//                Review review = new Review();
-//                review.id = (Long)(long)0;
-//                review.iscriteria = "Y";
-//                review.label = criteria;
-//                review.review_content = "";
-//                list.add(review);
-//            }
 
             return ok(
-                    views.html.editreview.render(crlist, map, options, qlist, try_options)
+                    views.html.editreview.render(crlist, map, qlist, try_options)
             );
         });
 
