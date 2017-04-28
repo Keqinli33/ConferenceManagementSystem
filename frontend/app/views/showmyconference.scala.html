@@ -67,7 +67,7 @@
                             } else {
                                 <td>Review</td>
                             }
-                        @if(conference.ifadmin == "Y") {
+                        @if(conference.ifadmin == "Y" || conference.ifchair == "Y") {
                             <td><a href="@routes.AdminController.adminPage(conference.title)">Admin</a></td>
                         } else {
                             <td>Admin</td>

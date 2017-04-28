@@ -61,6 +61,13 @@ public class Conference extends Model {
             System.out.println("4=====add member after update if reviewer"+new_conf.ifreviewer+" if chair "+new_conf.ifchair);
 
             new_conf.update();
+        }else{
+            Conference new_conf = new Conference();
+            new_conf.username = username;
+            new_conf.title = conf;
+            new_conf.ifreviewer = ifreviewer;
+            new_conf.ifchair = ifchair;
+            new_conf.save();
         }
     }
 

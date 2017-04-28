@@ -80,7 +80,8 @@ public class ShowConferenceController extends Controller{
                     .put("date", res.get(i).date)
                     .put("status",res.get(i).status)
                     .put("ifreviewer",res.get(i).ifreviewer)
-                    .put("ifadmin",res.get(i).ifadmin);
+                    .put("ifadmin",res.get(i).ifadmin)
+                    .put("ifchair",res.get(i).ifchair);
              jsonarray.add(json);
 
         }

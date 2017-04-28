@@ -342,6 +342,9 @@ public class UserController extends Controller {
                 new_user.password = MD5(password);
                 new_user.save();
 
+                //check if his/her exists in pc member then pick up information into conference
+
+
                 //the user has been logged in, save username and id to session
                 Long id = new_user.GetUserID(username);
                 Session session = Http.Context.current().session();

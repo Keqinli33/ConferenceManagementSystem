@@ -93,6 +93,7 @@ public class ShowConferenceController extends Controller{
                     savedConference.status = res1.get("status").asText();
                     savedConference.ifreviewer = res1.get("ifreviewer").asText();
                     savedConference.ifadmin = res1.get("ifadmin").asText();
+                    savedConference.ifchair = res1.get("ifchair").asText();
                     res.add(savedConference);
                 }
                 StringBuilder sb = new StringBuilder();

@@ -30,6 +30,7 @@ public class Conference extends Model {
     public String searchstatus;
     public String ifreviewer;
     public String ifadmin;
+    public String ifchair;
     public String keyword;
 
 
