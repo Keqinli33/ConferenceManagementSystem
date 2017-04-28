@@ -32,6 +32,7 @@ public class Conference extends Model {
     public String ifadmin;
     public String keyword;
 
+
     //conference details - configure system
 //    public String name;
 //    public String url;
