@@ -1,4 +1,5 @@
-@(cris:List[String], map:Map[String, String])
+@import java.util
+@(cris:List[String], map:Map[String, String], options_sum:List[LinkedHashMap[String, String]], qlist:List[String], try_options:List[List[String]])
 
 @import helper._
 
@@ -23,12 +24,13 @@
 
         <fieldset>
 
-        @for(cri <- cris){
-            <h3>@cri:</h3>>
+        @for(index <- 0 until qlist.size){
+            <h3>@qlist(index):</h3>>
 
-                @if(!map.containsKey(cri)){
+            @if(cris.contains(qlist(index))) {
+                @if(!map.containsKey(qlist(index))) {
 
-                        <select name="@cri">
+                    <select name="@qlist(index)">
                         <option value="strongaccept">Strong Accept</option>
                         <option value="accept">Accept</option>
                         <option value="weakaccept">Weak Accept</option>
@@ -36,88 +38,94 @@
                         <option value="weakreject">Weak Reject</option>
                         <option value="reject">Reject</option>
                         <option value="strongreject">Strong Reject</option>
+                    </select>
+                } else {
+                    @if(map.get(qlist(index)).equals("strongaccept")) {
+
+                        <select name="@qlist(index)">
+                            <option value="strongaccept" selected="selected">Strong Accept</option>
+                            <option value="accept">Accept</option>
+                            <option value="weakaccept">Weak Accept</option>
+                            <option value="neutral">Neutral</option>
+                            <option value="weakreject">Weak Reject</option>
+                            <option value="reject">Reject</option>
+                            <option value="strongreject">Strong Reject</option>
                         </select>
-                } else{
-                    @if(map.get(cri).equals("strongaccept")){
-
-                    <select name="@cri">
-                        <option value="strongaccept" selected="selected">Strong Accept</option>
-                        <option value="accept">Accept</option>
-                        <option value="weakaccept">Weak Accept</option>
-                        <option value="neutral">Neutral</option>
-                        <option value="weakreject">Weak Reject</option>
-                        <option value="reject">Reject</option>
-                        <option value="strongreject">Strong Reject</option>
-                    </select>
                     }
-                    @if(map.get(cri).equals("weakaccept")){
-                    <select name="@cri">
-                        <option value="strongaccept">Strong Accept</option>
-                        <option value="accept">Accept</option>
-                        <option value="weakaccept"  selected="selected">Weak Accept</option>
-                        <option value="neutral">Neutral</option>
-                        <option value="weakreject">Weak Reject</option>
-                        <option value="reject">Reject</option>
-                        <option value="strongreject">Strong Reject</option>
-                    </select>
-                    } @if(map.get(cri).equals("accept")){
+                    @if(map.get(qlist(index)).equals("weakaccept")) {
+                        <select name="@qlist(index)">
+                            <option value="strongaccept">Strong Accept</option>
+                            <option value="accept">Accept</option>
+                            <option value="weakaccept" selected="selected">Weak Accept</option>
+                            <option value="neutral">Neutral</option>
+                            <option value="weakreject">Weak Reject</option>
+                            <option value="reject">Reject</option>
+                            <option value="strongreject">Strong Reject</option>
+                        </select>
+                    } @if(map.get(qlist(index)).equals("accept")) {
 
-                    <select name="@cri">
-                        <option value="strongaccept">Strong Accept</option>
-                        <option value="accept" selected="selected">Accept</option>
-                        <option value="weakaccept">Weak Accept</option>
-                        <option value="neutral">Neutral</option>
-                        <option value="weakreject">Weak Reject</option>
-                        <option value="reject">Reject</option>
-                        <option value="strongreject">Strong Reject</option>
-                    </select>
-                    } @if(map.get(cri).equals("neutral")){
+                        <select name="@qlist(index)">
+                            <option value="strongaccept">Strong Accept</option>
+                            <option value="accept" selected="selected">Accept</option>
+                            <option value="weakaccept">Weak Accept</option>
+                            <option value="neutral">Neutral</option>
+                            <option value="weakreject">Weak Reject</option>
+                            <option value="reject">Reject</option>
+                            <option value="strongreject">Strong Reject</option>
+                        </select>
+                    } @if(map.get(qlist(index)).equals("neutral")) {
 
-                    <select name="@cri">
-                        <option value="strongaccept">Strong Accept</option>
-                        <option value="accept">Accept</option>
-                        <option value="weakaccept">Weak Accept</option>
-                        <option value="neutral" selected="selected">Neutral</option>
-                        <option value="weakreject">Weak Reject</option>
-                        <option value="reject">Reject</option>
-                        <option value="strongreject">Strong Reject</option>
-                    </select>
-                    } @if(map.get(cri).equals("weakreject")){
+                        <select name="@qlist(index)">
+                            <option value="strongaccept">Strong Accept</option>
+                            <option value="accept">Accept</option>
+                            <option value="weakaccept">Weak Accept</option>
+                            <option value="neutral" selected="selected">Neutral</option>
+                            <option value="weakreject">Weak Reject</option>
+                            <option value="reject">Reject</option>
+                            <option value="strongreject">Strong Reject</option>
+                        </select>
+                    } @if(map.get(qlist(index)).equals("weakreject")) {
 
-                    <select name="@cri">
-                        <option value="strongaccept">Strong Accept</option>
-                        <option value="accept">Accept</option>
-                        <option value="weakaccept">Weak Accept</option>
-                        <option value="neutral">Neutral</option>
-                        <option value="weakreject" selected="selected">Weak Reject</option>
-                        <option value="reject">Reject</option>
-                        <option value="strongreject">Strong Reject</option>
-                    </select>
-                    } @if(map.get(cri).equals("reject")){
+                        <select name="@qlist(index)">
+                            <option value="strongaccept">Strong Accept</option>
+                            <option value="accept">Accept</option>
+                            <option value="weakaccept">Weak Accept</option>
+                            <option value="neutral">Neutral</option>
+                            <option value="weakreject" selected="selected">Weak Reject</option>
+                            <option value="reject">Reject</option>
+                            <option value="strongreject">Strong Reject</option>
+                        </select>
+                    } @if(map.get(qlist(index)).equals("reject")) {
 
-                    <select name="@cri">
-                        <option value="strongaccept">Strong Accept</option>
-                        <option value="accept">Accept</option>
-                        <option value="weakaccept">Weak Accept</option>
-                        <option value="neutral">Neutral</option>
-                        <option value="weakreject">Weak Reject</option>
-                        <option value="reject" selected="selected">Reject</option>
-                        <option value="strongreject">Strong Reject</option>
-                    </select>
-                    } @if(map.get(cri).equals("strongreject")){
+                        <select name="@qlist(index)">
+                            <option value="strongaccept">Strong Accept</option>
+                            <option value="accept">Accept</option>
+                            <option value="weakaccept">Weak Accept</option>
+                            <option value="neutral">Neutral</option>
+                            <option value="weakreject">Weak Reject</option>
+                            <option value="reject" selected="selected">Reject</option>
+                            <option value="strongreject">Strong Reject</option>
+                        </select>
+                    } @if(map.get(qlist(index)).equals("strongreject")) {
 
-                    <select name="@cri">
-                        <option value="strongaccept">Strong Accept</option>
-                        <option value="accept">Accept</option>
-                        <option value="weakaccept">Weak Accept</option>
-                        <option value="neutral">Neutral</option>
-                        <option value="weakreject">Weak Reject</option>
-                        <option value="reject">Reject</option>
-                        <option value="strongreject"  selected="selected">Strong Reject</option>
-                    </select>
+                        <select name="@qlist(index)">
+                            <option value="strongaccept">Strong Accept</option>
+                            <option value="accept">Accept</option>
+                            <option value="weakaccept">Weak Accept</option>
+                            <option value="neutral">Neutral</option>
+                            <option value="weakreject">Weak Reject</option>
+                            <option value="reject">Reject</option>
+                            <option value="strongreject" selected="selected">Strong Reject</option>
+                        </select>
                     }
                 }
-
+            }   else{
+                <select name="@qlist(index)">
+                @for(j <- 0 until try_options(index-cris.size).size){
+                    <option value=@try_options(index-cris.size)(j)>@try_options(index-cris.size)(j)</option>
+                }
+                </select>
+            }
 
 
             <br>

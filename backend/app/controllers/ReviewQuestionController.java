@@ -133,7 +133,8 @@ public class ReviewQuestionController extends Controller {
 
     }
 
-    public Result retriveAll(String conferenceinfo){
+    public Result retriveAll(String name){
+        String conferenceinfo = name.replaceAll("\\+", " ");
         Form<ReviewQuestion> questionForm = formFactory.form(ReviewQuestion.class);
         //List<ReviewQuestion> temp = ReviewQuestion.find.all();
         List<ReviewQuestion> temp = ReviewQuestion.GetMyConferenceQuestion(conferenceinfo);

@@ -68,6 +68,7 @@ public class ReviewerController extends Controller{
 
     public static Long pid;
     public static List<Long> ridlist;
+    public static List<String> criteria_list;
 
     @Inject
     public ReviewerController(FormFactory formFactory) {
@@ -430,6 +431,7 @@ public class ReviewerController extends Controller{
 
         Form<FrontReview> reviewForm = formFactory.form(FrontReview.class);
         List<String> crlist = new ArrayList();
+        List<String> qlist = new ArrayList();
 
         CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all/"+tempstr).get();
         res2.thenAccept(response -> {
@@ -439,8 +441,68 @@ public class ReviewerController extends Controller{
             for (int j = 0; j < arr2.size(); j++) {
                 JsonNode res1 = arr2.get(j);
                 crlist.add(res1.get("label").asText());
-                System.out.println("-sdffd----");
-                System.out.println(res1.get("label").asText());
+                qlist.add(res1.get("label").asText());
+            }
+
+        });
+
+        criteria_list = crlist;
+
+        List<LinkedHashMap<String,String>> options = new ArrayList<LinkedHashMap<String,String>>();
+        List<List<String>> try_options = new ArrayList();
+
+        CompletionStage<WSResponse> res3 = ws.url("http://localhost:9000/reviewquestions/all/"+tempstr).get();
+        res3.thenAccept(response -> {
+            JsonNode ret3 = response.asJson();
+            ArrayNode arr3 = (ArrayNode) ret3;
+
+            for (int j = 0; j < arr3.size(); j++) {
+                JsonNode res1 = arr3.get(j);
+                System.out.println(res1.get("question").asText());
+                if(res1.get("isPublic").asText().equals("Yes")){
+
+                    LinkedHashMap<String,String> oneoptions = new LinkedHashMap<String,String>();
+                    List<String> try_oneoptions = new ArrayList();
+
+                    qlist.add(res1.get("question").asText());
+                    if(res1.get("listOfChoice1") != null){
+                        String s = res1.get("listOfChoice1").asText();
+                        oneoptions.put(s,s);
+                        try_oneoptions.add(s);
+                    }
+                    if(res1.get("listOfChoice2") != null){
+                        String s = res1.get("listOfChoice2").asText();
+                        oneoptions.put(s,s);
+                        try_oneoptions.add(s);
+                    }
+                    if(res1.get("listOfChoice3") != null){
+                        String s = res1.get("listOfChoice3").asText();
+                        oneoptions.put(s,s);
+                        try_oneoptions.add(s);
+                    }
+                    if(res1.get("listOfChoice4") != null){
+                        String s = res1.get("listOfChoice4").asText();
+                        oneoptions.put(s,s);
+                        try_oneoptions.add(s);
+                    }
+                    if(res1.get("listOfChoice5") != null){
+                        String s = res1.get("listOfChoice5").asText();
+                        oneoptions.put(s,s);
+                        try_oneoptions.add(s);
+                    }
+                    if(res1.get("listOfChoice6") != null){
+                        String s = res1.get("listOfChoice6").asText();
+                        oneoptions.put(s,s);
+                        try_oneoptions.add(s);
+                    }
+                    if(res1.get("listOfChoice7") != null){
+                        String s = res1.get("listOfChoice7").asText();
+                        oneoptions.put(s,s);
+                        try_oneoptions.add(s);
+                    }
+                    options.add(oneoptions);
+                    try_options.add(try_oneoptions);
+                }
             }
 
         });
@@ -479,7 +541,7 @@ public class ReviewerController extends Controller{
 //            }
 
             return ok(
-                    views.html.editreview.render(crlist, map)
+                    views.html.editreview.render(crlist, map, options, qlist, try_options)
             );
         });
 
@@ -491,21 +553,35 @@ public class ReviewerController extends Controller{
         Long userid = Long.parseLong(session.get("userid"));
 
         DynamicForm requestData = formFactory.form().bindFromRequest();
+//        System.out.println(requestData.data().keySet());
 
 
         for(String criteria:requestData.data().keySet()){
-            System.out.println("criteria!!!!!!!!");
-            System.out.println(requestData.data());
-            JsonNode json = Json.newObject()
-                    .put("paperid", pid)
-                    .put("reviewerid", userid)
-                    .put("iscriteria", "Y")
-                    .put("label", criteria)
-                    .put("review_content", requestData.get(criteria));
-            CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(json);
-            res.thenAccept(response -> {
+            if(criteria_list.contains(criteria)){
+                JsonNode json = Json.newObject()
+                        .put("paperid", pid)
+                        .put("reviewerid", userid)
+                        .put("iscriteria", "Y")
+                        .put("label", criteria)
+                        .put("review_content", requestData.get(criteria));
+                CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(json);
+                res.thenAccept(response -> {
 
-            });
+                });
+            }
+            else{
+                JsonNode json = Json.newObject()
+                        .put("paperid", pid)
+                        .put("reviewerid", userid)
+                        .put("iscriteria", "N")
+                        .put("label", criteria)
+                        .put("review_content", requestData.get(criteria));
+                CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(json);
+                res.thenAccept(response -> {
+
+                });
+            }
+
         };
         return GO_HOME;
 
