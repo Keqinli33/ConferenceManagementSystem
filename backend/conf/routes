@@ -81,7 +81,7 @@ POST   /criteria                      controllers.CriteriaController.createCrite
 #delete criteria
 GET    /criteria/deleting/:id            controllers.CriteriaController.deleteCriteria(id:Long)
 #retrive all criteria
-GET /criterias/all                     controllers.CriteriaController.retriveAll()
+GET /criterias/all/:conferenceinfo                     controllers.CriteriaController.retriveAll(conferenceinfo:String)
 
 #get reviewquestion content
 GET    /reviewquestion/:id                  controllers.ReviewQuestionController.edit(id:Long)

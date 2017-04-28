@@ -124,10 +124,13 @@ public class CriteriaController extends Controller{
     public CompletionStage<Result> createCriteria(){
         Form<Criteria> criteriaForm = formFactory.form(Criteria.class).bindFromRequest();
         Criteria newCriteria = criteriaForm.get();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
         JsonNode json = Json.newObject()
                 .put("label", newCriteria.label)
                 .put("explanations", newCriteria.explanations)
-                .put("weight", newCriteria.weight);
+                .put("weight", newCriteria.weight)
+                .put("conferenceinfo", newCriteria.conferenceinfo);
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/criteria").post(json);
         return res.thenApplyAsync(response -> {
@@ -159,8 +162,9 @@ public class CriteriaController extends Controller{
 
     public CompletionStage<Result> retriveAllCriteria(){
         Form<Criteria> criteriaForm = formFactory.form(Criteria.class);
-
-        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/criterias/all").get();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
+        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/criterias/all/"+conferenceinfo).get();
         List<Criteria> res = new ArrayList<Criteria>();
         return resws.thenApply(response -> {
             JsonNode arr = response.asJson();
