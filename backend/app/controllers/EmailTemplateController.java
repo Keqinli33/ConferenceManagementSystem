@@ -24,6 +24,15 @@ import java.util.*;
 import javax.inject.Inject;
 import org.apache.commons.mail.*;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
 public class EmailTemplateController extends Controller {
 
     private FormFactory formFactory;
@@ -33,10 +42,20 @@ public class EmailTemplateController extends Controller {
         this.formFactory = formFactory;
     }
 
-    public Result getEmailTemplate(String username){
+    public Result getEmailTemplate(String email_type, String chair_name, String conf_url){
         System.out.println("In get email template ");
         Form<EmailTemplate> EmailTemplateForm = formFactory.form(EmailTemplate.class);
-        String newEmailTemplateData = EmailTemplate.getEmailTemplateByUsername(username);
+        String conf = conf_url.replace("%20"," ");
+        //find if chair member's email template is created,if not, create it
+        EmailTemplate tmp = new EmailTemplate();
+        if(!tmp.IfExist(chair_name, conf))
+        {
+            System.out.println("===2In get email template create template");
+            tmp.createChairTemplate(chair_name, conf);
+        }
+
+        String newEmailTemplateData = EmailTemplate.getEmailTemplateByType(email_type, chair_name, conf);
+        String newEmailSubjectData = EmailTemplate.getEmailSubjectByType(email_type, chair_name, conf);
 
         JsonNode json;
 
@@ -45,8 +64,11 @@ public class EmailTemplateController extends Controller {
         }
         else {
             json = Json.newObject()
-                    .put("pcchair_name", username)
+                    .put("chair_name", chair_name)
+                    .put("conference", conf)
+                    .put("email_type", email_type)
                     .put("template",newEmailTemplateData)
+                    .put("subject",newEmailSubjectData)
                     .put("status","successful");
         }
 
@@ -60,20 +82,14 @@ public class EmailTemplateController extends Controller {
 
         Transaction txn = Ebean.beginTransaction();
         try {
-            if(new_EmailTemplate.IfUserExist(new_EmailTemplate.pcchair_name)) {
-                System.out.println("ready to update pcchair name "+new_EmailTemplate.pcchair_name+" template" + new_EmailTemplate.template);
-                EmailTemplate email_template = new_EmailTemplate.updateByUsername(new_EmailTemplate.pcchair_name, new_EmailTemplate.template);
-                //email_template.pcchair_name = new_EmailTemplate.pcchair_name;
-                //email_template.template = new_EmailTemplate.template;
-                //email_template.template = "updated";
-                //System.out.println("fk id "+email_template.id);
-                //System.out.println()
-                //email_template.update();
+            if(new_EmailTemplate.IfExist(new_EmailTemplate.chair_name, new_EmailTemplate.conference)) {
+                System.out.println("ready to update pcchair name "+new_EmailTemplate.chair_name+" template" + new_EmailTemplate.template);
+                new_EmailTemplate.updateEmailTemplate(new_EmailTemplate);
                 txn.commit();
             }
             else {
-                System.out.println("ready to save pcchair name "+new_EmailTemplate.pcchair_name+" template" + new_EmailTemplate.template);
-                new_EmailTemplate.save();
+                System.out.println("ready to save pcchair name "+new_EmailTemplate.chair_name+" template" + new_EmailTemplate.template);
+                new_EmailTemplate.createChairTemplate(new_EmailTemplate.chair_name, new_EmailTemplate.conference);
                 txn.commit();
             }
         } catch (Exception e){
@@ -82,5 +98,42 @@ public class EmailTemplateController extends Controller {
             txn.end();
         }
         return ok("successfully");
+    }
+
+    /* find all reviewer who has unreviewed paper
+     */
+    public Result findReviewer()
+    {
+        List<User> all_users = User.find.all();
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode jsonarray = new ArrayNode(factory);
+        for(int i = 0 ; i < all_users.size() ; ++i)
+        {
+            Long id = all_users.get(i).id;
+            List<Paper> paperList = Paper.ReviewPapers(id);
+            int assign_count=0;
+            int reviewed_count=0;
+            for(int j = 0 ; j < paperList.size() ; ++j)
+            {
+                if("assigned".equals(paperList.get(j).reviewstatus))
+                    assign_count++;
+//                else if("reviewed".equals(paperList.get(j).reviewstatus))
+//                    reviewed_count++;
+            }
+            if(assign_count > 0)
+            {
+                Profile profile = Profile.find.byId(all_users.get(i).id);
+                JsonNode json = Json.newObject()
+                        .put("id", all_users.get(i).id)
+                        .put("username", all_users.get(i).username)
+                        .put("firstname", profile.firstname)
+                        .put("lastname", profile.lastname)
+                        .put("unreviewedcount", Integer.toString(assign_count-reviewed_count));
+
+                jsonarray.add(json);
+            }
+        }
+        JsonNode temp = (JsonNode) jsonarray;
+        return ok(temp);
     }
 }
