@@ -98,10 +98,9 @@ public class Paper extends Model {
         return results;
     }
 
-    public static List<Paper> ConfPapers(Long reviewid, String conf){
+    public static List<Paper> ConfPapers(String conf){
         List<Paper> results =
                 find.where()
-                        .eq("reviewerid",reviewid)
                         .eq("conference",conf)
                         .findList();
         return results;

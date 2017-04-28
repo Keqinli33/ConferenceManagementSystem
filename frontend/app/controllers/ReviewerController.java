@@ -489,26 +489,9 @@ public class ReviewerController extends Controller{
         DynamicForm requestData = formFactory.form().bindFromRequest();
 
 
-//        for(String criteria:requestData.data().keySet()){
-//            JsonNode json = Json.newObject()
-//                    .put("paperid", pid)
-//                    .put("reviewerid", userid)
-//                    .put("iscriteria", "Y")
-//                    .put("label", criteria)
-//                    .put("review_content", requestData.get(criteria));
-//            arr.add(json);
-//        };
-//        System.out.println(arr);
-//        JsonNode temp = (JsonNode)arr;
-//        JsonNode resJson = Json.newObject()
-//                .put("result",temp);
-//        System.out.println(temp);
-//        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatereview").post(resJson);
-//        return res.thenApply(response -> {
-//            return GO_HOME;
-//        });
-
         for(String criteria:requestData.data().keySet()){
+            System.out.println("criteria!!!!!!!!");
+            System.out.println(requestData.data());
             JsonNode json = Json.newObject()
                     .put("paperid", pid)
                     .put("reviewerid", userid)

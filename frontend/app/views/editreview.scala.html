@@ -24,9 +24,9 @@
         <fieldset>
 
         @for(cri <- cris){
-            @cri:
-            @{
-                if(!map.containsKey(cri)){
+            <h3>@cri:</h3>>
+
+                @if(!map.containsKey(cri)){
 
                         <select name="@cri">
                         <option value="strongaccept">Strong Accept</option>
@@ -37,10 +37,10 @@
                         <option value="reject">Reject</option>
                         <option value="strongreject">Strong Reject</option>
                         </select>
-                }
-                else if(map.get(cri).equals("strongaccept")){
+                } else{
+                    @if(map.get(cri).equals("strongaccept")){
 
-                        <select name="@cri">
+                    <select name="@cri">
                         <option value="strongaccept" selected="selected">Strong Accept</option>
                         <option value="accept">Accept</option>
                         <option value="weakaccept">Weak Accept</option>
@@ -48,10 +48,10 @@
                         <option value="weakreject">Weak Reject</option>
                         <option value="reject">Reject</option>
                         <option value="strongreject">Strong Reject</option>
-                        </select>
-                }
-                else if(map.get(cri).equals("weakaccept")){
-                        <select name="@cri">
+                    </select>
+                    }
+                    @if(map.get(cri).equals("weakaccept")){
+                    <select name="@cri">
                         <option value="strongaccept">Strong Accept</option>
                         <option value="accept">Accept</option>
                         <option value="weakaccept"  selected="selected">Weak Accept</option>
@@ -59,10 +59,10 @@
                         <option value="weakreject">Weak Reject</option>
                         <option value="reject">Reject</option>
                         <option value="strongreject">Strong Reject</option>
-                        </select>
-                } else if(map.get(cri).equals("accept")){
+                    </select>
+                    } @if(map.get(cri).equals("accept")){
 
-                        <select name="@cri">
+                    <select name="@cri">
                         <option value="strongaccept">Strong Accept</option>
                         <option value="accept" selected="selected">Accept</option>
                         <option value="weakaccept">Weak Accept</option>
@@ -70,10 +70,10 @@
                         <option value="weakreject">Weak Reject</option>
                         <option value="reject">Reject</option>
                         <option value="strongreject">Strong Reject</option>
-                        </select>
-                } else if(map.get(cri).equals("neutral")){
+                    </select>
+                    } @if(map.get(cri).equals("neutral")){
 
-                        <select name="@cri">
+                    <select name="@cri">
                         <option value="strongaccept">Strong Accept</option>
                         <option value="accept">Accept</option>
                         <option value="weakaccept">Weak Accept</option>
@@ -81,10 +81,10 @@
                         <option value="weakreject">Weak Reject</option>
                         <option value="reject">Reject</option>
                         <option value="strongreject">Strong Reject</option>
-                        </select>
-                } else if(map.get(cri).equals("weakreject")){
+                    </select>
+                    } @if(map.get(cri).equals("weakreject")){
 
-                        <select name="@cri">
+                    <select name="@cri">
                         <option value="strongaccept">Strong Accept</option>
                         <option value="accept">Accept</option>
                         <option value="weakaccept">Weak Accept</option>
@@ -92,10 +92,10 @@
                         <option value="weakreject" selected="selected">Weak Reject</option>
                         <option value="reject">Reject</option>
                         <option value="strongreject">Strong Reject</option>
-                        </select>
-                } else if(map.get(cri).equals("reject")){
+                    </select>
+                    } @if(map.get(cri).equals("reject")){
 
-                        <select name="@cri">
+                    <select name="@cri">
                         <option value="strongaccept">Strong Accept</option>
                         <option value="accept">Accept</option>
                         <option value="weakaccept">Weak Accept</option>
@@ -103,10 +103,10 @@
                         <option value="weakreject">Weak Reject</option>
                         <option value="reject" selected="selected">Reject</option>
                         <option value="strongreject">Strong Reject</option>
-                        </select>
-                } else if(map.get(cri).equals("strongreject")){
+                    </select>
+                    } @if(map.get(cri).equals("strongreject")){
 
-                        <select name="@cri">
+                    <select name="@cri">
                         <option value="strongaccept">Strong Accept</option>
                         <option value="accept">Accept</option>
                         <option value="weakaccept">Weak Accept</option>
@@ -114,9 +114,11 @@
                         <option value="weakreject">Weak Reject</option>
                         <option value="reject">Reject</option>
                         <option value="strongreject"  selected="selected">Strong Reject</option>
-                        </select>
+                    </select>
+                    }
                 }
-            }
+
+
 
             <br>
         }
