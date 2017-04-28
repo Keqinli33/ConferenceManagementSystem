@@ -133,9 +133,10 @@ public class ReviewQuestionController extends Controller {
 
     }
 
-    public Result retriveAll(){
+    public Result retriveAll(String conferenceinfo){
         Form<ReviewQuestion> questionForm = formFactory.form(ReviewQuestion.class);
-        List<ReviewQuestion> temp = ReviewQuestion.find.all();
+        //List<ReviewQuestion> temp = ReviewQuestion.find.all();
+        List<ReviewQuestion> temp = ReviewQuestion.GetMyConferenceQuestion(conferenceinfo);
         JsonNodeFactory factory = JsonNodeFactory.instance;
         ArrayNode jsonarray = new ArrayNode(factory);
         for(int i=0; i< temp.size(); i++){

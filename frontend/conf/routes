@@ -123,4 +123,4 @@ GET    /reviewquestion/:id                controllers.ReviewQuestionController.e
 GET    /reviewquestion/deleting/:id          controllers.ReviewQuestionController.deleteQuestion(id:Long)
 GET     /reviewquestions/all                   controllers.ReviewQuestionController.retriveAll()
 POST    /reviewquestion/:id               controllers.ReviewQuestionController.update(id:Long)
-POST   /reviewquestion                      controllers.ReviewQuestionController.createQuestion()
+POST   /reviewquestion                    controllers.ReviewQuestionController.createQuestion()

@@ -18,6 +18,7 @@ public class ReviewQuestion extends Model {
     public long id;
     public String question;
     public String isPublic;
+    public String conferenceinfo;
     public String listOfChoice1;
     public String position1;
     public String listOfChoice2;
@@ -43,4 +44,11 @@ public class ReviewQuestion extends Model {
         return results;
     }
 
+    public static List<ReviewQuestion> GetMyConferenceQuestion(String conferenceinfo){
+        List<ReviewQuestion> results =
+                find.where()
+                        .eq("conferenceinfo",conferenceinfo)
+                        .findList();
+        return results;
+    }
 }

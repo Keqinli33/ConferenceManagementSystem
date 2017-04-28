@@ -64,7 +64,8 @@ public class CriteriaController extends Controller{
     private Criteria editCriteria = new Criteria();
     public CompletionStage<Result> edit(Long id) {
         Form<Criteria> criteriaForm = formFactory.form(Criteria.class);
-
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
         List<Criteria> restemp = new ArrayList<Criteria>();
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/criteria/"+id).get();
@@ -75,7 +76,7 @@ public class CriteriaController extends Controller{
             editCriteria.weight = ret.get("weight").asText();
         });
 
-        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all").get();
+        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/criterias/all/"+conferenceinfo).get();
         return res2.thenApply(response2 -> {
             JsonNode arr = response2.asJson();
             ArrayNode ret2 = (ArrayNode) arr;
@@ -130,7 +131,7 @@ public class CriteriaController extends Controller{
                 .put("label", newCriteria.label)
                 .put("explanations", newCriteria.explanations)
                 .put("weight", newCriteria.weight)
-                .put("conferenceinfo", newCriteria.conferenceinfo);
+                .put("conferenceinfo", conferenceinfo);
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/criteria").post(json);
         return res.thenApplyAsync(response -> {

@@ -65,6 +65,8 @@ public class ReviewQuestionController extends Controller{
     public CompletionStage<Result> edit(Long id) {
         Form<ReviewQuestion> questionForm = formFactory.form(ReviewQuestion.class);
         //ReviewQuestion editQuestion = new ReviewQuestion();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
         List<ReviewQuestion> restemp = new ArrayList<ReviewQuestion>();
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/reviewquestion/"+id).get();
@@ -88,7 +90,7 @@ public class ReviewQuestionController extends Controller{
             editQuestion.position7 = ret.get("position7").asText();
         });
 
-        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/reviewquestions/all").get();
+        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/reviewquestions/all/"+conferenceinfo).get();
         return res2.thenApply(response2 -> {
             JsonNode arr = response2.asJson();
             ArrayNode ret2 = (ArrayNode) arr;
@@ -165,10 +167,13 @@ public class ReviewQuestionController extends Controller{
     public CompletionStage<Result> createQuestion(){
         Form<ReviewQuestion> questionForm = formFactory.form(ReviewQuestion.class).bindFromRequest();
         ReviewQuestion newQuestion = questionForm.get();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
         JsonNode json = Json.newObject()
                 //.put("question", temp.get(i).question)
                 .put("question", newQuestion.question)
                 .put("isPublic", newQuestion.isPublic)
+                .put("conferenceinfo",conferenceinfo)
                 .put("listOfChoice1", newQuestion.listOfChoice1)
                 .put("position1", newQuestion.position1)
                 .put("listOfChoice2", newQuestion.listOfChoice2)
@@ -215,7 +220,9 @@ public class ReviewQuestionController extends Controller{
     public CompletionStage<Result> retriveAll(){
         Form<ReviewQuestion> questionForm = formFactory.form(ReviewQuestion.class);
         //System.out.println("here ===11");
-        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/reviewquestions/all").get();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
+        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/reviewquestions/all/"+conferenceinfo).get();
         //System.out.println("here ===22");
         List<ReviewQuestion> res = new ArrayList<ReviewQuestion>();
         return resws.thenApply(response -> {
