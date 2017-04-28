@@ -64,7 +64,7 @@ public class AdminController extends Controller {
         Http.Session session = Http.Context.current().session();
 //        conferenceinfo = conferenceinfo.replaceAll(" ","+");
         session.put("conferenceinfo", conferenceinfo);
-        return ok(views.html.admin.render());
+        return ok(views.html.admin.render(conferenceinfo));
     }
 
     public Result download()throws FileNotFoundException, IOException,InterruptedException{
@@ -75,6 +75,8 @@ public class AdminController extends Controller {
         final String conferenceinfo1 = conferenceinfo;
         CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/paper/" + username).get();
         List<Long> res = new ArrayList<>();
+        List<String> ifsubmitlist = new ArrayList<>();
+
         resofrest.thenAccept(response -> {
             System.out.println("here is "+response);
             JsonNode arr = response.asJson();
@@ -84,6 +86,7 @@ public class AdminController extends Controller {
                 if(res1.get("conference").asText().equals(conferenceinfo1)){
                     savedPaper.id = Long.parseLong(res1.get("id").asText());
                     res.add(savedPaper.id);
+                    ifsubmitlist.add(res1.get("ifsubmit").asText());
                 }
             }
             System.out.println("complete");
@@ -91,14 +94,17 @@ public class AdminController extends Controller {
         });
 
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(1);
 
             FileOutputStream fos = new FileOutputStream("/Users/shuang/uploads/"+conferenceinfo+".zip");
             ZipOutputStream zos = new ZipOutputStream(fos);
 
             for(int i =0; i<res.size(); i++){
-                String path = "/Users/shuang/uploads/"+Long.toString(res.get(i));
-                addToZipFile(path, zos);
+                if(ifsubmitlist.get(i).equals("Y")){
+                    String path = "/Users/shuang/uploads/"+Long.toString(res.get(i));
+                    addToZipFile(path, zos);
+                }
+
             }
             zos.close();
             fos.close();
