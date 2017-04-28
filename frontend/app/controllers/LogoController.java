@@ -105,7 +105,9 @@ public class LogoController extends Controller {
             } catch (Exception e){
                 e.printStackTrace();
             }
-        return GO_HOME;
+        return ok(
+                views.html.logoSubmitted.render()
+        );
 //        JsonNode json = Json.newObject()
 //                .put("ifsubmit", savedPaper.ifsubmit)
 //                .put("format", savedPaper.format)
