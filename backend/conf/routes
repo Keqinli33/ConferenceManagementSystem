@@ -46,6 +46,7 @@ POST     /changePwd                  controllers.UserController.changepwd()
 
 # get users
 GET     /users                      controllers.UserController.getUsers()
+GET     /allreviewers/:conf                      controllers.UserController.allReviewers(conf:String)
 
 # Submit paper
 

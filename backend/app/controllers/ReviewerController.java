@@ -91,9 +91,9 @@ public class ReviewerController extends Controller{
      * Handle get conf info
      */
     public Result getpapers(Long id, String papername) {
-        System.out.println("============"+ papername);
+
         String name = papername.replaceAll("\\+", " ");
-        System.out.println("============"+ name);
+
         List<Paper> paperList = Paper.ConfPapers(name);
 
         int i = 0;

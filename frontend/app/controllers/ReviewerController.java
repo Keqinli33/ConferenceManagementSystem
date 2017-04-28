@@ -551,7 +551,10 @@ public class ReviewerController extends Controller{
         List<Long> revieweridlist = new ArrayList();
         Map<Long, String> emailmap = new HashMap();
 
-        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/users").get();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
+        String tempstr = conferenceinfo.replaceAll(" ", "+");
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/allreviewers/"+tempstr).get();
         res.thenAccept(response -> {
 
             JsonNode ret = response.asJson();

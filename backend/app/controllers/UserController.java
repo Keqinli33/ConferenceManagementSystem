@@ -1,7 +1,7 @@
 package controllers;
 
 import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
-import models.Profile;
+import models.*;
 //import org.hibernate.validator.constraints.Email;
 import play.data.Form;
 import play.data.FormFactory;
@@ -252,6 +252,28 @@ public class UserController extends Controller {
         ArrayNode arr = new ArrayNode(factory);
 
         for(User user : User.find.all()){
+            JsonNode json = Json.newObject()
+                    .put("username", user.username)
+                    .put("userid", user.id.toString());
+            //node.put(Integer.toString(i++), json);
+            arr.add(json);
+        }
+//        System.out.println(arr);
+        JsonNode temp = (JsonNode)arr;
+
+        return ok(temp);
+    }
+
+    /**
+     * get all reviewers of one conference
+     */
+    public Result allReviewers(String name){
+        String confname = name.replaceAll("\\+", " ");
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode arr = new ArrayNode(factory);
+
+        for(Conference conf : Conference.find.where().eq("title", confname).eq("ifreviewer", "Y").findList()){
+            User user = User.find.where().eq("username", conf.username).findUnique();
             JsonNode json = Json.newObject()
                     .put("username", user.username)
                     .put("userid", user.id.toString());

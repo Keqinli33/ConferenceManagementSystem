@@ -349,7 +349,7 @@ public class ShowPaperController extends Controller{
                 }
             }
             return ok(
-                    views.html.showmypaper.render(paperForm,res,session,options,conferencename));
+                    views.html.clicktoassignpaper.render(paperForm,res,session,options,conferencename));
 
         });
 
