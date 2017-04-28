@@ -107,10 +107,12 @@ public class StatusCodeController extends Controller {
 
     }
 
-    public Result retriveAll(){
+    public Result retriveAll(String conferenceinfo){
         Form<StatusCode> statusForm = formFactory.form(StatusCode.class);
-        //List<StatusCode> temp = StatusCode.GetMyConferenceStatusCode(conferenceinfo);
-        List<StatusCode> temp = StatusCode.find.all();
+        String confname = conferenceinfo.replaceAll("\\+", " ");
+        System.out.println("=====me"+confname);
+        List<StatusCode> temp = StatusCode.GetMyConferenceStatusCode(confname);
+        //List<StatusCode> temp = StatusCode.find.all();
         JsonNodeFactory factory = JsonNodeFactory.instance;
         ArrayNode jsonarray = new ArrayNode(factory);
         for(int i=0; i< temp.size(); i++){

@@ -64,8 +64,9 @@ public class StatusCodeController extends Controller{
     private StatusCode editStatusCode = new StatusCode();
     public CompletionStage<Result> edit(Long id) {
         Form<StatusCode> statuscodeForm = formFactory.form(StatusCode.class);
-//        Http.Session session = Http.Context.current().session();
-//        String conferenceinfo = session.get("conferenceinfo");
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
+        String temp = conferenceinfo.replaceAll(" ", "+");
         List<StatusCode> restemp = new ArrayList<StatusCode>();
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/statuscode/"+id).get();
@@ -76,7 +77,7 @@ public class StatusCodeController extends Controller{
             editStatusCode.camerareadyrequired = ret.get("camerareadyrequired").asText();
         });
 
-        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/statuscodes/all").get();
+        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/statuscodes/all/"+temp).get();
         return res2.thenApply(response2 -> {
             JsonNode arr = response2.asJson();
             ArrayNode ret2 = (ArrayNode) arr;
@@ -125,13 +126,13 @@ public class StatusCodeController extends Controller{
     public CompletionStage<Result> createStatusCode(){
         Form<StatusCode> statuscodeForm = formFactory.form(StatusCode.class).bindFromRequest();
         StatusCode newStatusCode = statuscodeForm.get();
-//        Http.Session session = Http.Context.current().session();
-//        String conferenceinfo = session.get("conferenceinfo");
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
         JsonNode json = Json.newObject()
                 .put("label", newStatusCode.label)
                 .put("mailtemplate", newStatusCode.mailtemplate)
-                .put("camerareadyrequired", newStatusCode.camerareadyrequired);
-                //.put("conferenceinfo", conferenceinfo);
+                .put("camerareadyrequired", newStatusCode.camerareadyrequired)
+                .put("conferenceinfo", conferenceinfo);
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/statuscode").post(json);
         return res.thenApplyAsync(response -> {
@@ -163,9 +164,10 @@ public class StatusCodeController extends Controller{
 
     public CompletionStage<Result> retriveAllStatusCode(){
         Form<StatusCode> statuscodeForm = formFactory.form(StatusCode.class);
-//        Http.Session session = Http.Context.current().session();
-//        String conferenceinfo = session.get("conferenceinfo");
-        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/statuscodes/all").get();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
+        String temp = conferenceinfo.replaceAll(" ", "+");
+        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/statuscodes/all/"+temp).get();
         List<StatusCode> res = new ArrayList<StatusCode>();
         return resws.thenApply(response -> {
             JsonNode arr = response.asJson();

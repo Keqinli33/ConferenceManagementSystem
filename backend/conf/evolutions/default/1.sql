@@ -193,6 +193,7 @@ create table status_code (
   label                         varchar(255),
   mailtemplate                  varchar(255),
   camerareadyrequired           varchar(255),
+  conferenceinfo                varchar(255),
   constraint pk_status_code primary key (id)
 );
 

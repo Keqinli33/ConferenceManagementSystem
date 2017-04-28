@@ -67,6 +67,7 @@ public class ReviewQuestionController extends Controller{
         //ReviewQuestion editQuestion = new ReviewQuestion();
         Http.Session session = Http.Context.current().session();
         String conferenceinfo = session.get("conferenceinfo");
+        String temp = conferenceinfo.replaceAll(" ", "+");
         List<ReviewQuestion> restemp = new ArrayList<ReviewQuestion>();
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/reviewquestion/"+id).get();
@@ -90,7 +91,7 @@ public class ReviewQuestionController extends Controller{
             editQuestion.position7 = ret.get("position7").asText();
         });
 
-        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/reviewquestions/all/"+conferenceinfo).get();
+        CompletionStage<WSResponse> res2 = ws.url("http://localhost:9000/reviewquestions/all/"+temp).get();
         return res2.thenApply(response2 -> {
             JsonNode arr = response2.asJson();
             ArrayNode ret2 = (ArrayNode) arr;
@@ -222,7 +223,8 @@ public class ReviewQuestionController extends Controller{
         //System.out.println("here ===11");
         Http.Session session = Http.Context.current().session();
         String conferenceinfo = session.get("conferenceinfo");
-        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/reviewquestions/all/"+conferenceinfo).get();
+        String temp = conferenceinfo.replaceAll(" ", "+");
+        CompletionStage<WSResponse> resws = ws.url("http://localhost:9000/reviewquestions/all/"+temp).get();
         //System.out.println("here ===22");
         List<ReviewQuestion> res = new ArrayList<ReviewQuestion>();
         return resws.thenApply(response -> {

@@ -135,7 +135,7 @@ POST   /statuscode                      controllers.StatusCodeController.createS
 #delete reviewquestion
 GET    /statuscode/deleting/:id            controllers.StatusCodeController.deleteStatusCode(id:Long)
 #retrive all reviewquestion
-GET /statuscodes/all                      controllers.StatusCodeController.retriveAll()
+GET /statuscodes/all/:conferenceinfo                      controllers.StatusCodeController.retriveAll(conferenceinfo:String)
 
 
 

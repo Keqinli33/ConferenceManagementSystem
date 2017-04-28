@@ -19,7 +19,7 @@ public class StatusCode extends Model {
     public String label;
     public String mailtemplate;
     public String camerareadyrequired;
-    //public String conferenceinfo;
+    public String conferenceinfo;
 
     public static Finder<Long,StatusCode> find = new Finder<Long,StatusCode>(StatusCode.class);
 

@@ -109,7 +109,8 @@ public class CriteriaController extends Controller {
 
     public Result retriveAll(String conferenceinfo){
         Form<Criteria> criteriaForm = formFactory.form(Criteria.class);
-        List<Criteria> temp = Criteria.GetMyConferenceCriteria(conferenceinfo);
+        String confname = conferenceinfo.replaceAll("\\+", " ");
+        List<Criteria> temp = Criteria.GetMyConferenceCriteria(confname);
         JsonNodeFactory factory = JsonNodeFactory.instance;
         ArrayNode jsonarray = new ArrayNode(factory);
         for(int i=0; i< temp.size(); i++){
