@@ -60,11 +60,20 @@ public class AdminController extends Controller {
             routes.ShowConferenceController.showMyConference()
     );
 
-    public Result adminPage(String conferenceinfo){
+    public CompletionStage<Result> adminPage(String conferenceinfo){
         Http.Session session = Http.Context.current().session();
 //        conferenceinfo = conferenceinfo.replaceAll(" ","+");
         session.put("conferenceinfo", conferenceinfo);
-        return ok(views.html.admin.render(conferenceinfo));
+
+        String conf_url = conferenceinfo.replace(" ","%20");
+        String username = session.get("username");
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/role/"+conf_url+"/"+username).get();
+        return res.thenApply(response -> {
+            String ret = response.getBody();
+            int role = Integer.parseInt(ret);
+            System.out.println("===admin page role is "+role);
+            return ok(views.html.admin.render(conferenceinfo, role));
+        });
     }
 
     public Result download()throws FileNotFoundException, IOException,InterruptedException{
