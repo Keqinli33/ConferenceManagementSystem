@@ -5,21 +5,7 @@
 @import b3.vertical.fieldConstructor
 
 @main {
-    <table border=0 cellpadding=0 cellspacing=0 width="100%" style="background: #0064cd"><tr>
-        <td><img src="@routes.Assets.at("images/logo.png")" width="28" height="22" /></td>
 
-        <td width="60%">
-            <div align="left"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif"><strong><em>Conference Management System</em></strong></font></div>
-        </td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/conference'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Conferences</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/paper'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Paper</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/review'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Review</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/profile'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Profile</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/verifyChangePwdAuth'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Change Password</font></div></td>
-        <td valign="middle" align="right" width="8%"><div style="cursor: pointer" onclick="location.href='/logout'"><font color="#F5EACD"  size="+2" face="Georgia, Times New Roman, Times, serif">Logout</font></div></td>
-
-    </tr>
-    </table>
 
     <h1>Research Topic</h1>
     @b3.form(routes.TopicController.save()) {
