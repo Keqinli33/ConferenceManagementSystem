@@ -424,12 +424,22 @@ public class ReviewerController extends Controller{
 
     }
 
-    public CompletionStage<Result> review(Long paperid) throws InterruptedException{
+    public CompletionStage<Result> review(Long paperid, String conf) throws InterruptedException{
         pid = paperid;
+
+//        String conferenceinfo;
+        String tempstr = conf.replaceAll(" ", "+");
+//
+//        CompletionStage<WSResponse> res0 = ws.url("http://localhost:9000/papers/"+pid).get();
+//        res0.thenAccept(response -> {
+//            JsonNode ret2 = response.asJson();
+//
+//            tempstr = ret2.get("conference").asText().replaceAll(" ", "+");
+//
+//        });
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
-        String conferenceinfo = session.get("conferenceinfo");
-        String tempstr = conferenceinfo.replaceAll(" ", "+");
+
 
         Form<FrontReview> reviewForm = formFactory.form(FrontReview.class);
         List<String> crlist = new ArrayList();

@@ -90,7 +90,7 @@ GET     /review                    controllers.ReviewerController.enterReviewCon
 GET     /review/paper              controllers.ReviewerController.enterReviewPaper(confName:String)
 
 GET     /download                   controllers.ReviewerController.download(filename:Long)
-GET     /editreview/:paperid                     controllers.ReviewerController.review(paperid:Long)
+GET     /editreview/:paperid                     controllers.ReviewerController.review(paperid:Long,conf:String)
 POST    /editreview                     controllers.ReviewerController.updateReview()
 GET     /showreview/:paperid                     controllers.ReviewerController.showreview(paperid:Long)
 GET     /printreview                    controllers.ReviewerController.printreview(review:String)
