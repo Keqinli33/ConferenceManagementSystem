@@ -143,6 +143,15 @@ public class PCmemberController extends Controller {
 
         PCmember.find.ref(ID).delete();
 
+        User tmp = new User();
+        String username = tmp.GetUsernameByEmail(email);
+        System.out.println("3====backend username "+username);
+        //update ifreview in conference
+        if (!"error".equals(username)) {
+            Conference tmp_conf = new Conference();
+            tmp_conf.deleteReviewer(username, conf);
+        }
+
         return ok();
     }
 }

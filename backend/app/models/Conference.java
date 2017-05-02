@@ -63,12 +63,38 @@ public class Conference extends Model {
             new_conf.update();
         }else{
             Conference new_conf = new Conference();
+
+            List<Conference> results2 =
+                    find.where()
+                            .eq("title", conf)
+                            .findList();
+            String loc = "";
+            String date = "";
+            String status = "";
+            if(results2.size()>0){
+                loc = results2.get(0).location;
+                date = results2.get(0).date;
+                status = results2.get(0).status;
+            }
+
             new_conf.username = username;
             new_conf.title = conf;
+            new_conf.location = loc;
+            new_conf.status = status;
+            new_conf.date = date;
             new_conf.ifreviewer = ifreviewer;
             new_conf.ifchair = ifchair;
             new_conf.save();
         }
+    }
+
+    public static void deleteReviewer(String username, String conf){
+        List<Conference> results =
+                find.where()
+                        .and(Expr.eq("username", username), Expr.eq("title", conf))
+                        .findList();
+        Long id = results.get(0).id;
+        Conference.find.ref(id).delete();
     }
 
     /* Get the privilege of the user of certain conference

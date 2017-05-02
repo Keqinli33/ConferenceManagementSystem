@@ -15,37 +15,37 @@
         <label for="textarea">Title</label>
         <input name="title" value="@configSysObject.title" readonly>
 
-      @if(configSysObject != null && configSysObject.name != null) {
+      @if(configSysObject != null && configSysObject.name != "null") {
         @b3.text(configSysForm("name"), '_label -> "Conference name", 'value -> configSysObject.name)
       }   else{
         @b3.text(configSysForm("name"), '_label -> "Conference name")
       }
 
-      @if(configSysObject != null && configSysObject.url!=null) {
+      @if(configSysObject != null && configSysObject.url!="null") {
         @b3.text(configSysForm("url"), '_label -> "URL", 'value -> configSysObject.url)
       }   else{
         @b3.text(configSysForm("url"), '_label -> "URL")
       }
 
-      @if(configSysObject != null && configSysObject.conference_email != null) {
+      @if(configSysObject != null && configSysObject.conference_email != "null") {
         @b3.text(configSysForm("conference_email"), '_label -> "Conference mail", 'value -> configSysObject.conference_email)
       }   else{
         @b3.text(configSysForm("conference_email"), '_label -> "Conference mail")
       }
 
-      @if(configSysObject != null && configSysObject.chair_email != null) {
+      @if(configSysObject != null && configSysObject.chair_email != "null") {
         @b3.text(configSysForm("chair_email"), '_label -> "Chair mail", 'value -> configSysObject.chair_email)
       }   else{
         @b3.text(configSysForm("chair_email"), '_label -> "Chair mail")
       }
 
-      @if(configSysObject != null && configSysObject.tag_title != null) {
+      @if(configSysObject != null && configSysObject.tag_title != "null") {
         @b3.text(configSysForm("tag_title"), '_label -> "TAG Title", 'value -> configSysObject.tag_title)
       }   else{
         @b3.text(configSysForm("tag_title"), '_label -> "TAG Title")
       }
 
-      @if(configSysObject != null && configSysObject.config_content != null) {
+      @if(configSysObject != null && configSysObject.config_content != "null") {
         @b3.textarea(configSysForm("config_content"), '_label -> "Config Content", 'value -> configSysObject.config_content)
       }   else{
         @b3.textarea(configSysForm("config_content"), '_label -> "Config Content")
@@ -110,7 +110,7 @@
       <br>
       <br>
 
-      @if(configSysObject != null && configSysObject.reviewer_number != null) {
+      @if(configSysObject != null && configSysObject.reviewer_number != "null") {
         @b3.textarea(configSysForm("reviewer_number"), '_label -> "Number of reviewers per paper", 'value -> configSysObject.reviewer_number)
       }   else{
         @b3.textarea(configSysForm("reviewer_number"), '_label -> "Number of reviewers per paper")
@@ -129,7 +129,7 @@
 
     <div class="actions">
       <input type="submit" value="Edit configuration" class="btn primary">
-      <a href="@routes.ShowPaperController.showMyPaper()" class="btn">Cancel</a>
+      <a href="@routes.AdminController.adminPage(configSysObject.title)" class="btn">Cancel</a>
     </div>
 
     </div>
