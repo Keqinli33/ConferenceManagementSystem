@@ -15,51 +15,68 @@
             @b3.email(paperForm("contactemail"), '_label -> "Email of Contact Author", 'placeholder -> "example@mail.com",'value ->paperInfo.contactemail)
             @*<br><br><br><br>@b3.email(paperForm("confirmemail"), '_label -> "Confirm Email", '_help -> "",'value ->paperInfo.confirmemail)*@
 
-            <br><br>@b3.text(paperForm("firstname1"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname1)
-            @b3.text(paperForm("lastname1"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname1)
-            @b3.text(paperForm("affilation1"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation1)
-            @b3.email(paperForm("email1"), '_label -> "Email", '_help -> "",'value ->paperInfo.email1)
+            <br><br>
 
+            <table class="myquestion zebra-striped">
+                    <thead>
+                            <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Affiliation</th>
+                                    <th>Email</th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                    <td>@b3.text(paperForm("firstname1"), '_label -> "First Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("lastname1"), '_label -> "Last Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("affilation1"), '_label -> "Affiliation", '_help -> "")</td>
+                                    <td>@b3.email(paperForm("email1"), '_label -> "Email", '_help -> "")</td>
+                            </tr>
 
-            @b3.text(paperForm("firstname2"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname2)
-            @b3.text(paperForm("lastname2"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname2)
-            @b3.text(paperForm("affilation2"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation2)
-            @b3.email(paperForm("email2"), '_label -> "Email", '_help -> "",'value ->paperInfo.email2)
+                            <tr>
+                                    <td>@b3.text(paperForm("firstname2"), '_label -> "First Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("lastname2"), '_label -> "Last Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("affilation2"), '_label -> "Affiliation", '_help -> "")</td>
+                                    <td>@b3.email(paperForm("email2"), '_label -> "Email", '_help -> "")</td>
+                            </tr>
 
+                            <tr>
+                                    <td>@b3.text(paperForm("firstname3"), '_label -> "First Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("lastname3"), '_label -> "Last Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("affilation3"), '_label -> "Affiliation", '_help -> "")</td>
+                                    <td>@b3.email(paperForm("email3"), '_label -> "Email", '_help -> "")</td>
 
+                    <tr>
+                            <td>@b3.text(paperForm("firstname4"), '_label -> "First Name", '_help -> "")</td>
+                            <td>@b3.text(paperForm("lastname4"), '_label -> "Last Name", '_help -> "")</td>
+                            <td>@b3.text(paperForm("affilation4"), '_label -> "Affiliation", '_help -> "")</td>
+                            <td>@b3.email(paperForm("email4"), '_label -> "Email", '_help -> "")</td>
+                    </tr>
 
-            @b3.text(paperForm("firstname3"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname3)
-            @b3.text(paperForm("lastname3"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname3)
-            @b3.text(paperForm("affilation3"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation3)
-            @b3.email(paperForm("email3"), '_label -> "Email", '_help -> "",'value ->paperInfo.email3)
+                            <tr>
+                                    <td>@b3.text(paperForm("firstname5"), '_label -> "First Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("lastname5"), '_label -> "Last Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("affilation5"), '_label -> "Affiliation", '_help -> "")</td>
+                                    <td>@b3.email(paperForm("email5"), '_label -> "Email", '_help -> "")</td>
+                            </tr>
 
+                            <tr>
+                                    <td>@b3.text(paperForm("firstname6"), '_label -> "First Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("lastname6"), '_label -> "Last Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("affilation6"), '_label -> "Affiliation", '_help -> "")</td>
+                                    <td>@b3.email(paperForm("email6"), '_label -> "Email", '_help -> "")</td>
+                            </tr>
 
-            @b3.text(paperForm("firstname4"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname4)
-            @b3.text(paperForm("lastname4"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname4)
-            @b3.text(paperForm("affilation4"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation4)
-            @b3.email(paperForm("email4"), '_label -> "Email", '_help -> "",'value ->paperInfo.email4)
+                            <tr>
+                                    <td>@b3.text(paperForm("firstname7"), '_label -> "First Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("lastname7"), '_label -> "Last Name", '_help -> "")</td>
+                                    <td>@b3.text(paperForm("affilation7"), '_label -> "Affiliation", '_help -> "")</td>
+                                    <td>@b3.email(paperForm("email7"), '_label -> "Email", '_help -> "")</td>
+                            </tr>
 
-
-
-            @b3.text(paperForm("firstname5"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname5)
-            @b3.text(paperForm("lastname5"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname5)
-            @b3.text(paperForm("affilation5"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation5)
-            @b3.email(paperForm("email5"), '_label -> "Email", '_help -> "",'value ->paperInfo.email5)
-
-
-            @b3.text(paperForm("firstname6"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname6)
-            @b3.text(paperForm("lastname6"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname6)
-            @b3.text(paperForm("affilation6"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation6)
-            @b3.email(paperForm("email6"), '_label -> "Email", '_help -> "",'value ->paperInfo.email6)
-
-
-
-
-            @b3.text(paperForm("firstname7"), '_label -> "First Name", '_help -> "",'value ->paperInfo.firstname7)
-            @b3.text(paperForm("lastname7"), '_label -> "Last Name", '_help -> "",'value ->paperInfo.lastname7)
-            @b3.text(paperForm("affilation7"), '_label -> "Affiliation", '_help -> "",'value ->paperInfo.affilation7)
-            @b3.email(paperForm("email7"), '_label -> "Email", '_help -> "",'value ->paperInfo.email7)
-
+                    </tbody>
+            </table>
 
 
             @b3.text(paperForm("otherauthor"), '_label -> "Other authors", '_help -> "",'value ->paperInfo.otherauthor)
