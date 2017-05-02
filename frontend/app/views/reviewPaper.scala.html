@@ -40,7 +40,7 @@
                         <td>@paper.title</td>
                         <td>@paper.authors</td>
                         <td><a href="@routes.ReviewerController.download(paper.id)">Download</a></td>
-                        <td><a href="@routes.ReviewerController.review(paper.id)">Update review</a></td>
+                        <td><a href="@routes.ReviewerController.review(paper.id,confname)">Update review</a></td>
                         <td><a href="@routes.ReviewerController.showreview(paper.id)">See review</a></td>
                         <td><a href="@routes.ReviewerController.printreview(paper.review)">Print review</a></td>
 
