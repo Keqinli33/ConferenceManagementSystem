@@ -577,7 +577,7 @@ public class ReviewerController extends Controller{
             }
 
         };
-        return GO_HOME;
+        return Results.redirect(routes.ReviewerController.enterReviewConf());
 
     }
 
