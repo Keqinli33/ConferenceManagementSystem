@@ -1,21 +1,38 @@
 package controllers;
-import models.EmailTemplate;
-import play.data.Form;
-import play.data.FormFactory;
-import play.mvc.Controller;
-
-import javax.inject.Inject;
-import play.mvc.Result;
-import play.mvc.Results;
-
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Transaction;
+import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
+import play.mvc.*;
+import play.data.*;
+import static play.data.Form.*;
+import play.libs.ws.*;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CompletableFuture;
-import play.mvc.*;
-import com.fasterxml.jackson.databind.JsonNode;
-import play.libs.ws.*;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
-import play.mvc.Http.Session;
-import play.mvc.Http;
+import models.*;
+import java.util.*;
+
+import javax.inject.Inject;
+import javax.persistence.PersistenceException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.file.FileDataBodyPart;
+
+import com.avaje.ebeaninternal.server.type.ScalarTypeYear;
+
+import com.fasterxml.jackson.databind.ObjectMapper;// in play 2.3
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import play.libs.Json;
 import org.apache.commons.mail.*;
 
@@ -46,7 +63,8 @@ public class EmailTemplateController extends Controller {
         //String email_type = "AC_PAPER";
         Form<EmailTemplate> EmailTemplateForm = formFactory.form(EmailTemplate.class);
 
-        Session session = Http.Context.current().session();
+        //Session session = Http.Context.current().session();
+        Http.Session session = Http.Context.current().session();
         String chair_name = session.get("username");
         String conf = session.get("conferenceinfo");
         String conf_url = conf.replace(" ","%20");
@@ -71,7 +89,8 @@ public class EmailTemplateController extends Controller {
         //String email_type = "AC_PAPER";
         Form<EmailTemplate> EmailTemplateForm = formFactory.form(EmailTemplate.class);
 
-        Session session = Http.Context.current().session();
+        //Session session = Http.Context.current().session();
+        Http.Session session = Http.Context.current().session();
         String chair_name = session.get("username");
         String conf = session.get("conferenceinfo");
         String conf_url = conf.replace(" ","%20");
@@ -111,7 +130,8 @@ public class EmailTemplateController extends Controller {
      */
     public Result updateEmailTemplate()
     {
-        Session session = Http.Context.current().session();
+        //Session session = Http.Context.current().session();
+        Http.Session session = Http.Context.current().session();
         String pcchair_name = session.get("username");
         String conf = session.get("conferenceinfo");
         Form<EmailTemplate> EmailTemplateForm = formFactory.form(EmailTemplate.class).bindFromRequest();
@@ -184,7 +204,8 @@ public class EmailTemplateController extends Controller {
     public void SendTemplateEmail(String receiver_name)
     {
         //String emailTemplate = "";
-        Session session = Http.Context.current().session();
+        //Session session = Http.Context.current().session();
+        Http.Session session = Http.Context.current().session();
         String pcchair_name = session.get("username");
         //System.out.println("=======1 username is "+pcchair_name);
         String email_type = "AC_PAPER";
@@ -238,7 +259,8 @@ public class EmailTemplateController extends Controller {
 
     public Result SendReviewerReminder()
     {
-        Session session = Http.Context.current().session();
+        //Session session = Http.Context.current().session();
+        Http.Session session = Http.Context.current().session();
         String pcchair_name = session.get("username");
         String conf = session.get("conferenceinfo");
         int role = Integer.parseInt(session.get("role"));
@@ -248,6 +270,72 @@ public class EmailTemplateController extends Controller {
                 .put("conference",conf);
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/reviewerreminder").post(json);
         return ok(views.html.admin.render(conf, role));
+    }
+
+    public CompletionStage<Result> SendAuthorReminder()
+    {
+        Paper paperInfo = new Paper();
+        Http.Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
+
+        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        String[] conferences= session.get("conferences").split("#");
+        for(String s : conferences) {
+            options.put("All My Conference","All My Conference");
+            options.put(s, s);
+        }
+//        JsonNode json = Json.newObject()
+//                .put("username", username);
+
+        String confurl = conferenceinfo.replaceAll(" ","+");
+        CompletionStage<WSResponse> resofrest = ws.url("http://localhost:9000/allpaper/conference/" + confurl).get();
+//        List<Paper> restemp =new Arraylist<Paper>();
+        return resofrest.thenApplyAsync(response -> {
+            System.out.println("here is " + response);
+            JsonNode arr = response.asJson();
+            ArrayNode ret = (ArrayNode) arr;
+            List<Paper> res = new ArrayList<Paper>();
+            for (JsonNode res1 : ret) {
+                Paper savedPaper = new Paper();
+                savedPaper.email1 = res1.get("email1").asText();
+                System.out.println("1333====="+savedPaper.email1);
+                SendAuthorEmail(savedPaper.email1);
+                savedPaper.email2 = res1.get("email2").asText();
+                SendAuthorEmail(savedPaper.email2);
+                savedPaper.email2 = res1.get("email3").asText();
+                SendAuthorEmail(savedPaper.email3);
+                savedPaper.email2 = res1.get("email4").asText();
+                SendAuthorEmail(savedPaper.email4);
+                savedPaper.email2 = res1.get("email5").asText();
+                SendAuthorEmail(savedPaper.email5);
+                savedPaper.email2 = res1.get("email6").asText();
+                SendAuthorEmail(savedPaper.email6);
+                savedPaper.email2 = res1.get("email7").asText();
+                SendAuthorEmail(savedPaper.email7);
+
+
+            }
+            return ok(views.html.admin.render(conferenceinfo, 3));
+        });
+    }
+
+    private static void SendAuthorEmail(String emailto){
+        try {
+            if(emailto!=null && !emailto.equals("null") && !emailto.equals("")) {
+                Email email = new SimpleEmail();
+                email.setHostName("smtp.googlemail.com");
+                email.setSmtpPort(465);
+                email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+                email.setSSLOnConnect(true);
+                email.setFrom("socandrew2017@gmail.com");
+                email.setSubject("YOUR PAPER IS SUBMITTED");
+                email.setMsg("hello~ your paper is submitted successfully!");
+                email.addTo(emailto);
+                email.send();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static void SendEmail(String emailto, String pwd){

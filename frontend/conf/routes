@@ -157,6 +157,7 @@ GET    /logo/upload               controllers.LogoController.uploadFile()
 POST    /logo/upload              controllers.LogoController.selectFile()
 
 GET     /reviewerreminder           controllers.EmailTemplateController.SendReviewerReminder()
+GET     /authorreminder       controllers.EmailTemplateController.SendAuthorReminder()
 
 GET     /paperstatus                controllers.ShowPaperController.enterPaperStatus()
 GET     /enterpaperstatus/:id           controllers.ReviewerController.enterAssignPaperStatus(id:Long)
