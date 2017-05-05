@@ -79,7 +79,8 @@ GET    /topics/delete/:id                     controllers.TopicController.delete
 #show all topics of a user
 GET   /topic/conference                  controllers.TopicController.showMyTopic()
 
-
+GET     /GENERATECSV                    controllers.GenerateCSVController.generateCSV()
+GET     /downloadcsv                    controllers.GenerateCSVController.downloadCSV()
 
 #Upload paper
 GET    /papers/:id/upload               controllers.PaperController.uploadFile(id:Long)
