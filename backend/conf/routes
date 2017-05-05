@@ -156,3 +156,5 @@ GET         /deletepcmember/:email/:conf      controllers.PCmemberController.del
 GET         /role/:conf/:username                       controllers.AdminController.getRole(conf:String, username:String)
 
 POST        /addpcmember                controllers.PCmemberController.addPCmember()
+
+POST         /reviewerreminder           controllers.EmailTemplateController.SendReviewerReminder()

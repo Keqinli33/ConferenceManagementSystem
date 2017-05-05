@@ -54,6 +54,15 @@ public class PCmember extends Model {
         return results;
     }
 
+    public static List<PCmember> GetAllReviewer(String conf)
+    {
+        List<PCmember> results =
+                find.where()
+                        .and(Expr.eq("if_review", "Y"), Expr.eq("conference", conf))
+                        .findList();
+        return results;
+    }
+
     public static boolean IfEXIST(String email, String conf)
     {
         List<PCmember> results =

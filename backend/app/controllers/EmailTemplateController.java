@@ -136,4 +136,51 @@ public class EmailTemplateController extends Controller {
         JsonNode temp = (JsonNode) jsonarray;
         return ok(temp);
     }
+
+    public Result SendReviewerReminder()
+    {
+        Form<EmailTemplate> EmailTemplateForm = formFactory.form(EmailTemplate.class).bindFromRequest();
+        EmailTemplate new_EmailTemplate = EmailTemplateForm.get();
+
+        String chair_name = new_EmailTemplate.chair_name;
+        String conference = new_EmailTemplate.conference;
+
+        String template = new_EmailTemplate.getEmailTemplateByType("REVIEWER_REMINDER", chair_name, conference);
+        String subject = new_EmailTemplate.getEmailSubjectByType("REVIEWER_REMINDER", chair_name, conference);
+
+        String template_email = template.replace("\\n","\n");
+
+        PCmember members = new PCmember();
+        List<PCmember> reviewers = members.GetAllReviewer(conference);
+        User util_user = new User();
+
+        for(int i = 0 ; i < reviewers.size() ; ++i)
+        {
+            PCmember reviewer = reviewers.get(i);
+            String username = util_user.GetUsernameByEmail(reviewer.email);
+            if(util_user.IfUserExist(username))
+            //if user exist, send email
+            {
+                //get unreviewed paper count of this username and conference
+
+            }
+        }
+    }
+
+    private static void SendEmail(String emailto, String subject, String template){
+        try {
+            Email email = new SimpleEmail();
+            email.setHostName("smtp.googlemail.com");
+            email.setSmtpPort(465);
+            email.setAuthenticator(new DefaultAuthenticator("socandrew2017@gmail.com", "ling0915"));
+            email.setSSLOnConnect(true);
+            email.setFrom("socandrew2017@gmail.com");
+            email.setSubject(subject);
+            email.setMsg(template);
+            email.addTo(emailto);
+            email.send();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

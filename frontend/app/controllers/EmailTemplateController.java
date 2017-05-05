@@ -236,6 +236,19 @@ public class EmailTemplateController extends Controller {
 //        });
     }
 
+    public Result SendReviewerReminder()
+    {
+        Session session = Http.Context.current().session();
+        String pcchair_name = session.get("username");
+        String conf = session.get("conferenceinfo");
+
+        JsonNode json = Json.newObject()
+                .put("chair_name", pcchair_name)
+                .put("conference",conf);
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/reviewerreminder").post(json);
+        return ok(views.html.emailTemplate.render());
+    }
+
     private static void SendEmail(String emailto, String pwd){
         try {
             Email email = new SimpleEmail();

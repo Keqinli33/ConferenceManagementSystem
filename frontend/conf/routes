@@ -152,3 +152,5 @@ POST   /statuscode                    controllers.StatusCodeController.createSta
 #Upload logo
 GET    /logo/upload               controllers.LogoController.uploadFile()
 POST    /logo/upload              controllers.LogoController.selectFile()
+
+GET     /reviewerreminder           controllers.EmailTemplateController.SendReviewerReminder()
