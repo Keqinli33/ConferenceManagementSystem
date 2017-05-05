@@ -269,7 +269,7 @@ public class ShowPaperController extends Controller{
 
             }
             return ok(
-                    views.html.showmypaper.render(paperForm,res,session,options,conferenceinfo));
+                    views.html.conferencepaper.render(paperForm,res,session,options,conferenceinfo));
 
         });
 
