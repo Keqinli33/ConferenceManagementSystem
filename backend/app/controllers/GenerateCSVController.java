@@ -86,7 +86,7 @@ public class GenerateCSVController extends Controller {
             FileOutputStream fos = new FileOutputStream(fout);
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-
+            bw.write("paper_name"+"\t"+"reviewid"+"\t"+"reviewstatus"+"\n");
             for (int i = 0; i < paperList.size(); i++) {
                 Paper one = paperList.get(i);
                 long paperid = one.id;
@@ -94,7 +94,6 @@ public class GenerateCSVController extends Controller {
                 System.out.println("10===="+paper_name);
                 List<Review> paper_reviews = Review.find.where().eq("paperid", paperid).findList();
                 System.out.println("11===="+paper_reviews);
-                bw.write("paper_name"+"\t"+"reviewid"+"\t"+"reviewstatus"+"\n");
                 for(int j = 0 ; j < paper_reviews.size() ; j++){
                     Review paper_review = paper_reviews.get(j);
                     String reviewid = Long.toString(paper_review.reviewerid);

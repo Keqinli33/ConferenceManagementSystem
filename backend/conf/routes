@@ -85,6 +85,7 @@ GET    /review/conf/:id                controllers.ReviewerController.getconf(id
 GET    /review/paper/:id/:conf          controllers.ReviewerController.getpapers(id:Long, conf:String)
 GET     /showreview/:paperid/:reviewerid    controllers.ReviewerController.getreview(paperid:Long, reviewerid:Long)
 GET     /review/state/:conf                  controllers.ReviewerController.getReviewState(conf:String)
+GET     /showallreview/:paperid   controllers.ReviewerController.getallreview(paperid:Long)
 
 POST    /updatereview                   controllers.ReviewerController.updateReview()
 
@@ -161,3 +162,4 @@ GET         /role/:conf/:username                       controllers.AdminControl
 POST        /addpcmember                controllers.PCmemberController.addPCmember()
 
 POST         /reviewerreminder           controllers.EmailTemplateController.SendReviewerReminder()
+POST        /updatestatus               controllers.ReviewerController.updatestatus()
