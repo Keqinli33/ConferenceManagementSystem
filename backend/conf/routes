@@ -58,6 +58,8 @@ GET     /papers/:id                     controllers.PaperController.edit(id:Long
 POST    /papers/:id                     controllers.PaperController.update(id:Long)
 #get all papers of a user
 GET   /paper/:username                     controllers.ShowPaperController.showMyPaper(username:String)
+GET   /allpaper/conference/:conferencename                  controllers.ShowPaperController.getAllConferencePaper(conferencename:String)
+GET   /paper/conference/:conferencename/:username                 controllers.ShowPaperController.getConferencePaper(conferencename:String,username:String)
 
 
 # Submit topic
