@@ -131,6 +131,9 @@ public class UserController extends Controller {
      */
     public Result verifyAuth() {
         Form<User> userForm = formFactory.form(User.class);
+        Session session = Http.Context.current().session();
+        if(session.get("username")==null)
+            return GO_LOGIN;
         return ok(
                 views.html.verifyChangePwdAuth.render(userForm, 0)
         );

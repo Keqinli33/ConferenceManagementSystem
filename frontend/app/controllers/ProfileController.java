@@ -13,6 +13,7 @@ import play.mvc.Results;
 
 import java.util.*;
 import play.data.validation.ValidationError;
+import java.util.concurrent.CompletableFuture;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -75,11 +76,15 @@ public class ProfileController extends Controller{
     public Result GO_HOME = Results.redirect(
             routes.ShowConferenceController.showMyConference()
     );
-
+    public Result GO_LOGIN = Results.redirect(
+            routes.UserController.login()
+    );
 
     public CompletionStage<Result> enterProfile(){
         Form<Profile> profileForm = formFactory.form(Profile.class);
         Session session = Http.Context.current().session();
+        if(session.get("username")==null)
+            return CompletableFuture.completedFuture(GO_LOGIN);
         Long userid = Long.parseLong(session.get("userid"));
 //        System.out.println("Enter profile page user id is "+userid.toString());
 //        Profile profile = Profile.find.byId(userid);

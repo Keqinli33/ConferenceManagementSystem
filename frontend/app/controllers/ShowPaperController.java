@@ -8,6 +8,7 @@ import play.data.*;
 import static play.data.Form.*;
 import play.libs.ws.*;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.CompletableFuture;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
@@ -55,6 +56,9 @@ public class ShowPaperController extends Controller{
             routes.ShowPaperController.showMyPaper()
     );
 
+    public Result GO_LOGIN = Results.redirect(
+            routes.UserController.login()
+    );
     /**
      * Handle default path requests, redirect to computers list
      */
@@ -103,6 +107,8 @@ public class ShowPaperController extends Controller{
         //Paper paperInfo = paperForm.get();
         Paper paperInfo = new Paper();
         Http.Session session = Http.Context.current().session();
+        if(session.get("username")==null)
+            return CompletableFuture.completedFuture(GO_LOGIN);
         String username = session.get("username");
 
 //        CompletionStage<WSResponse> resofconf = ws.url("http://localhost:9000/conference/" + username ).get();

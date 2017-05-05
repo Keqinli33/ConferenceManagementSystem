@@ -8,6 +8,7 @@ import play.data.*;
 import static play.data.Form.*;
 import play.libs.ws.*;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.CompletableFuture;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
@@ -55,6 +56,9 @@ public class ShowConferenceController extends Controller{
             routes.ShowConferenceController.showMyConference()
     );
 
+    public Result GO_LOGIN = Results.redirect(
+            routes.UserController.login()
+    );
     /**
      * Handle default path requests, redirect to computers list
      */
@@ -71,6 +75,8 @@ public class ShowConferenceController extends Controller{
         //Paper paperInfo = paperForm.get();
         Conference conferenceInfo = new Conference();
         Http.Session session = Http.Context.current().session();
+        if(session.get("username")==null)
+            return CompletableFuture.completedFuture(GO_LOGIN);
         String username = session.get("username");
 
         JsonNode json = Json.newObject()
@@ -102,7 +108,6 @@ public class ShowConferenceController extends Controller{
             }
 //            sb.setLength(sb.length() - 1);
             session.put("conferences", sb.toString());
-            System.out.println(session.get("conferences"));
                 return ok(
                         views.html.showmyconference.render(conferenceForm,res,session));
 
