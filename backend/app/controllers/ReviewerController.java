@@ -98,8 +98,13 @@ public class ReviewerController extends Controller{
         Map<Long, Integer> reviewcount = new HashMap<Long, Integer>();
         Map<Long, Integer> leftcount = new HashMap<Long, Integer>();
 
+        Map<Long, Set<Long>> papercount = new HashMap<Long, Set<Long>>();
+
         for(Review review : reviewList){
             Long reviewerid = review.reviewerid;
+            if(papercount.containsKey(reviewerid) && papercount.get(reviewerid).contains(review.paperid)){
+                continue;
+            }
             User user = User.find.where().eq("id", reviewerid).findUnique();
             if(Conference.find.where().eq("username",user.username).eq("title",confinfo).eq("ifreviewer", "Y").findList().size() > 0) {
                 int reviewnum = Review.find.where().eq("paperid", review.paperid).eq("reviewerid", reviewerid).eq("reviewstatus", "reviewed").findList().size();
@@ -115,6 +120,12 @@ public class ReviewerController extends Controller{
                         reviewcount.put(reviewerid, 0);
                     }
                 }
+                if(!papercount.containsKey(reviewerid)){
+                    papercount.put(reviewerid, new HashSet<Long>());
+                }
+                Set<Long> set = papercount.get(reviewerid);
+                set.add(review.paperid);
+                papercount.put(reviewerid, set);
             }
         }
 

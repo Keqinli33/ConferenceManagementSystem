@@ -35,9 +35,7 @@
                     <tr>
                         <th>Paper Id / Title </th>
                         <th>Conference / Submission Deadline</th>
-                        <th>Authors / Contact email</th>
                         <th>Topic</th>
-                        <th>Status</th>
                         <th>Format / File Size</th>
                         <th>Submission Date</th>
                         <th>Action</th>
@@ -50,10 +48,7 @@
                         <td>@paper.id    @paper.title</td>
                         <td>@paper.conference </td>
                         @*should deal if author exist*@
-                        <td>@paper.authors</td>
                         <td>@paper.topic</td>
-                        <td>@paper.status</td>
-
                             @if(paper.ifsubmit == "Y") {
                                 <td>@paper.format @paper.papersize byte</td>
                             } else {
