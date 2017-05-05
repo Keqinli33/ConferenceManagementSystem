@@ -164,6 +164,17 @@ public class ReviewerController extends Controller{
         return ok(temp);
     }
 
+    public Result updatestatus(){
+        Form<Paper> paperForm = formFactory.form(Paper.class).bindFromRequest();
+        Paper update_paper = paperForm.get();
+        try {
+            update_paper.update();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return ok("successfully");
+    }
+
     /**
      * Handle get conf info
      */
@@ -373,6 +384,35 @@ public class ReviewerController extends Controller{
                 //System.out.println(review.review);
                 System.out.println(reviews.review_content);
                 //node.put(Integer.toString(i++), json);
+                arr.add(json);
+            }
+        }
+//        System.out.println(arr);
+        JsonNode temp = (JsonNode)arr;
+
+        return ok(temp);
+    }
+
+    public Result getallreview(Long paperid) {
+        List<Review> reviewList = Review.find.where().eq("paperid", paperid).findList();
+        System.out.println(reviewList.size());
+
+        int i = 0;
+        //ObjectNode node = Json.newObject();
+
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode arr = new ArrayNode(factory);
+
+        for(Review reviews : reviewList){
+            if(!reviews.iscriteria.equals("NA")) {
+                JsonNode json = Json.newObject()
+                        .put("id", reviews.id)
+                        .put("paperid", reviews.paperid)
+                        .put("reviewerid", reviews.reviewerid)
+                        .put("iscriteria", reviews.iscriteria)
+                        .put("label", reviews.label)
+                        .put("review_content", reviews.review_content)
+                        .put("reviewstatus", reviews.reviewstatus);
                 arr.add(json);
             }
         }

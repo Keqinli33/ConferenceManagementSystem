@@ -93,6 +93,14 @@ public class ReviewerController extends Controller{
             routes.UserController.login()
     );
 
+    public Result enterAssignPaperStatus(Long paperid){
+        List<Long> list = new ArrayList();
+        list.add(paperid);
+        return ok(
+                views.html.assignstatus.render(list)
+        );
+    }
+
     public CompletionStage<Result> enterReviewConf(){
         Session session = Http.Context.current().session();
         if(session.get("username")==null)
@@ -627,11 +635,64 @@ public class ReviewerController extends Controller{
 
     }
 
+    public Result updateStatus(){
+        Session session = Http.Context.current().session();
+        Long userid = Long.parseLong(session.get("userid"));
+
+        DynamicForm requestData = formFactory.form().bindFromRequest();
+
+        for(String paperid:requestData.data().keySet()){
+            System.out.println("this is paper id");
+            System.out.println(paperid);
+            JsonNode json = Json.newObject()
+                    .put("id", Long.parseLong(paperid))
+                    .put("status", requestData.get(paperid));
+            CompletionStage<WSResponse> res = ws.url("http://localhost:9000/updatestatus").post(json);
+            res.thenAccept(response -> {
+
+            });
+
+        };
+        return Results.redirect(routes.ReviewerController.enterReviewConf());
+
+    }
+
     public CompletionStage<Result> showreview(Long paperid){
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
 
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/showreview/"+paperid+"/"+userid).get();
+        return res.thenApply(response -> {
+
+            JsonNode ret = response.asJson();
+            ArrayNode arr = (ArrayNode)ret;
+
+            List<Review> list = new ArrayList();
+
+            for(int i = 0; i < arr.size(); i++){
+                JsonNode node = arr.get(i);
+                Review review = new Review();
+                review.id = Long.parseLong(node.get("id").asText());
+                review.paperid = Long.parseLong(node.get("paperid").asText());
+                review.reviewerid = Long.parseLong(node.get("reviewerid").asText());
+                review.iscriteria = node.get("iscriteria").asText();
+                review.label = node.get("label").asText();
+                review.review_content = node.get("review_content").asText();
+                System.out.println(node.get("review_content").asText());
+                list.add(review);
+            }
+
+
+            return ok(
+                    views.html.showreview.render(list)
+            );
+        });
+
+    }
+
+    public CompletionStage<Result> showallreview(Long paperid){
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/showallreview/"+paperid).get();
         return res.thenApply(response -> {
 
             JsonNode ret = response.asJson();
