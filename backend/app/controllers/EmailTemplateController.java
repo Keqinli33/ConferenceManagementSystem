@@ -1,10 +1,11 @@
 package controllers;
 
-import com.avaje.ebean.Ebean;
+import com.avaje.ebean.*;
 import com.avaje.ebean.Transaction;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
+import play.data.validation.*;
 
 import models.*;
 
@@ -161,10 +162,49 @@ public class EmailTemplateController extends Controller {
             if(util_user.IfUserExist(username))
             //if user exist, send email
             {
-                //get unreviewed paper count of this username and conference
+                Long review_id = util_user.GetUserID(username);
+                //get unreviewed paper count of this reviewer and conference
+                //get all unreviewed paperid of this reviewer
 
+                //get all paper assigned of this reviewer
+                List<Review> papers = Review.find.where()
+                        .and(Expr.eq("reviewerid", review_id), Expr.eq("reviewstatus", "assigned"))
+                        .findList();
+
+                //get all paper reviewed of this reviewer
+                List<Review> papers_reviewed = Review.find.where()
+                        .and(Expr.eq("reviewerid", review_id), Expr.eq("reviewstatus", "reviewed"))
+                        .findList();
+
+                //a set of reviewed paperid
+                Set<Long> reviewed_paperid = new HashSet<Long>();
+                for(Review paper_reviewed: papers_reviewed)
+                {
+                    reviewed_paperid.add(paper_reviewed.paperid);
+                }
+
+                int unreview_count = 0;
+                //see if the paper is in set reviewed_paperid, then see if the paper belongs to this conference
+                for(Review paper: papers)
+                {
+                    if(!reviewed_paperid.contains(paper.paperid)){
+                        Paper thispaper = Paper.find.byId(paper.paperid);
+                        if(thispaper != null && thispaper.conference.equals(conference)){
+                            unreview_count++;
+                        }
+                    }
+                }
+
+                String template1 = template_email.replace("{FIRST_NAME}", reviewer.firstname);
+                String template2 = template1.replace("{LAST_NAME}", reviewer.lastname);
+                String template3 = template2.replace("{LAST_NAME}", reviewer.lastname);
+                String template4 = template3.replace("{NUMBER}", Integer.toString(unreview_count));
+                String template5 = template4.replace("{CONFERENCE_ACRONYM}", conference);
+
+                SendEmail(reviewer.email, subject, template5);
             }
         }
+        return ok();
     }
 
     private static void SendEmail(String emailto, String subject, String template){

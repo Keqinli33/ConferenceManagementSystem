@@ -146,6 +146,47 @@ public class ReviewerController extends Controller{
 
     }
 
+    public CompletionStage<Result> enterReviewState(){
+        Session session = Http.Context.current().session();
+        String conferenceinfo = session.get("conferenceinfo");
+        String tempstr = conferenceinfo.replaceAll(" ", "+");
+        System.out.println(tempstr);
+
+        CompletionStage<WSResponse> res = ws.url("http://localhost:9000/review/state/"+tempstr).get();
+        return res.thenApply(response -> {
+            JsonNode ret = response.asJson();
+            ArrayNode arr = (ArrayNode)ret;
+
+            List<ReviewCount> list = new ArrayList();
+
+            if(ret == null){
+                return ok(
+                        views.html.reviewState.render(list)
+                );
+            }
+
+            for(int i = 0; i < arr.size(); i++){
+                JsonNode node = arr.get(i);
+                ReviewCount count = new ReviewCount();
+                count.reviewerid = node.get("reviewerid").asText();
+                count.reviewed = node.get("reviewed").asText();
+                count.left = node.get("left").asText();
+                if(node.get("name") != null) {
+                    count.name = node.get("name").asText();
+                }
+                if(node.get("email") != null) {
+                    count.email = node.get("email").asText();
+                }
+                list.add(count);
+            }
+
+            return ok(
+                    views.html.reviewState.render(list)
+            );
+        });
+
+    }
+
     public CompletionStage<Result> enterReviewPaper(String confName){
         Session session = Http.Context.current().session();
         Long userid = Long.parseLong(session.get("userid"));
@@ -577,7 +618,7 @@ public class ReviewerController extends Controller{
             }
 
         };
-        return GO_HOME;
+        return Results.redirect(routes.ReviewerController.enterReviewConf());
 
     }
 
