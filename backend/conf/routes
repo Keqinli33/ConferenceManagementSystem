@@ -82,6 +82,7 @@ GET   /conference/:username                     controllers.ShowConferenceContro
 GET    /review/conf/:id                controllers.ReviewerController.getconf(id:Long)
 GET    /review/paper/:id/:conf          controllers.ReviewerController.getpapers(id:Long, conf:String)
 GET     /showreview/:paperid/:reviewerid    controllers.ReviewerController.getreview(paperid:Long, reviewerid:Long)
+GET     /review/state/:conf                  controllers.ReviewerController.getReviewState(conf:String)
 
 POST    /updatereview                   controllers.ReviewerController.updateReview()
 

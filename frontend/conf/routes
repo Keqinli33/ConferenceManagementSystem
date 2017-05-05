@@ -94,6 +94,7 @@ GET     /editreview/:paperid                     controllers.ReviewerController.
 POST    /editreview                     controllers.ReviewerController.updateReview()
 GET     /showreview/:paperid                     controllers.ReviewerController.showreview(paperid:Long)
 GET     /printreview                    controllers.ReviewerController.printreview(review:String)
+GET     /review/state                   controllers.ReviewerController.enterReviewState()
 
 # show author paper
 GET     /author/paper                   controllers.PaperController.showAuthorPaper()
