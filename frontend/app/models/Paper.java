@@ -11,6 +11,14 @@ import com.avaje.ebean.*;
 
 import com.avaje.ebean.Model;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  * Created by shuang on 3/28/17.
  */
@@ -106,5 +114,20 @@ public class Paper extends Model {
                         .findList();
         return results;
     }
+
+    public void writePaper(Paper aBook, Row row) {
+        Cell cell = row.createCell(1);
+        cell.setCellValue(aBook.title);
+
+        cell = row.createCell(2);
+        cell.setCellValue(aBook.contactemail);
+
+        cell = row.createCell(3);
+        cell.setCellValue(aBook.topic);
+
+    }
+
+
+
 
 }

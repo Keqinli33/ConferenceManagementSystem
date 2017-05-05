@@ -59,8 +59,8 @@ POST    /papers/:id                     controllers.PaperController.update(id:Lo
 #get all papers of a user
 GET   /paper/:username                     controllers.ShowPaperController.showMyPaper(username:String)
 GET   /allpaper/conference/:conferencename                  controllers.ShowPaperController.getAllConferencePaper(conferencename:String)
-GET   /paper/conference/:conferencename/:username                 controllers.ShowPaperController.getConferencePaper(conferencename:String,username:String)
-GET     /generatecsv/:conf                                                              controllers.GenerateCSVController.generateCSV(conf:String)
+GET   /paper/conference/:conferencename/:username           controllers.ShowPaperController.getConferencePaper(conferencename:String,username:String)
+GET     /generatecsv/:conf                                        controllers.GenerateCSVController.generateCSV(conf:String)
 
 # Submit topic
 

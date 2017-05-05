@@ -80,7 +80,7 @@ public class GenerateCSVController extends Controller {
             List<Paper> paperList = Paper.ConfPapers(name);
             System.out.println("11===="+paperList);
 
-            String outputFile = "/Users/huiliangling/papercsv/paper.csv";
+            String outputFile = "/Users/shuang/uploads/paper.csv";
 
             File fout = new File(outputFile);
             FileOutputStream fos = new FileOutputStream(fout);
