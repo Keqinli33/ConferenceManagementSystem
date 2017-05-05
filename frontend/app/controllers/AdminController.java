@@ -72,6 +72,7 @@ public class AdminController extends Controller {
             String ret = response.getBody();
             int role = Integer.parseInt(ret);
             System.out.println("===admin page role is "+role);
+            session.put("role",Integer.toString(role));
             return ok(views.html.admin.render(conferenceinfo, role));
         });
     }

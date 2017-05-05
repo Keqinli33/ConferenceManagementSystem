@@ -241,12 +241,13 @@ public class EmailTemplateController extends Controller {
         Session session = Http.Context.current().session();
         String pcchair_name = session.get("username");
         String conf = session.get("conferenceinfo");
+        int role = Integer.parseInt(session.get("role"));
 
         JsonNode json = Json.newObject()
                 .put("chair_name", pcchair_name)
                 .put("conference",conf);
         CompletionStage<WSResponse> res = ws.url("http://localhost:9000/reviewerreminder").post(json);
-        return ok(views.html.emailTemplate.render());
+        return ok(views.html.admin.render(conf, role));
     }
 
     private static void SendEmail(String emailto, String pwd){

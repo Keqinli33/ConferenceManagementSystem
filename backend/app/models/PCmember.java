@@ -58,7 +58,7 @@ public class PCmember extends Model {
     {
         List<PCmember> results =
                 find.where()
-                        .and(Expr.eq("if_review", "Y"), Expr.eq("conference", conf))
+                        .and(Expr.eq("if_reviewer", "Y"), Expr.eq("conference", conf))
                         .findList();
         return results;
     }

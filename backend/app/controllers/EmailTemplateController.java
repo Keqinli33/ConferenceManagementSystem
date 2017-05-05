@@ -146,6 +146,13 @@ public class EmailTemplateController extends Controller {
         String chair_name = new_EmailTemplate.chair_name;
         String conference = new_EmailTemplate.conference;
 
+        EmailTemplate tmp = new EmailTemplate();
+        if(!tmp.IfExist(chair_name, conference))
+        {
+            System.out.println("===created email template");
+            tmp.createChairTemplate(chair_name, conference);
+        }
+
         String template = new_EmailTemplate.getEmailTemplateByType("REVIEWER_REMINDER", chair_name, conference);
         String subject = new_EmailTemplate.getEmailSubjectByType("REVIEWER_REMINDER", chair_name, conference);
 
@@ -194,14 +201,14 @@ public class EmailTemplateController extends Controller {
                         }
                     }
                 }
-
                 String template1 = template_email.replace("{FIRST_NAME}", reviewer.firstname);
                 String template2 = template1.replace("{LAST_NAME}", reviewer.lastname);
                 String template3 = template2.replace("{LAST_NAME}", reviewer.lastname);
                 String template4 = template3.replace("{NUMBER}", Integer.toString(unreview_count));
                 String template5 = template4.replace("{CONFERENCE_ACRONYM}", conference);
 
-                SendEmail(reviewer.email, subject, template5);
+                if(reviewer.email != null && template5 != null)
+                    SendEmail(reviewer.email, subject, template5);
             }
         }
         return ok();
@@ -219,6 +226,7 @@ public class EmailTemplateController extends Controller {
             email.setMsg(template);
             email.addTo(emailto);
             email.send();
+            System.out.println("===email sent: "+template);
         }catch (Exception e){
             e.printStackTrace();
         }
