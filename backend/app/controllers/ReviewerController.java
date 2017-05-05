@@ -156,9 +156,9 @@ public class ReviewerController extends Controller{
     /**
      * Handle get conf info
      */
-    public Result getpapers(Long id, String papername) {
+    public Result getpapers(Long id, String confname) {
 
-        String name = papername.replaceAll("\\+", " ");
+        String name = confname.replaceAll("\\+", " ");
 
         List<Paper> paperList = Paper.ConfPapers(name);
 
