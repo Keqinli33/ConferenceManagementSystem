@@ -105,5 +105,12 @@ public class Paper extends Model {
                         .findList();
         return results;
     }
-
+    public static List<Paper> ConfUserPapers(String conf,String username){
+        List<Paper> results =
+                find.where()
+                        .eq("conference",conf)
+                        .eq("username",username)
+                        .findList();
+        return results;
+    }
 }
