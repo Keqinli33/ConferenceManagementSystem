@@ -119,6 +119,12 @@ public class Paper extends Model {
         Cell cell = row.createCell(1);
         cell.setCellValue(aBook.title);
 
+        cell = row.createCell(2);
+        cell.setCellValue(aBook.contactemail);
+
+        cell = row.createCell(3);
+        cell.setCellValue(aBook.topic);
+
     }
 
 
