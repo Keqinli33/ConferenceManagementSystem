@@ -88,8 +88,8 @@ POST    /papers/:id/upload              controllers.PaperController.selectFile(i
 #show all conference of a user
 GET   /conference                      controllers.ShowConferenceController.showMyConference()
 POST  /conference/search               controllers.ShowConferenceController.searchConference()
-GET     /admin/downloadexcelpapers           controllers.AdminController.downloadExcelPaper()
-GET     /admin/downloadacceptedpapers           controllers.AdminController.downloadAcceptedPaper()
+#GET     /admin/downloadexcelpapers           controllers.ShowPaperController.downloadExcelPaper()
+#GET     /admin/downloadacceptedpapers           controllers.ShowPaperController.downloadAcceptedPaper()
 
 # Reviewer page
 GET     /review                    controllers.ReviewerController.enterReviewConf()
