@@ -88,6 +88,72 @@ public class ReviewerController extends Controller{
     }
 
     /**
+     * Handle get review state
+     */
+    public Result getReviewState(String confstr) {
+
+        String confinfo = confstr.replaceAll("\\+", " ");
+        List<Review> reviewList = Review.find.all();
+
+        Map<Long, Integer> reviewcount = new HashMap<Long, Integer>();
+        Map<Long, Integer> leftcount = new HashMap<Long, Integer>();
+
+        for(Review review : reviewList){
+            Long reviewerid = review.reviewerid;
+            User user = User.find.where().eq("id", reviewerid).findUnique();
+            if(Conference.find.where().eq("username",user.username).eq("title",confinfo).eq("ifreviewer", "Y").findList().size() > 0) {
+                int reviewnum = Review.find.where().eq("paperid", review.paperid).eq("reviewerid", reviewerid).eq("reviewstatus", "reviewed").findList().size();
+                if (reviewnum > 0) {
+                    reviewcount.put(reviewerid, reviewcount.getOrDefault(reviewerid, 0) + 1);
+                    if (!leftcount.containsKey(reviewerid)) {
+                        leftcount.put(reviewerid, 0);
+                    }
+
+                } else {
+                    leftcount.put(reviewerid, leftcount.getOrDefault(reviewerid, 0) + 1);
+                    if (!reviewcount.containsKey(reviewerid)) {
+                        reviewcount.put(reviewerid, 0);
+                    }
+                }
+            }
+        }
+
+
+
+        int i = 0;
+        //ObjectNode node = Json.newObject();
+
+        JsonNodeFactory factory = JsonNodeFactory.instance;
+        ArrayNode arr = new ArrayNode(factory);
+
+        for(Map.Entry<Long, Integer> entry : leftcount.entrySet()){
+            Long reviewerid = entry.getKey();
+            Profile user = Profile.find.where().eq("userid", reviewerid).findUnique();
+            JsonNode json;
+            if(user != null){
+                json = Json.newObject()
+                        .put("reviewerid", reviewerid)
+                        .put("reviewed", reviewcount.get(reviewerid))
+                        .put("left", entry.getValue())
+                        .put("name", user.firstname + " " + user.lastname)
+                        .put("email", user.email);
+            }
+            else{
+                json = Json.newObject()
+                        .put("reviewerid", reviewerid)
+                        .put("reviewed", reviewcount.get(reviewerid))
+                        .put("left", entry.getValue());
+            }
+            //node.put(Integer.toString(i++), json);
+            arr.add(json);
+        }
+        System.out.println(arr);
+        JsonNode temp = (JsonNode)arr;
+
+        return ok(temp);
+    }
+
+    /**
      * Handle get conf info
      */
     public Result getpapers(Long id, String papername) {
