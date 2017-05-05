@@ -107,4 +107,13 @@ public class Paper extends Model {
         return results;
     }
 
+    private void writePaper(Paper aBook, Row row) {
+        Cell cell = row.createCell(1);
+        cell.setCellValue(aBook.title);
+
+    }
+
+
+
+
 }

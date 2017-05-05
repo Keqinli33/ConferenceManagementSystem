@@ -62,6 +62,9 @@ GET   /paper                            controllers.ShowPaperController.showMyPa
 GET   /paper/conference                  controllers.ShowPaperController.getConferencePaper(conferencename:String)
 GET   /paper/conference/assign                  controllers.ShowPaperController.getConferencePaperToAssign()
 GET   /allpaper/conference                  controllers.ShowPaperController.getAllConferencePaper()
+GET   /allpaper/conference/status                  controllers.ShowPaperController.showStatusPaper()
+GET   /allpaper/conference/status                  controllers.ShowPaperController.getStatusPaper()
+
 
 
 # Submit topic
@@ -85,6 +88,8 @@ POST    /papers/:id/upload              controllers.PaperController.selectFile(i
 #show all conference of a user
 GET   /conference                      controllers.ShowConferenceController.showMyConference()
 POST  /conference/search               controllers.ShowConferenceController.searchConference()
+GET     /admin/downloadexcelpapers           controllers.AdminController.downloadExcelPaper()
+GET     /admin/downloadacceptedpapers           controllers.AdminController.downloadAcceptedPaper()
 
 # Reviewer page
 GET     /review                    controllers.ReviewerController.enterReviewConf()
