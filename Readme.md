@@ -18,6 +18,7 @@ Change the mysql password to yours
 	default.password="" -> add you mysql password
 
  **how to use the software**
+ 
 Create a database named ‘playdbtest’
 Run run.sh in backend/:
 	cd backend
